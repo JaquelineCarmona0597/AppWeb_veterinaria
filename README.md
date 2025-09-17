@@ -1,6 +1,12 @@
-# AppWeb_veterinaria
+# React + Vite
 
-Este repositorio contiene el desarrollo del módulo web del proyecto "Gestión de Veterinaria – Patita Feliz", diseñado para que administradores y veterinarios puedan gestionar citas, pacientes, usuarios y reportes desde cualquier navegador.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-🎯 Objetivo:
-Crear una plataforma web intuitiva, segura y funcional que optimice la operación diaria de clínicas veterinarias como Animal Care (Manzanillo, Colima), eliminando procesos manuales y mejorando la experiencia del personal médico.
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
