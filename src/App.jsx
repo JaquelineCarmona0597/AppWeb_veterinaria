@@ -1,24 +1,15 @@
-import React, { useState } from 'react';
-import Login from './components/auth/login';      // Asegúrate que la ruta sea correcta
-import SignUp from './components/auth/SignUp';
-import AdminPanel from './components/admin/adminpanel';     // Importa el nuevo componente
+// App.js
+
+import React from 'react';
 import './css/App.css';
+import AppRouter from './components/routes/AppRouter'; // Importa el enrutador
 
 function App() {
-  const [isLoginPage, setIsLoginPage] = useState(true);
-
-  // Funciones para cambiar entre vistas
-  const navigateToSignUp = () => setIsLoginPage(false);
-  const navigateToLogin = () => setIsLoginPage(true);
-
+  // Ya no se necesita el estado para manejar qué página se muestra.
+  // ¡El componente AppRouter se encarga de todo eso ahora!
   return (
     <div className="App">
-{/*       {isLoginPage ? (
-        <Login onNavigateToSignUp={navigateToSignUp} />
-      ) : (
-        <SignUp onNavigateToLogin={navigateToLogin} />
-      )} */}
-      <AdminPanel />
+      <AppRouter />
     </div>
   );
 }
