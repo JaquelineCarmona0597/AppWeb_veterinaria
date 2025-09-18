@@ -1,20 +1,18 @@
 // src/App.jsx
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './components/auth/login'; // Importa el nuevo componente
-import AdminPanel from './components/admin/adminpanel';
-import './css/App.css'; 
+import Login from './components//auth/login'; 
+import './css/App.css';
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          {/* La ruta principal ahora usará el nuevo componente Login */}
-          <Route path="/" element={<Login />} />
-          <Route path="/admin" element={<AdminPanel />} />
-        </Routes>
-      </div>
+      <Routes>
+        {/* La ruta principal es para el componente de Login. */}
+        <Route path="/" element={<Login />} />
+        
+        {/* Aquí puedes añadir otras rutas para el resto de la aplicación,
+        como el dashboard una vez que el usuario se haya autenticado. */}
+      </Routes>
     </Router>
   );
 }

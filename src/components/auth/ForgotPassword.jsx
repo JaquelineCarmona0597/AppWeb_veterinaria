@@ -1,58 +1,53 @@
-import React from 'react';
-import Button from '@mui/material/Button';
+import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import TextField from '@mui/material/TextField';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
-// El código original tenía una 'interface', esto no es necesario en JavaScript.
-// Se puede reemplazar con un JSDoc para documentar los props.
 
-export default function ForgotPassword({ open, handleClose }) {
+const ForgotPasswordModal = ({ open, onClose }) => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handlePasswordReset = async () => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setMessage('Se ha enviado un correo electrónico para restablecer tu contraseña. Revisa tu bandeja de entrada.');
+    } catch (error) {
+      setMessage(`Error: ${error.message}`);
+    }
+  };
+
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      slotProps={{
-        paper: {
-          component: 'form',
-          onSubmit: (event) => {
-            event.preventDefault();
-            // Lógica de Firebase para enviar el correo de recuperación
-            handleClose();
-          },
-          sx: { backgroundImage: 'none' },
-        },
-      }}
-    >
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle>Restablecer contraseña</DialogTitle>
-      <DialogContent
-        sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}
-      >
+      <DialogContent>
         <DialogContentText>
-          Ingresa el correo electrónico de tu cuenta y te enviaremos un enlace para
-          restablecer tu contraseña.
+          Ingrese la dirección de correo electrónico de su cuenta y le enviaremos un enlace para restablecer su contraseña.
         </DialogContentText>
-        <OutlinedInput
+        <TextField
           autoFocus
-          required
           margin="dense"
-          id="email"
-          name="email"
+          id="email-reset"
           label="Dirección de correo electrónico"
-          placeholder="Dirección de correo electrónico"
           type="email"
           fullWidth
+          variant="standard"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
+        {message && <p>{message}</p>}
       </DialogContent>
-      <DialogActions sx={{ pb: 3, px: 3 }}>
-        <Button onClick={handleClose}>Cancelar</Button>
-        <Button variant="contained" type="submit">
-          Continuar
-        </Button>
+      <DialogActions>
+        <Button onClick={onClose}>Cancelar</Button>
+        <Button onClick={handlePasswordReset}>Continuar</Button>
       </DialogActions>
     </Dialog>
   );
-}
+};
+
+export default ForgotPasswordModal;
