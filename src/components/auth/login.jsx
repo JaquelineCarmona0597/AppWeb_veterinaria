@@ -7,7 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
+import MuiLink from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -15,11 +15,17 @@ import Card from '@mui/material/Card';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 
+// Nuevo: Importa el componente del modal
+import ForgotPasswordModal from './ForgotPassword';
+
 export default function Login() {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  
+  // Nuevo: Estado para controlar la visibilidad del modal
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -59,6 +65,10 @@ export default function Login() {
 
     return isValid;
   };
+  
+  // Nuevas funciones para abrir y cerrar el modal
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -164,15 +174,18 @@ export default function Login() {
             >
               Iniciar Sesión
             </Button>
-            <Link
+            
+            {/* Nuevo: El enlace que abrirá el modal */}
+            <MuiLink
               component="button"
               type="button"
-              onClick={() => alert('Olvidaste tu contraseña?')}
+              onClick={handleOpenModal}
               variant="body2"
               sx={{ alignSelf: 'center' }}
             >
               ¿Olvidaste tu contraseña?
-            </Link>
+            </MuiLink>
+
           </Box>
           <Divider>o</Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -194,13 +207,17 @@ export default function Login() {
             </Button>
             <Typography sx={{ textAlign: 'center' }}>
               ¿No tienes una cuenta?{' '}
-              <Link href="#" variant="body2" sx={{ alignSelf: 'center' }}>
+              <MuiLink href="#" variant="body2" sx={{ alignSelf: 'center' }}>
                 Regístrate
-              </Link>
+              </MuiLink>
             </Typography>
           </Box>
         </Card>
       </Stack>
+      
+      {/* Nuevo: El componente del modal renderizado condicionalmente */}
+      <ForgotPasswordModal open={isModalOpen} onClose={handleCloseModal} />
+
     </>
   );
 }
