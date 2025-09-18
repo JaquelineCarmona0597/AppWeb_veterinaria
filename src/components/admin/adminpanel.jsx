@@ -1,29 +1,40 @@
 // src/components/admin/adminpanel.jsx
 
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import Sidebar from './siderbar.jsx';
+import logo from '../../assets/react.svg';
 
-import Sidebar from './siderbar.jsx'; // Tu nuevo sidebar
-import adminRoutes from '../routes/adminRoutes.js'; // Las rutas que creamos
-import logo from '../../assets/react.svg'; // Usaremos el logo de React como ejemplo
+// --- SOLUCIÓN AQUÍ ---
+// 1. Definimos la lista de rutas directamente en este archivo.
+//    Esta es la información que el Sidebar necesita para mostrar los enlaces.
+const adminRoutes = [
+  {
+    path: "/admin/dashboard",
+    name: "Dashboard",
+    icon: "fa-solid fa-chart-pie", // Ejemplo de ícono (puedes cambiarlo)
+  },
+  {
+    path: "/admin/veterinarios",
+    name: "Veterinarios",
+    icon: "fa-solid fa-user-doctor",
+  },
+  {
+    path: "/admin/horarios",
+    name: "Horarios",
+    icon: "fa-solid fa-calendar-days",
+  }
+];
+
+const mainContentStyle = {
+  marginLeft: '250px',
+  padding: '2rem'
+};
 
 const AdminPanel = () => {
-
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          // Por ahora, solo renderizamos un texto simple para cada ruta
-          <Route path={prop.path} element={<h2>{prop.name}</h2>} key={key} />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
-
   return (
     <>
+      {/* 2. Le pasamos la lista que acabamos de crear al Sidebar */}
       <Sidebar
         routes={adminRoutes}
         logo={{
@@ -32,12 +43,8 @@ const AdminPanel = () => {
           imgAlt: "Logo",
         }}
       />
-      <div className="main-content">
-        <Routes>
-          {getRoutes(adminRoutes)}
-          {/* Puedes añadir una ruta por defecto */}
-          <Route path="*" element={<h2>Dashboard Principal</h2>} />
-        </Routes>
+      <div style={mainContentStyle} className="main-content">
+        <Outlet />
       </div>
     </>
   );
