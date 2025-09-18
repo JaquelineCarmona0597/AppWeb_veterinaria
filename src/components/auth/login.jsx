@@ -12,13 +12,15 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
-import GoogleIcon from '@mui/icons-material/Google';
-import FacebookIcon from '@mui/icons-material/Facebook';
+
+import { GoogleIcon} from './customicons';
 
 // Nuevo: Importa el componente del modal
 import ForgotPasswordModal from './ForgotPassword';
 
-export default function Login() {
+
+export default function Login({ onNavigateToSignUp }) {
+  
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -197,19 +199,11 @@ export default function Login() {
             >
               Google
             </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Iniciar sesión con Facebook')}
-              startIcon={<FacebookIcon />}
-            >
-              Facebook
-            </Button>
             <Typography sx={{ textAlign: 'center' }}>
               ¿No tienes una cuenta?{' '}
-              <MuiLink href="#" variant="body2" sx={{ alignSelf: 'center' }}>
+              <Button variant="text" size="small" onClick={onNavigateToSignUp}>
                 Regístrate
-              </MuiLink>
+              </Button>
             </Typography>
           </Box>
         </Card>

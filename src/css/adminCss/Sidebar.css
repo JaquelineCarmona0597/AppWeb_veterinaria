@@ -1,0 +1,141 @@
+/* src/components/admin/Sidebar.css */
+
+/* --- Estilos del Bloque Principal (Sidebar) --- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 250px; /* Ancho del sidebar */
+  background-color: #ffffff;
+  border-right: 1px solid #e3e3e3;
+  padding: 1rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* --- Elementos del Sidebar --- */
+
+.sidebar__brand {
+  padding-bottom: 1.5rem;
+  display: block;
+}
+
+.sidebar__logo-img {
+  max-height: 40px; /* Altura máxima del logo */
+  width: auto;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.sidebar__item {
+  width: 100%;
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Espacio entre el ícono y el texto */
+  padding: 0.8rem 1rem;
+  color: #525f7f;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar__link:hover {
+  background-color: #f6f9fc;
+  color: #32325d;
+}
+
+/* --- Modificador para el enlace activo --- */
+.sidebar__link--active {
+  background-color: #f6f9fc;
+  color: #5e72e4; /* Un color de acento */
+  font-weight: 600;
+}
+
+.sidebar__link--active i {
+  color: #5e72e4; /* Color del ícono cuando está activo */
+}
+
+/* --- Otros Elementos --- */
+
+.sidebar__divider {
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid #e3e3e3;
+}
+
+.sidebar__heading {
+  padding: 0 1rem;
+  font-size: 0.75rem;
+  color: #8898aa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- Estilos para Móvil (Responsive) --- */
+
+.sidebar__toggler {
+  display: none; /* Oculto por defecto en escritorio */
+  background: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 0.25rem 0.75rem;
+}
+
+.sidebar__toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  width: 1.5em;
+  height: 1.5em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.sidebar__mobile-header {
+  display: none; /* Oculto en escritorio */
+}
+
+/* Media Query para pantallas pequeñas (tablets y móviles) */
+@media (max-width: 767.98px) {
+  .sidebar {
+    /* En móvil, el sidebar está fuera de la pantalla por defecto */
+    transform: translateX(-100%);
+  }
+
+  .sidebar--open .navbar-collapse {
+    /* Muestra el contenido cuando el sidebar está abierto */
+    display: block;
+    transform: translateX(100%);
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    padding: 1rem;
+  }
+
+  .sidebar__toggler {
+    display: block; /* Muestra el botón del toggler */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1001; /* Asegura que esté por encima */
+  }
+
+  .sidebar__brand {
+    display: none; /* Oculta el logo principal en móvil */
+  }
+
+  .sidebar__mobile-header {
+    display: block; /* Muestra el encabezado del menú móvil */
+  }
+}
