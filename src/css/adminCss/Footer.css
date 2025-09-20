@@ -1,0 +1,30 @@
+.footer-container {
+  padding: 1.5rem 0;
+  width: 100%;
+}
+
+.copyright-text {
+  text-align: center;
+  font-size: .875rem;
+  color: #8898aa;
+}
+
+.footer-nav {
+  justify-content: center;
+}
+
+/* En pantallas grandes, alineamos los elementos de manera diferente */
+@media (min-width: 1200px) {
+  .copyright-text {
+    text-align: left;
+  }
+  
+  .footer-nav {
+    justify-content: flex-end;
+  }
+}
+
+.footer-nav .nav-link {
+  color: var(--color-confianza) !important; /* Usamos el color de confianza */
+  font-weight: 600;
+}

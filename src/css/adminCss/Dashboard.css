@@ -1,0 +1,71 @@
+/* Estilos para la página de iconos */
+.icons-container {
+  /* Esto empuja el contenedor hacia arriba para que se solape con el Header */
+  margin-top: -7rem;
+  padding-bottom: 3rem;
+}
+
+.icons-card {
+  border: none;
+  box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
+}
+
+.icons-card-header {
+  background-color: transparent;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.icons-card-title {
+  margin-bottom: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-base); /* Color de Patita Feliz */
+}
+
+.icons-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.icon-item {
+  padding: 15px;
+  text-align: center;
+}
+
+.icon-clipboard-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1.5rem;
+  font-size: 1rem;
+  border-radius: .375rem;
+  border: 1px solid #dee2e6;
+  background-color: #fff;
+  color: #525f7f;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.icon-clipboard-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-confianza); /* Color de Patita Feliz */
+  color: var(--color-confianza);
+}
+
+.icon-clipboard-button i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--color-accion); /* Color de Patita Feliz */
+}
+
+.icon-clipboard-button span {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #8898aa;
+  word-break: break-all;
+}
