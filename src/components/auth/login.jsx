@@ -1,3 +1,4 @@
+// Importamos las dependencias necesarias de React y Material-UI.
 import React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,54 +13,69 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
+
+// Importamos componentes de enrutamiento y personalizados.
 import { Link } from 'react-router-dom';
+import { GoogleIcon } from './customicons';
+import { useNavigate } from 'react-router-dom';
 
-import { GoogleIcon} from './customicons';
-
-// Nuevo: Importa el componente del modal
+// Importamos el componente del modal para recuperar la contraseña.
 import ForgotPasswordModal from './ForgotPassword';
 
+// Importamos nuestro nuevo archivo de estilos CSS.
+import '../../css/authCss/Login.css';
 
-export default function Login({ onNavigateToSignUp }) {
-  
+// Definimos el componente de Login.
+export default function Login() {
+  // Estados para manejar los errores de validación de los campos de email y contraseña.
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  
-  // Nuevo: Estado para controlar la visibilidad del modal
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
+  // Estado para controlar la visibilidad del modal de "Olvidé mi contraseña".
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const navigate = useNavigate();
+
+  // Función para navegar al componente de registro.
+  const handleNavigateToLogin = () => {
+    navigate('/auth/signup');
+  };
+
+  // Función que se ejecuta al enviar el formulario.
   const handleSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Prevenimos el comportamiento por defecto del formulario.
     if (emailError || passwordError) {
-      return;
+      return; // Si hay errores de validación, no hacemos nada.
     }
     const data = new FormData(event.currentTarget);
+    // Mostramos los datos del formulario en la consola (para depuración).
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
   };
 
+  // Función para validar los campos del formulario.
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
-
     let isValid = true;
 
+    // Validamos el campo de email.
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
+      setEmailErrorMessage('Por favor, introduce un email válido.');
       isValid = false;
     } else {
       setEmailError(false);
       setEmailErrorMessage('');
     }
 
+    // Validamos el campo de contraseña.
     if (!password.value || password.value.length < 6) {
       setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
+      setPasswordErrorMessage('La contraseña debe tener al menos 6 caracteres.');
       isValid = false;
     } else {
       setPasswordError(false);
@@ -68,70 +84,35 @@ export default function Login({ onNavigateToSignUp }) {
 
     return isValid;
   };
-  
-  // Nuevas funciones para abrir y cerrar el modal
+
+  // Funciones para abrir y cerrar el modal.
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
   return (
     <>
+      {/* Componente para normalizar los estilos del navegador. */}
       <CssBaseline />
-      <Stack
-        direction="column"
-        justifyContent="space-between"
-        sx={{
-          height: '100vh',
-          minHeight: '100%',
-          padding: 2,
-          '&::before': {
-            content: '""',
-            display: 'block',
-            position: 'absolute',
-            zIndex: -1,
-            inset: 0,
-            backgroundImage:
-              'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-            backgroundRepeat: 'no-repeat',
-          },
-        }}
-      >
-        <Card
-          variant="outlined"
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignSelf: 'center',
-            width: '100%',
-            padding: 4,
-            gap: 2,
-            margin: 'auto',
-            maxWidth: '450px',
-            boxShadow:
-              'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-          }}
-        >
-          {/* Aquí puedes poner un logo, por ahora es solo un placeholder */}
-          <Typography variant="h2" sx={{ textAlign: 'center' }}>
+      {/* Contenedor principal que centra el contenido verticalmente. */}
+      <Stack direction="column" justifyContent="space-between" className="login-container">
+        {/* Tarjeta que contiene el formulario de login. */}
+        <Card variant="outlined" className="login-card">
+          {/* Logo de la aplicación. */}
+          <Typography variant="h2" className="login-logo">
             Tu Logo
           </Typography>
-          <Typography
-            component="h1"
-            variant="h4"
-            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-          >
+          {/* Título del formulario. */}
+          <Typography component="h1" variant="h4" className="login-title">
             Inicia Sesión
           </Typography>
+          {/* Formulario de login. */}
           <Box
             component="form"
             onSubmit={handleSubmit}
             noValidate
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100%',
-              gap: 2,
-            }}
+            className="login-form"
           >
+            {/* Campo de Email. */}
             <FormControl>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
@@ -149,6 +130,7 @@ export default function Login({ onNavigateToSignUp }) {
                 color={emailError ? 'error' : 'primary'}
               />
             </FormControl>
+            {/* Campo de Contraseña. */}
             <FormControl>
               <FormLabel htmlFor="password">Contraseña</FormLabel>
               <TextField
@@ -165,10 +147,12 @@ export default function Login({ onNavigateToSignUp }) {
                 color={passwordError ? 'error' : 'primary'}
               />
             </FormControl>
+            {/* Checkbox para "Recuérdame". */}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Recuérdame"
             />
+            {/* Botón para enviar el formulario. */}
             <Button
               type="submit"
               fullWidth
@@ -177,21 +161,22 @@ export default function Login({ onNavigateToSignUp }) {
             >
               Iniciar Sesión
             </Button>
-            
-            {/* Nuevo: El enlace que abrirá el modal */}
+            {/* Enlace para abrir el modal de "Olvidé mi contraseña". */}
             <MuiLink
               component="button"
               type="button"
               onClick={handleOpenModal}
               variant="body2"
-              sx={{ alignSelf: 'center' }}
+              className="forgot-password-link"
             >
               ¿Olvidaste tu contraseña?
             </MuiLink>
-
           </Box>
+          {/* Divisor con texto. */}
           <Divider>o</Divider>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {/* Contenedor para opciones de inicio de sesión alternativas. */}
+          <Box className="social-login-container">
+            {/* Botón para iniciar sesión con Google. */}
             <Button
               fullWidth
               variant="outlined"
@@ -200,19 +185,18 @@ export default function Login({ onNavigateToSignUp }) {
             >
               Google
             </Button>
-            <Typography sx={{ textAlign: 'center' }}>
+            {/* Texto y botón para navegar al registro. */}
+            <Typography className="signup-text">
               ¿No tienes una cuenta?{' '}
-              <Button variant="text" size="small" onClick={onNavigateToSignUp}>
+              <Button variant="text" size="small" onClick={handleNavigateToLogin}>
                 Regístrate
               </Button>
             </Typography>
           </Box>
         </Card>
       </Stack>
-      
-      {/* Nuevo: El componente del modal renderizado condicionalmente */}
+      {/* Componente del modal que se muestra u oculta según el estado. */}
       <ForgotPasswordModal open={isModalOpen} onClose={handleCloseModal} />
-
     </>
   );
 }

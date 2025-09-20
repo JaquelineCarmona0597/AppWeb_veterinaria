@@ -1,0 +1,62 @@
+/* Estilos para el Header de Patita Feliz */
+.header-container {
+  background: linear-gradient(87deg, var(--color-base) 0, var(--color-confianza) 100%);
+  padding-top: 3rem;
+  padding-bottom: 7rem;
+}
+
+.stat-card {
+  border: none;
+  border-radius: .375rem;
+  box-shadow: 0 0 2rem 0 rgba(136,152,170,.15);
+}
+
+.stat-card-body {
+  padding: 1.5rem;
+}
+
+.stat-card-title {
+  font-size: .8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #8898aa;
+  margin-bottom: 0;
+}
+
+.stat-card-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.stat-icon-container {
+  width: 3rem;
+  height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: white;
+  box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
+}
+
+/* Colores de los íconos */
+.icon-color-accion {
+  background-color: var(--color-accion);
+}
+.icon-color-salud {
+  background-color: var(--color-salud);
+}
+.icon-color-confianza {
+  background-color: var(--color-confianza);
+}
+.icon-color-base {
+    background-color: var(--color-base);
+}
+
+.stat-card-footer {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  font-size: .875rem;
+  color: #8898aa;
+}

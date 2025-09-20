@@ -1,3 +1,4 @@
+// Importamos las dependencias necesarias de React y Material-UI.
 import React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,80 +10,90 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 
-// Recibimos la función 'onNavigateToLogin' para poder volver al login
-export default function SignUp({ onNavigateToLogin }) {
+// Importamos nuestro nuevo archivo de estilos CSS para el registro.
+import '../../css/authCss/SignUp.css';
+import { useNavigate } from 'react-router-dom';
 
-  // Esta función solo mostrará los datos en la consola por ahora
-    const handleSubmit = (event) => {
-    event.preventDefault();
+// Definimos el componente de SignUp (Registro).
+// Recibe una prop 'onNavigateToLogin' para permitir la navegación de vuelta al login.
+export default function SignUp() {
+    const navigate = useNavigate();
+    const onNavigateToLogin = () => {
+        navigate('/auth/login');
+    }
+
+  // Función que se ejecuta al enviar el formulario.
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevenimos el comportamiento por defecto del formulario.
     const data = new FormData(event.currentTarget);
+    // Mostramos los datos del formulario en la consola (para depuración).
     console.log({
-        email: data.get('email'),
-        password: data.get('password'),
+      email: data.get('email'),
+      password: data.get('password'),
     });
     alert('Formulario enviado (revisa la consola para ver los datos)');
-    };
+  };
 
-    return (
+  return (
     <>
-        <CssBaseline />
-        <Stack
+      {/* Componente para normalizar los estilos del navegador. */}
+      <CssBaseline />
+      {/* Contenedor principal que centra el contenido verticalmente. */}
+      <Stack
         direction="column"
         justifyContent="center"
-        sx={{ height: '100vh', padding: 2 }}
-        >
+        className="signup-container"
+      >
+        {/* Tarjeta que contiene el formulario de registro. */}
         <Card
-            variant="outlined"
-            sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignSelf: 'center',
-            width: '100%',
-            padding: 4,
-            gap: 2,
-            maxWidth: '450px',
-            boxShadow: 'md',
-            }}
+          variant="outlined"
+          className="signup-card"
         >
-            <Typography component="h1" variant="h4">
+          {/* Título del formulario. */}
+          <Typography component="h1" variant="h4">
             Crea tu Cuenta
-            </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate>
-            <FormControl fullWidth sx={{ mb: 2 }}>
-            <FormLabel htmlFor="email">Email</FormLabel>
-            <TextField
+          </Typography>
+          {/* Formulario de registro. */}
+          <Box component="form" onSubmit={handleSubmit} noValidate>
+            {/* Campo de Email. */}
+            <FormControl fullWidth className="form-control-margin">
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <TextField
                 required
                 id="email"
                 placeholder="tu@email.com"
                 name="email"
                 autoComplete="email"
-            />
+              />
             </FormControl>
+            {/* Campo de Contraseña. */}
             <FormControl fullWidth>
-            <FormLabel htmlFor="password">Contraseña</FormLabel>
-            <TextField
+              <FormLabel htmlFor="password">Contraseña</FormLabel>
+              <TextField
                 required
                 name="password"
                 placeholder="••••••"
                 type="password"
                 id="password"
                 autoComplete="new-password"
-            />
+              />
             </FormControl>
 
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
-                Registrarme
+            {/* Botón para enviar el formulario de registro. */}
+            <Button type="submit" fullWidth variant="contained" className="signup-button">
+              Registrarme
             </Button>
 
-            <Typography sx={{ textAlign: 'center', mt: 2 }}>
-                ¿Ya tienes una cuenta?{' '}
-            <Button variant="text" size="small" onClick={onNavigateToLogin}>
+            {/* Texto y botón para navegar a la pantalla de inicio de sesión. */}
+            <Typography className="login-prompt">
+              ¿Ya tienes una cuenta?{' '}
+              <Button variant="text" size="small" onClick={onNavigateToLogin}>
                 Inicia Sesión
-            </Button>
+              </Button>
             </Typography>
-        </Box>
+          </Box>
         </Card>
-    </Stack>
+      </Stack>
     </>
-);
+  );
 }

@@ -1,0 +1,72 @@
+/* Estilos para el contenedor principal de la página de login. */
+.login-container {
+  height: 100vh;
+  min-height: 100%;
+  padding: 16px; /* Equivalente a 'padding: 2' de MUI */
+  position: relative;
+}
+
+/* Pseudo-elemento para el fondo degradado. */
+.login-container::before {
+  content: '';
+  display: block;
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(
+    ellipse at 50% 50%,
+    hsl(210, 100%, 97%),
+    hsl(0, 0%, 100%)
+  );
+  background-repeat: no-repeat;
+}
+
+/* Estilos para la tarjeta del formulario. */
+.login-card {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 100%;
+  padding: 32px; /* Equivalente a 'padding: 4' de MUI */
+  gap: 16px; /* Equivalente a 'gap: 2' de MUI */
+  margin: auto;
+  max-width: 450px;
+  box-shadow: hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px,
+    hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px;
+}
+
+/* Estilos para el logo. */
+.login-logo {
+  text-align: center;
+}
+
+/* Estilos para el título del formulario. */
+.login-title {
+  width: 100%;
+  font-size: clamp(2rem, 10vw, 2.15rem);
+}
+
+/* Estilos para el formulario. */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px; /* Equivalente a 'gap: 2' de MUI */
+}
+
+/* Estilos para el enlace de "Olvidé mi contraseña". */
+.forgot-password-link {
+  align-self: center;
+}
+
+/* Estilos para el contenedor de inicio de sesión con redes sociales. */
+.social-login-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Equivalente a 'gap: 2' de MUI */
+}
+
+/* Estilos para el texto de registro. */
+.signup-text {
+  text-align: center;
+}

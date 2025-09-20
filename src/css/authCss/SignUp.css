@@ -1,0 +1,33 @@
+/* Estilos para el contenedor principal de la página de registro. */
+.signup-container {
+  height: 100vh;
+  padding: 16px; /* Equivalente a 'padding: 2' de MUI */
+}
+
+/* Estilos para la tarjeta del formulario de registro. */
+.signup-card {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 100%;
+  padding: 32px; /* Equivalente a 'padding: 4' de MUI */
+  gap: 16px; /* Equivalente a 'gap: 2' de MUI */
+  max-width: 450px;
+  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12); /* Sombra 'md' de MUI */
+}
+
+/* Margen inferior para el campo de email. */
+.form-control-margin {
+  margin-bottom: 16px; /* Equivalente a 'mb: 2' de MUI */
+}
+
+/* Margen superior para el botón de registro. */
+.signup-button {
+  margin-top: 24px; /* Equivalente a 'mt: 3' de MUI */
+}
+
+/* Estilos para el texto que pregunta si ya tienes cuenta. */
+.login-prompt {
+  text-align: center;
+  margin-top: 16px; /* Equivalente a 'mt: 2' de MUI */
+}
