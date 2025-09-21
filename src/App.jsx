@@ -1,12 +1,13 @@
-// App.js
+// App.jsx
 
 import React from 'react';
-import './css/App.css';
-import AppRouter from './components/routes/AppRouter'; // Importa el enrutador
+import './css/App.css'
+// ✅ CORRECCIÓN: Ruta de importación más estándar
+import AppRouter from './components/routes/AppRouter'; 
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
 function App() {
-  // Ya no se necesita el estado para manejar qué página se muestra.
-  // ¡El componente AppRouter se encarga de todo eso ahora!
+  console.log("2. App.jsx se está renderizando");
   return (
     <div className="App">
       <AppRouter />

@@ -1,22 +1,131 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* src/components/Login/Login.css */
+
+.login-split-screen {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* --- Estilos para la sección de la imagen (Izquierda) --- */
+.login-image-section {
+  flex-basis: 50%; /* Ocupa el 50% del ancho */
+  background: url('https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=1964&auto=format&fit=crop') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-blanco);
   text-align: center;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+.image-content {
+  background-color: rgba(0, 0, 0, 0.4); /* Un fondo oscuro semitransparente para que el texto resalte */
+  padding: 2rem;
+  border-radius: 12px;
 }
 
-/* Puedes dejar los estilos de Vite y React que tenías, o reemplazarlos */
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.image-content h1 {
+  font-size: 3rem;
+  color: var(--color-blanco);
+  margin-bottom: 1rem;
+}
+
+/* --- Estilos para la sección del formulario (Derecha) --- */
+.login-form-section {
+  flex-basis: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-fondo);
+  padding: 2rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--color-blanco);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.login-logo h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--color-base);
+  margin-bottom: 1.5rem;
+}
+
+.login-form .input-group {
+  margin-bottom: 1rem;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--color-texto);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-confianza);
+  box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.2);
+}
+
+/* --- Estilos para Botones y Enlaces --- */
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1em;
+  margin-top: 1rem;
+  background-color: var(--color-accion); /* Usando el color de tu paleta */
+}
+.btn-primary:hover {
+  background-color: #c42d39; /* Tono más oscuro del color de acción */
+}
+
+.btn-google {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1em;
+  background-color: var(--color-blanco);
+  color: var(--color-texto);
+  border: 1px solid #ccc;
+}
+.btn-google:hover {
+  background-color: #f7f7f7;
+}
+
+.separator {
+  text-align: center;
+  margin: 1.5rem 0;
+  color: #aaa;
+}
+
+.forgot-password-link, .signup-text {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9em;
+}
+
+/* --- Media Query para Responsividad --- */
+@media (max-width: 900px) {
+  .login-image-section {
+    display: none; /* Ocultamos la imagen en pantallas pequeñas */
+  }
+
+  .login-form-section {
+    flex-basis: 100%; /* El formulario ocupa todo el ancho */
+  }
 }

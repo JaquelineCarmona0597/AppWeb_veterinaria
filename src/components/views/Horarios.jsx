@@ -1,7 +1,7 @@
 // src/views/Dashboard.jsx
 import React from 'react';
 
-const Dashboard = () => {
+const Horarios = () => {
   return (
     <div>
       <h1>Dashboard</h1>
@@ -10,4 +10,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Horarios;

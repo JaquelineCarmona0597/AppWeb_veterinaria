@@ -4,16 +4,15 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../auth/login.jsx';
 import SignUp from '../auth/SignUp.jsx';
-import AdminPanel from '../admin/adminpanel.jsx';
 import Dashboard from '../views/Dashboard.jsx';
 import Veterinarios from '../views/Veterinarios.jsx';
 import Horarios from '../views/Horarios.jsx';
+import AdminLayout from '../admin/layout/adminlayout.jsx';
 
 const AppRouter = () => {
   return (
     <Routes>
-      {/* Ruta para el panel de administración con sub-rutas anidadas */}
-      <Route path="/admin" element={<AdminPanel />}>
+      <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="veterinarios" element={<Veterinarios />} />
         <Route path="horarios" element={<Horarios />} />

@@ -1,30 +1,54 @@
+/* src/css/adminCss/Footer.css */
+
 .footer-container {
   padding: 1.5rem 0;
-  width: 100%;
+  background-color: transparent; /* Se integra con el fondo del layout */
 }
 
-.copyright-text {
-  text-align: center;
-  font-size: .875rem;
-  color: #8898aa;
+.copyright-text,
+.copyright-text a {
+  font-size: 0.875rem; /* 14px */
+  color: #8898aa; /* Un gris suave para el texto */
+  text-decoration: none;
+}
+
+.copyright-text a:hover {
+  color: var(--color-confianza); /* Usa el color de confianza de tu paleta */
 }
 
 .footer-nav {
-  justify-content: center;
-}
-
-/* En pantallas grandes, alineamos los elementos de manera diferente */
-@media (min-width: 1200px) {
-  .copyright-text {
-    text-align: left;
-  }
-  
-  .footer-nav {
-    justify-content: flex-end;
-  }
+  display: flex;
+  justify-content: flex-end; /* Alinea los enlaces a la derecha */
+  flex-wrap: wrap; /* Permite que los enlaces pasen a la siguiente línea si no caben */
 }
 
 .footer-nav .nav-link {
-  color: var(--color-confianza) !important; /* Usamos el color de confianza */
-  font-weight: 600;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #8898aa; /* Mismo color que el copyright */
+  padding: 0 1rem;
+  background-color: transparent !important; /* Sobrescribe estilos de bootstrap */
+  transition: color 0.2s ease-in-out;
+}
+
+.footer-nav .nav-link:hover {
+  color: var(--color-confianza);
+}
+
+/* --- Media Query para Responsividad --- */
+@media (max-width: 1199.98px) {
+  /* En pantallas más pequeñas, centramos todo */
+  .footer-container .row > [class*="col-"] {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .copyright-text {
+    margin-bottom: 1rem;
+  }
+
+  .footer-nav {
+    justify-content: center;
+  }
 }

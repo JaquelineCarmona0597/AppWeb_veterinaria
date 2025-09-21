@@ -1,84 +1,76 @@
-/* Estilos principales para la barra de navegación */
-.admin-navbar {
-  background-color: #5e72e4; /* Color de fondo principal (morado Argon) */
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+/* src/css/adminCss/AdminNavbar.css */
+
+/* --- Contenedor Principal de la Navbar --- */
+
+.contenedornavbar .container-fluid {
+  display: flex !important; /* Forzamos flexbox */
+  flex-direction: row !important; /* Aseguramos la dirección horizontal */
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+/* Flexbox para alinear los elementos en fila.
+  Este es el contenedor directo de los 3 elementos principales:
+  1. El título (Link)
+  2. El buscador (Form)
+  3. El perfil de usuario (Nav)
+*/
+.contenedornavbar > .container-fluid {
+  display: flex;
+  justify-content: space-between; /* Empuja los elementos a los extremos */
+  align-items: center; /* Centra verticalmente los elementos */
+  width: 100%;
 }
 
-/* Estilo para el título o "brand" */
-.admin-navbar__brand {
-  font-size: 1.25rem; /* h4 */
-  margin-bottom: 0;
+/* --- Título/Ubicación (Ej: "TABLES") --- */
+.ubicacion {
   color: white;
-  text-transform: uppercase;
+  font-size: 1.1rem;
   font-weight: 600;
+  text-transform: uppercase;
   text-decoration: none;
 }
 
-/* Ocultar el brand en pantallas pequeñas */
-@media (max-width: 991.98px) {
-  .admin-navbar__brand {
-    display: none;
-  }
+/* --- Contenedor del Buscador --- */
+.contenedorbusqueda {
+  /* Permite que el buscador ocupe un espacio flexible pero no todo */
+  flex-grow: 0.5;
+  margin: 0 2rem; /* Añade espacio a los lados */
 }
 
-/* Formulario de búsqueda */
-.admin-navbar__search-form {
-  margin-left: auto; /* Mueve el formulario a la derecha */
-  margin-right: 1.5rem !important; /* mr-3 */
-}
-
-/* Ocultar el formulario en pantallas medianas y pequeñas */
-@media (max-width: 767.98px) {
-  .admin-navbar__search-form {
-    display: none;
-  }
-}
-
-.admin-navbar__search-form .form-group {
+/* Anula márgenes por defecto de reactstrap/bootstrap */
+.contenedorbusqueda .form-group {
   margin-bottom: 0;
 }
 
-/* Estilos para el input de búsqueda */
-.admin-navbar__search-form .input-group {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 0;
-  border-radius: 0.375rem;
-  transition: all 0.15s ease;
+.contenedorbusqueda .input-group {
+  width: 100%;
 }
 
-.admin-navbar__search-form .input-group:focus-within {
-  background-color: rgba(255, 255, 255, 0.2);
+/* Estilo del campo de texto del buscador */
+.contenedorbusqueda input {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 0.375rem !important; /* Asegura el borde redondeado */
+  padding-left: 1rem;
+  box-shadow: none;
 }
 
-.admin-navbar__search-form .input-group .input-group-text {
-  background-color: transparent;
-  border: 0;
-  color: rgba(255, 255, 255, 0.6);
+.contenedorbusqueda input::placeholder {
+  color: #8898aa;
 }
 
-.admin-navbar__search-form .input-group .form-control {
-  background-color: transparent;
-  border: 0;
-  color: #fff;
+/* Oculta el contenedor del ícono si no estás usando uno */
+.contenedorbusqueda .input-group-text {
+  display: none;
 }
 
-.admin-navbar__search-form .input-group .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
 
-/* Contenedor de la navegación de usuario */
-.admin-navbar__nav {
+/* --- Contenedor del Perfil de Usuario --- */
+.contenedoruser {
   align-items: center;
 }
 
-@media (max-width: 767.98px) {
-  .admin-navbar__nav {
-    display: none;
-  }
-}
-
-/* Contenedor del perfil de usuario */
 .user-profile {
   display: flex;
   align-items: center;
@@ -86,26 +78,59 @@
 }
 
 .user-profile__avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-/* Nombre del usuario */
-.user-profile__media {
-  margin-left: 0.75rem;
-}
-
-@media (max-width: 991.98px) {
-  .user-profile__media {
-    display: none;
-  }
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Hace la imagen redonda */
+  object-fit: cover; /* Asegura que la imagen no se distorsione */
+  margin-right: 10px;
 }
 
 .user-profile__name {
-  margin-bottom: 0;
-  font-size: 0.875rem;
   font-weight: 600;
   color: white;
+}
+
+/* --- Menú Desplegable --- */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  
+  /* --- AJUSTES DE POSICIÓN --- */
+  top: 100%;       /* Empuja el menú hacia abajo un 100% de la altura del contenedor padre. */
+  right: 0;        /* Alinea el borde derecho del menú con el borde derecho del padre. */
+  left: auto;      /* Evita que la propiedad 'left' interfiera. */
+  margin-top: 8px; /* (Opcional) Añade un pequeño espacio para que no esté pegado. */
+
+  /* --- ESTILOS VISUALES (ya los tenías) --- */
+  background-color: white; 
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.375rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 2. Muestra el menú SOLO cuando se hace clic (cuando el padre tiene la clase .show) */
+.show > .dropdown-menu {
+  display: block; /* MUY IMPORTANTE: Muestra el menú al hacer clic */
+}
+
+/* 3. Mejora el estilo del texto y los íconos dentro del menú */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  color: #525f7f; /* Color de texto legible */
+  font-weight: 400;
+}
+
+.dropdown-item:hover {
+  background-color: #f6f9fc; /* Color de fondo al pasar el mouse */
+  color: #32325d;
+}
+
+.dropdown-item i {
+  margin-right: 1rem;
+  color: #5e72e4;
+  font-size: 1.1rem;
+}
+.dropdown {
+  position: relative;
 }

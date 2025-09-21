@@ -1,3 +1,4 @@
+/* src/index.css */
 :root {
   /* Paleta de colores de Patita Feliz */
   --color-base: #8B5A3E; /* Marrón Caramelo */
@@ -8,40 +9,44 @@
   --color-blanco: #FFFFFF; /* Blanco Puro */
   --color-texto: #333333; /* Gris oscuro para el texto principal */
 
-  /* Estilos de fuente */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   font-weight: 400;
-
-  color-scheme: light dark;
   color: var(--color-texto);
   background-color: var(--color-fondo);
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  /* Hacemos que el tamaño de fuente base se adapte al ancho de la pantalla */
+  font-size: 16px;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
+  font-size: 1rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   margin-top: 0;
   margin-bottom: 0.5rem;
-  color: var(--color-base); /* Usamos el color base para los encabezados */
+  color: var(--color-base);
 }
 
 a {
   font-weight: 500;
-  color: var(--color-accion); /* El color de acción resalta bien en los enlaces */
+  color: var(--color-accion);
   text-decoration: none;
+  transition: color 0.3s ease;
 }
 a:hover {
   text-decoration: underline;
+  color: #c42d39;
 }
 
 button {
@@ -54,4 +59,18 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #c42d39;
+  transform: translateY(-2px);
+}
+
+/* --- Media Query para Responsividad --- */
+@media (max-width: 600px) {
+  html {
+    /* Reducimos ligeramente el tamaño de la fuente base en móviles */
+    font-size: 15px;
+  }
 }

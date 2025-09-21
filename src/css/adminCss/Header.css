@@ -1,62 +1,83 @@
-/* Estilos para el Header de Patita Feliz */
-.header-container {
-  background: linear-gradient(87deg, var(--color-base) 0, var(--color-confianza) 100%);
-  padding-top: 3rem;
-  padding-bottom: 7rem;
+/* src/css/adminCss/Header.css */
+
+/* --- Contenedor Principal del Header --- */
+.contenedorheader {
+  background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
+  padding: 3rem 0; /* Espacio vertical para que las tarjetas respiren */
 }
 
+/* --- Estilos para cada Tarjeta de Estadística --- */
 .stat-card {
   border: none;
-  border-radius: .375rem;
-  box-shadow: 0 0 2rem 0 rgba(136,152,170,.15);
+  border-radius: 0.5rem; /* Bordes redondeados */
+  box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15); /* Sombra sutil */
+  margin-bottom: 1.5rem; /* Espacio por si se apilan en móvil */
+  display: flex; /* Ayuda a que el contenido se estire correctamente */
+  flex-direction: column;
 }
 
 .stat-card-body {
   padding: 1.5rem;
+  flex-grow: 1; /* Permite que el cuerpo de la tarjeta crezca */
 }
 
+
+/* --- Tipografía dentro de las Tarjetas --- */
 .stat-card-title {
-  font-size: .8125rem;
-  font-weight: 600;
-  text-transform: uppercase;
   color: #8898aa;
-  margin-bottom: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
 .stat-card-value {
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 600;
-  margin-bottom: 0;
+  color: #32325d;
+  display: block; /* Asegura que ocupe su propia línea */
 }
 
+
+/* --- Contenedor del Ícono Circular --- */
 .stat-icon-container {
-  width: 3rem;
-  height: 3rem;
-  display: inline-flex;
-  align-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%; /* Lo hace un círculo perfecto */
+  display: flex;
   justify-content: center;
-  border-radius: 50%;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon-container i {
+  font-size: 1.5rem;
   color: white;
-  box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
 }
 
-/* Colores de los íconos */
-.icon-color-accion {
-  background-color: var(--color-accion);
-}
-.icon-color-salud {
-  background-color: var(--color-salud);
-}
-.icon-color-confianza {
-  background-color: var(--color-confianza);
-}
-.icon-color-base {
-    background-color: var(--color-base);
-}
+/* Colores de fondo para cada ícono */
+.icon-color-accion { background: #f5365c; }   /* Rojo */
+.icon-color-salud { background: #fb6340; }    /* Naranja */
+.icon-color-base { background: #ffd600; }     /* Amarillo */
+.icon-color-confianza { background: #11cdef; } /* Cian */
 
+
+/* --- Pie de la Tarjeta (Footer) --- */
 .stat-card-footer {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   margin-bottom: 0;
-  font-size: .875rem;
+  font-size: 0.875rem;
   color: #8898aa;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* Para que se ajuste bien en pantallas pequeñas */
 }
+
+.stat-card-footer .mr-2 {
+  margin-right: 0.5rem !important;
+}
+
+/* Ajustes finos para los textos de Bootstrap */
+.text-success { color: #2dce89 !important; }
+.text-danger { color: #f5365c !important; }
+.text-warning { color: #fb6340 !important; } /* Usamos el naranja para 'warning' */
