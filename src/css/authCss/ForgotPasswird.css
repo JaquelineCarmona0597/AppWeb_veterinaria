@@ -1,0 +1,99 @@
+/* -------------------------------------------------------------------------- */
+/* 6. ESTILOS PARA EL MODAL (DIALOG) DE "OLVIDÉ MI CONTRASEÑA"                */
+/* -------------------------------------------------------------------------- */
+
+/* Animación de entrada para el modal */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Contenedor principal del modal */
+.dialog .MuiDialog-paper {
+  border-radius: 16px !important;
+  background-color: var(--color-superficie) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  width: 100%;
+  max-width: 450px;
+  animation: fadeInScale 0.3s ease-out;
+}
+
+/* Título del modal */
+.ttituloDial {
+  color: var(--color-marca) !important;
+  font-weight: 600 !important;
+  padding: 1.5rem !important;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+/* Cuerpo del modal */
+.cuerpoDial {
+  padding: 1.5rem !important;
+}
+
+.textoDial {
+  color: var(--color-texto-secundario) !important;
+  line-height: 1.6;
+}
+
+/* Campo de texto (variante "standard") */
+.inputDial {
+  margin-top: 1rem !important;
+}
+
+/* Línea inferior del input */
+.inputDial .MuiInput-underline:before {
+  border-bottom-color: var(--color-borde) !important;
+}
+.inputDial .MuiInput-underline:hover:not(.Mui-disabled):before {
+  border-bottom-color: var(--color-texto-principal) !important;
+}
+.inputDial .MuiInput-underline:after {
+  /* Línea que aparece al hacer foco */
+  border-bottom: 2px solid var(--color-primario) !important;
+}
+
+/* Etiqueta del input al hacer foco */
+.inputDial .MuiInputLabel-root.Mui-focused {
+  color: var(--color-primario) !important;
+}
+
+/* Contenedor de los botones */
+.accionesDial {
+  padding: 1rem 1.5rem !important;
+  background-color: var(--color-primario-claro);
+  border-top: 1px solid var(--color-borde);
+}
+
+/* Estilos para los botones del modal */
+.botonDialog {
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Botón "Continuar" (el último botón) */
+.botonDialog:last-of-type {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto-blanco) !important;
+}
+.botonDialog:last-of-type:hover {
+  background-color: var(--color-primario-oscuro) !important;
+  transform: translateY(-2px);
+}
+
+/* Botón "Cancelar" (el primer botón) */
+.botonDialog:first-of-type {
+  color: var(--color-texto-secundario) !important;
+}
+.botonDialog:first-of-type:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

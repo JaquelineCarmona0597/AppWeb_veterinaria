@@ -1,88 +1,183 @@
-/* src/components/Login/Login.css */
+/**
+ * Estilos para el componente de Login de Patita Feliz
+ * Organizado por secciones lógicas.
+ */
 
-/* Keyframes para la animación de entrada */
-@keyframes fadeInSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* -------------------------------------------------------------------------- */
+/* 1. VARIABLES GLOBALES (PALETA DE COLORES)                                  */
+/* -------------------------------------------------------------------------- */
+:root {
+  --color-primario: #457B9D;
+  --color-primario-oscuro: #335c79;
+  --color-primario-claro: #EBF2F7;
+  --color-marca: #8B5A3E;
+  --color-peligro: #E63946;
+  --color-fondo: #F5F5DC;
+  --color-superficie: #FFFFFF;
+  --color-borde: #D1D1D1;
+  --color-texto-principal: #333333;
+  --color-texto-secundario: #555555;
+  --color-texto-blanco: #FFFFFF;
 }
 
+/* -------------------------------------------------------------------------- */
+/* 2. LAYOUT PRINCIPAL Y TARJETA                                              */
+/* -------------------------------------------------------------------------- */
 .login-container {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 16px;
+  justify-content: center;
   background-color: var(--color-fondo);
+  padding: 1rem;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .login-card {
+  max-width: 420px;
   width: 100%;
-  max-width: 400px;
-  padding: 32px;
-  background-color: var(--color-blanco);
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  
-  /* Aplicamos la animación */
-  animation: fadeInSlideUp 0.7s ease-out forwards;
+  padding: 2.5rem 2rem !important;
+  border-radius: 16px !important;
+  border: 1px solid var(--color-borde) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  animation: fadeInUp 0.6s ease-out;
 }
 
-.login-logo {
+/* -------------------------------------------------------------------------- */
+/* 3. ENCABEZADO Y TIPOGRAFÍA                                                 */
+/* -------------------------------------------------------------------------- */
+.login-header, .login-logo {
   text-align: center;
-  color: var(--color-base);
+  margin-bottom: 1.5rem;
 }
 
-.login-logo h2 {
-  font-size: 2em;
-  margin: 0;
+.login-logo-image {
+  max-width: 120px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
 }
 
 .login-title {
-  text-align: center;
-  font-size: clamp(1.8rem, 10vw, 2rem);
-  color: var(--color-texto);
-  margin-bottom: 8px;
+  color: var(--color-texto-principal) !important;
+  margin-bottom: 2rem !important;
 }
 
+.forgot-password-link, .signup-text {
+  color: var(--color-texto-secundario) !important;
+  text-align: center;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. FORMULARIO Y CAMPOS DE TEXTO (INPUTS)                                   */
+/* -------------------------------------------------------------------------- */
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.5rem;
 }
 
-/* Estilos para los campos de entrada */
-.form-input {
-  width: 100%;
-  padding: 12px 15px;
-  font-size: 1em;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+.input .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-/* Mejora visual al hacer foco en un input */
-.form-input:focus {
-  outline: none;
-  border-color: var(--color-confianza);
-  box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.2);
+.input .MuiOutlinedInput-notchedOutline {
+  border: 1px solid var(--color-borde) !important;
 }
 
-.forgot-password-link {
-  text-align: center;
-  font-size: 0.9em;
+.input .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-texto-principal) !important;
 }
 
-.signup-text {
-  text-align: center;
-  margin-top: 16px;
+.input .MuiOutlinedInput-root.Mui-focused {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primario) 20%, transparent) !important;
+}
+
+.input .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primario) !important;
+  border-width: 2px !important;
+}
+
+.input .MuiInputLabel-root.Mui-focused {
+  color: var(--color-primario) !important;
+  font-weight: 500;
+}
+
+.input .MuiFormHelperText-root {
+  color: var(--color-peligro) !important;
+  font-weight: 500 !important;
+  margin-left: 0 !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. BOTONES                                                                 */
+/* -------------------------------------------------------------------------- */
+.submit-button, .google-button, .registrate {
+  border-radius: 8px !important;
+  padding: 12px 0 !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.submit-button:hover, .google-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón Primario (Iniciar Sesión) */
+.submit-button {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto-blanco) !important;
+}
+.submit-button:hover {
+  background-color: var(--color-primario-oscuro) !important;
+}
+
+/* Botón Secundario (Google) */
+.google-button {
+  border-color: var(--color-borde) !important;
+  color: var(--color-texto-secundario) !important;
+}
+.google-button:hover {
+  border-color: var(--color-primario) !important;
+  background-color: var(--color-primario-claro) !important;
+  color: var(--color-primario) !important;
+}
+
+/* Botón de Texto (Regístrate) */
+.registrate {
+  color: var(--color-primario) !important;
+  padding: 8px !important;
+}
+.registrate:hover {
+  background-color: var(--color-primario-claro) !important;
+}
+
+/* Estado de Carga para el Botón Principal */
+.submit-button.loading {
+  background-color: var(--color-primario-oscuro) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  cursor: not-allowed;
+}
+
+.submit-button.loading::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  border-top-color: var(--color-texto-blanco);
+  animation: spin 1s ease-in-out infinite;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

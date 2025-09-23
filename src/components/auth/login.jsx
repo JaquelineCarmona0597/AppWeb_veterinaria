@@ -1,69 +1,58 @@
-// Importamos las dependencias necesarias de React y Material-UI.
-import React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Divider from '@mui/material/Divider';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import MuiLink from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import Card from '@mui/material/Card';
-
-// Importamos componentes de enrutamiento y personalizados.
-import { Link } from 'react-router-dom';
-import { GoogleIcon } from './customicons';
+// 1. IMPORTACIONES
+// -----------------------------------------------------------------------------
+// React y Librerías
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Importamos el componente del modal para recuperar la contraseña.
-import ForgotPasswordModal from './ForgotPassword';
+// Componentes de Material-UI
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import Checkbox from '@mui/material/Checkbox';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import MuiLink from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-// Importamos nuestro nuevo archivo de estilos CSS.
+// Íconos de Material-UI
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
+// Componentes y Estilos Locales
+import { GoogleIcon } from './customicons';
+import ForgotPasswordModal from './ForgotPassword';
 import '../../css/authCss/Login.css';
 
-// Definimos el componente de Login.
+// 2. COMPONENTE PRINCIPAL
+// -----------------------------------------------------------------------------
 export default function Login() {
-  // Estados para manejar los errores de validación de los campos de email y contraseña.
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  // --- Estados del Componente ---
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Estado para controlar la visibilidad del modal de "Olvidé mi contraseña".
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  // Estados para errores de validación
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+
   const navigate = useNavigate();
 
-  // Función para navegar al componente de registro.
-  const handleNavigateToLogin = () => {
-    navigate('/auth/signup');
-  };
-
-  // Función que se ejecuta al enviar el formulario.
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevenimos el comportamiento por defecto del formulario.
-    if (emailError || passwordError) {
-      return; // Si hay errores de validación, no hacemos nada.
-    }
-    const data = new FormData(event.currentTarget);
-    // Mostramos los datos del formulario en la consola (para depuración).
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-
-  // Función para validar los campos del formulario.
+  // --- Manejadores de Eventos (Handlers) ---
   const validateInputs = () => {
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
     let isValid = true;
-
-    // Validamos el campo de email.
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
+    // Validación de Email
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
       setEmailErrorMessage('Por favor, introduce un email válido.');
       isValid = false;
@@ -71,9 +60,8 @@ export default function Login() {
       setEmailError(false);
       setEmailErrorMessage('');
     }
-
-    // Validamos el campo de contraseña.
-    if (!password.value || password.value.length < 6) {
+    // Validación de Contraseña
+    if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('La contraseña debe tener al menos 6 caracteres.');
       isValid = false;
@@ -81,103 +69,118 @@ export default function Login() {
       setPasswordError(false);
       setPasswordErrorMessage('');
     }
-
     return isValid;
   };
 
-  // Funciones para abrir y cerrar el modal.
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!validateInputs()) return;
+
+    setIsLoading(true);
+    // Simulación de una llamada a API
+    setTimeout(() => {
+      console.log({ email, password });
+      setIsLoading(false);
+    }, 2000);
+  };
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => event.preventDefault();
+  const handleNavigateToSignup = () => navigate('/auth/signup');
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  // 3. RENDERIZADO DEL JSX
+  // -----------------------------------------------------------------------------
   return (
     <>
-      {/* Componente para normalizar los estilos del navegador. */}
       <CssBaseline />
-      {/* Contenedor principal que centra el contenido verticalmente. */}
       <Stack direction="column" justifyContent="space-between" className="login-container">
-        {/* Tarjeta que contiene el formulario de login. */}
         <Card variant="outlined" className="login-card">
-          {/* Logo de la aplicación. */}
-          <Typography variant="h2" className="login-logo">
-            Tu Logo
-          </Typography>
-          {/* Título del formulario. */}
-          <Typography component="h1" variant="h4" className="login-title">
-            Inicia Sesión
-          </Typography>
-          {/* Formulario de login. */}
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            className="login-form"
-          >
-            {/* Campo de Email. */}
-            <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <TextField
-                error={emailError}
-                helperText={emailErrorMessage}
-                id="email"
-                type="email"
-                name="email"
-                placeholder="tu@email.com"
-                autoComplete="email"
-                autoFocus
-                required
-                fullWidth
-                variant="outlined"
-                color={emailError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            {/* Campo de Contraseña. */}
-            <FormControl>
-              <FormLabel htmlFor="password">Contraseña</FormLabel>
-              <TextField
-                error={passwordError}
-                helperText={passwordErrorMessage}
-                name="password"
-                placeholder="••••••"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                required
-                fullWidth
-                variant="outlined"
-                color={passwordError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            {/* Checkbox para "Recuérdame". */}
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Recuérdame"
+          {/* --- Encabezado --- */}
+          <Box className="login-header">
+            <img src="/src/assets/Logo.png" alt="Logo" className="login-logo-image" />
+            <Typography component="h1" variant="h4" className="login-title">
+              Inicia Sesión
+            </Typography>
+          </Box>
+
+          {/* --- Formulario Principal --- */}
+          <Box component="form" onSubmit={handleSubmit} noValidate className="login-form">
+            <TextField
+              className="input"
+              label="Email"
+              id="email"
+              type="email"
+              placeholder="tu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              error={emailError}
+              helperText={emailErrorMessage}
+              required
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start"><MailOutlineIcon color="action" /></InputAdornment>
+                ),
+              }}
             />
-            {/* Botón para enviar el formulario. */}
+            <TextField
+              className="input"
+              label="Contraseña"
+              id="password"
+              placeholder="••••••"
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={passwordError}
+              helperText={passwordErrorMessage}
+              required
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start"><LockOutlinedIcon color="action" /></InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            
+            {/* --- Opciones del Formulario --- */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label={<Typography variant="body2">Recuérdame</Typography>}
+              />
+              <MuiLink component="button" type="button" onClick={handleOpenModal} variant="body2" className="forgot-password-link">
+                ¿Olvidaste tu contraseña?
+              </MuiLink>
+            </Box>
+
+            {/* --- Botón de Envío --- */}
             <Button
+              className={`submit-button ${isLoading ? 'loading' : ''}`}
               type="submit"
               fullWidth
               variant="contained"
-              onClick={validateInputs}
+              disabled={isLoading}
             >
-              Iniciar Sesión
+              {isLoading ? 'Iniciando...' : 'Iniciar Sesión'}
             </Button>
-            {/* Enlace para abrir el modal de "Olvidé mi contraseña". */}
-            <MuiLink
-              component="button"
-              type="button"
-              onClick={handleOpenModal}
-              variant="body2"
-              className="forgot-password-link"
-            >
-              ¿Olvidaste tu contraseña?
-            </MuiLink>
           </Box>
-          {/* Divisor con texto. */}
-          <Divider>o</Divider>
-          {/* Contenedor para opciones de inicio de sesión alternativas. */}
+
+          {/* --- Separador y Login Social --- */}
+          <Divider sx={{ my: 2 }}>o</Divider>
           <Box className="social-login-container">
-            {/* Botón para iniciar sesión con Google. */}
             <Button
+              className="google-button"
               fullWidth
               variant="outlined"
               onClick={() => alert('Iniciar sesión con Google')}
@@ -185,17 +188,16 @@ export default function Login() {
             >
               Google
             </Button>
-            {/* Texto y botón para navegar al registro. */}
-            <Typography className="signup-text">
+            <Typography variant="body2" className="signup-text">
               ¿No tienes una cuenta?{' '}
-              <Button variant="text" size="small" onClick={handleNavigateToLogin}>
+              <Button className="registrate" variant="text" size="small" onClick={handleNavigateToSignup}>
                 Regístrate
               </Button>
             </Typography>
           </Box>
         </Card>
       </Stack>
-      {/* Componente del modal que se muestra u oculta según el estado. */}
+
       <ForgotPasswordModal open={isModalOpen} onClose={handleCloseModal} />
     </>
   );

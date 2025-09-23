@@ -8,6 +8,7 @@ import Dashboard from '../views/Dashboard.jsx';
 import Veterinarios from '../views/Veterinarios.jsx';
 import Horarios from '../views/Horarios.jsx';
 import AdminLayout from '../admin/layout/adminlayout.jsx';
+import NuevoVeterinario from '../views/NuevoVeterinario.jsx';
 
 const AppRouter = () => {
   return (
@@ -15,6 +16,7 @@ const AppRouter = () => {
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="veterinarios" element={<Veterinarios />} />
+        <Route path="veterinarios/nuevo" element={<NuevoVeterinario />} />
         <Route path="horarios" element={<Horarios />} />
         {/* Redirección por defecto dentro del panel de admin */}
         <Route index element={<Navigate to="dashboard" replace />} />
@@ -25,7 +27,7 @@ const AppRouter = () => {
       <Route path="/auth/signup" element={<SignUp />} />
 
       {/* Redirección desde la raíz de la web hacia la página de login */}
-      <Route path="/" element={<Navigate to="/admin" replace />} />
+      <Route path="/" element={<Navigate to="/auth/login" replace />} />
     </Routes>
   );
 };

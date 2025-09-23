@@ -1,58 +1,63 @@
-/* src/index.css */
+/* Paleta de Colores Mejorada para Patita Feliz */
 :root {
-  /* Paleta de colores de Patita Feliz */
-  --color-base: #8B5A3E; /* Marrón Caramelo */
-  --color-fondo: #F5F5DC; /* Beige Claro */
-  --color-accion: #E63946; /* Rojo Corazón */
-  --color-salud: #2A9D80; /* Verde Pastel */
-  --color-confianza: #457B9D; /* Azul Suave */
-  --color-blanco: #FFFFFF; /* Blanco Puro */
-  --color-texto: #333333; /* Gris oscuro para el texto principal */
+  /* Colores Primarios (para acciones principales) */
+  --color-primario: #457B9D;         /* Azul Confianza (Para Login, Guardar, etc.) */
+  --color-primario-oscuro: #335c79;  /* Versión oscura para hover */
+  --color-primario-claro: #EBF2F7;   /* Tono muy claro para fondos de alerta o highlights */
+
+  /* Colores de Marca y Acento */
+  --color-marca: #8B5A3E;            /* Marrón Caramelo (Para títulos y elementos de marca) */
+  --color-marca-oscuro: #6d4731;     /* Versión oscura para texto o hover */
+  
+  /* Colores de Estado y Notificación */
+  --color-exito: #2A9D8F;            /* Verde Salud (Para mensajes de éxito) */
+  --color-advertencia: #F4A261;      /* Naranja Suave (Para avisos o alertas no críticas) */
+  --color-peligro: #E63946;          /* Rojo Corazón (Para errores o acciones destructivas) */
+  --color-peligro-oscuro: #c42d39;   /* Versión oscura para hover */
+
+  /* Colores Neutros y de Fondo */
+  --color-fondo: #F5F5DC;            /* Beige Claro (Fondo general de la app) */
+  --color-superficie: #FFFFFF;       /* Blanco (Para cards, modales, y fondos de sección) */
+  --color-borde: #D1D1D1;            /* Gris claro para bordes de inputs y separadores */
+  
+  /* Colores de Texto */
+  --color-texto-principal: #333333;  /* Gris oscuro para párrafos y texto importante */
+  --color-texto-secundario: #555555; /* Gris medio para texto menos importante o placeholders */
+  --color-texto-blanco: #FFFFFF;     /* Texto sobre fondos oscuros o de color */
 
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   font-weight: 400;
-  color: var(--color-texto);
+  color: var(--color-texto-principal);
   background-color: var(--color-fondo);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-html {
-  /* Hacemos que el tamaño de fuente base se adapte al ancho de la pantalla */
-  font-size: 16px;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-size: 1rem;
-}
+/* ... (html y body se quedan igual) ... */
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   margin-top: 0;
   margin-bottom: 0.5rem;
-  color: var(--color-base);
+  color: var(--color-marca); /* Usamos el color de marca para los títulos */
 }
 
 a {
   font-weight: 500;
-  color: var(--color-accion);
+  color: var(--color-primario); /* Los enlaces ahora son del color primario (azul) */
   text-decoration: none;
   transition: color 0.3s ease;
 }
 a:hover {
   text-decoration: underline;
-  color: #c42d39;
+  color: var(--color-primario-oscuro);
 }
 
+/* Estilo base para todos los botones */
 button {
   cursor: pointer;
-  background-color: var(--color-accion);
-  color: var(--color-blanco);
   border: 1px solid transparent;
   border-radius: 8px;
   padding: 0.6em 1.2em;
@@ -63,14 +68,35 @@ button {
 }
 
 button:hover {
-  background-color: #c42d39;
   transform: translateY(-2px);
 }
 
-/* --- Media Query para Responsividad --- */
-@media (max-width: 600px) {
-  html {
-    /* Reducimos ligeramente el tamaño de la fuente base en móviles */
-    font-size: 15px;
-  }
+/* Clase para el botón primario (Login, Guardar, etc.) */
+.btn-primario {
+  background-color: var(--color-primario);
+  color: var(--color-texto-blanco);
+}
+.btn-primario:hover {
+  background-color: var(--color-primario-oscuro);
+}
+
+/* Clase para botones de peligro (Eliminar) */
+.btn-peligro {
+  background-color: var(--color-peligro);
+  color: var(--color-texto-blanco);
+}
+.btn-peligro:hover {
+  background-color: var(--color-peligro-oscuro);
+}
+
+/* Clase para botones secundarios (Cancelar) */
+.btn-secundario {
+  background-color: transparent;
+  color: var(--color-texto-secundario);
+  border-color: var(--color-borde);
+}
+.btn-secundario:hover {
+  background-color: var(--color-primario-claro);
+  color: var(--color-primario-oscuro);
+  border-color: var(--color-primario);
 }

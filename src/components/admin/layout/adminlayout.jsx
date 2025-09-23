@@ -1,32 +1,54 @@
-// src/admin/layout/adminlayout.jsx
-
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Box } from '@mui/material'; // Usaremos Box para un layout simple
+import { Box, Toolbar, CssBaseline } from '@mui/material';
 
-// Componentes
-import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
+import Breadcrumb from '..//components/Breadcrumb'; // ✅ 1. Importa el nuevo componente
+import Header from '../components/Header';
 
 const AdminLayout = () => {
-  // ✅ Estado local para controlar el sidebar
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const drawerWidth = 240;
 
-  // ✅ Función para pasarla al Header
   const toggleSidebar = () => {
+
     setSidebarOpen(!isSidebarOpen);
+
   };
 
+
   return (
-    // Usamos Box de MUI para un layout flexible y simple
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Le pasamos el estado y la función a los componentes hijos */}
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
       <Header isSidebarOpen={isSidebarOpen} handleToggleSidebar={toggleSidebar} />
       <Sidebar isSidebarOpen={isSidebarOpen} />
       
-      <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: '64px' }}>
-        {/* El Outlet renderizará la página actual (Dashboard, etc.) */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: `calc(100% - ${drawerWidth}px)`,
+          transition: (theme) => theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
+          marginLeft: `-${drawerWidth}px`,
+          ...(isSidebarOpen && {
+            transition: (theme) => theme.transitions.create('margin', {
+              easing: theme.transitions.easing.easeOut,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
+            marginLeft: 0,
+          }),
+        }}
+      >
+        <Toolbar />
+        
+        {/* ✅ 2. Añade el componente Breadcrumb aquí */}
+        <Breadcrumb />
+
         <Outlet />
         <Footer />
       </Box>
