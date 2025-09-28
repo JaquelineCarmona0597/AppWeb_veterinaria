@@ -1,18 +1,38 @@
-import React, { useState, useEffect } from 'react';
+/* ==========================================
+   IMPORTS
+   ========================================== */
+// React y Hooks de React Router
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { db } from '../../firebase'; // Comentado para no usar la base de datos
-// import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 
 // Componentes de Material-UI
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, TextField } from '@mui/material';
+import { 
+  Box, 
+  Button, 
+  Dialog, 
+  DialogActions, 
+  DialogContent, 
+  DialogContentText, 
+  DialogTitle, 
+  Typography, 
+  TextField 
+} from '@mui/material';
+
+// Componentes de Data Grid
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'; 
+
+// Iconos de Material-UI
 import AddIcon from '@mui/icons-material/Add'; 
-// ✅ 1. Importamos los íconos necesarios
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import GoogleIcon from '@mui/icons-material/Google';
 
+// Estilos locales
+import '../../css/authCss/Veterinarios.css';
 
-// --- DATOS DE MUESTRA PARA DISEÑO ---
+
+/* ==========================================
+   DATOS DE MUESTRA (PARA DESARROLLO)
+   ========================================== */
 const datosDeMuestra = [
   { id: '1', nombre: 'Juan', apellido: 'Pérez', especialidad: 'Cardiología', email: 'juan.perez@email.com' },
   { id: '2', nombre: 'Ana', apellido: 'García', especialidad: 'Dermatología', email: 'ana.garcia@email.com' },
@@ -20,21 +40,32 @@ const datosDeMuestra = [
 ];
 
 
+/* ==========================================
+   DEFINICIÓN DEL COMPONENTE: Veterinarios
+   ========================================== */
 const Veterinarios = () => {
+
+  /* ==========================================
+     ESTADO DEL COMPONENTE (HOOKS)
+     ========================================== */
   const navigate = useNavigate();
-  const [veterinarios, setVeterinarios] = useState(datosDeMuestra); 
-  const [loading, setLoading] = useState(false); 
+  const [veterinarios, setVeterinarios] = useState(datosDeMuestra); // Almacena los datos de la tabla
+  const [loading, setLoading] = useState(false); // Controla el estado de carga de la tabla
   
-  // --- Estados para el diálogo de borrado ---
+  // Estados para el diálogo de confirmación de borrado
   const [dialogOpen, setDialogOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
 
-  // ✅ 2. Estados para el nuevo modal de invitación
+  // Estados para el modal de invitación
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
 
 
-  // --- Lógica para el borrado ---
+  /* ==========================================
+     LÓGICA Y MANEJADORES DE EVENTOS
+     ========================================== */
+  
+  // --- Lógica para Diálogo de Borrado ---
   const handleOpenDialog = (id) => {
     setIdToDelete(id);
     setDialogOpen(true);
@@ -47,29 +78,32 @@ const Veterinarios = () => {
 
   const handleDelete = () => {
     if (idToDelete) {
+      // Filtra los datos para "eliminar" el registro (en modo de prueba)
       setVeterinarios(veterinarios.filter(v => v.id !== idToDelete));
       handleCloseDialog();
     }
   };
 
-  // ✅ 3. Funciones para controlar el modal de invitación
+  // --- Lógica para Modal de Invitación ---
   const handleOpenInviteModal = () => {
     setInviteModalOpen(true);
   };
 
   const handleCloseInviteModal = () => {
     setInviteModalOpen(false);
-    setInviteEmail(''); // Limpiamos el email al cerrar
+    setInviteEmail(''); // Limpia el campo de email al cerrar
   };
 
   const handleSendInvitation = () => {
-    // Por ahora, solo mostramos el email en la consola
+    // Lógica para enviar la invitación (actualmente solo simula con un log)
     console.log(`Invitación enviada a: ${inviteEmail}`);
-    handleCloseInviteModal(); // Cerramos el modal después de "enviar"
+    handleCloseInviteModal();
   };
   
   
-  // --- Definición de las Columnas para la Tabla ---
+  /* ==========================================
+     CONFIGURACIÓN DE LA TABLA (COLUMNAS)
+     ========================================== */
   const columns = [
     { field: 'nombre', headerName: 'Nombres', width: 150 },
     { field: 'apellido', headerName: 'Apellidos', width: 150 },
@@ -86,8 +120,8 @@ const Veterinarios = () => {
             variant="contained"
             color="primary"
             size="small"
-            sx={{ mr: 1 }}
             onClick={() => navigate(`/admin/veterinarios/${params.id}/edit`)}
+            sx={{ mr: 1 }}
           >
             Editar
           </Button>
@@ -104,27 +138,32 @@ const Veterinarios = () => {
     },
   ];
 
+
+  /* ==========================================
+     RENDERIZADO DEL COMPONENTE (JSX)
+     ========================================== */
   return (
-    <Box sx={{ p: 3 }}>
+    <Box className='containeer-box'>
       
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h5" component="h1">
+      {/* --- Cabecera: Título y Botones de Acción --- */}
+      <Box className='sub-container' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography className='titulo' variant="h5" component="h1">
           Gestión de Veterinarios
         </Typography>
-        {/* ✅ 4. Contenedor para los botones de acción */}
-        <Box>
+        
+        <Box className='action-buttons'>
           <Button
+            className='invite-button'
             variant="outlined"
-            color="secondary"
             startIcon={<PersonAddIcon />}
-            onClick={handleOpenInviteModal} // Abre el nuevo modal
+            onClick={handleOpenInviteModal}
             sx={{ mr: 2 }}
           >
             Invitar Veterinario
           </Button>
           <Button
+            className='add-button'
             variant="contained"
-            color="primary"
             startIcon={<AddIcon />}
             onClick={() => navigate('/admin/veterinarios/nuevo')}
           >
@@ -133,56 +172,55 @@ const Veterinarios = () => {
         </Box>
       </Box>
 
-      <Box sx={{ height: 600, width: '100%' }}>
+      {/* --- Tabla de Datos --- */}
+      <Box className='box-edit' sx={{ height: 600, width: '100%' }}>
         <DataGrid
+          className='data-grid'
           rows={veterinarios}
           columns={columns}
           loading={loading}
-          pageSize={10}
-          rowsPerPageOptions={[5, 10, 20]}
-          disableSelectionOnClick
           components={{ Toolbar: GridToolbar }}
         />
       </Box>
 
       {/* --- Diálogo de Confirmación de Borrado --- */}
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Confirmar eliminación</DialogTitle>
+      <Dialog className='container-dialog' open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle className='confirmacion'>Confirmar eliminación</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText className='texto-dialog'>
             ¿Estás seguro de que quieres eliminar este registro? Esta acción no se puede deshacer.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancelar</Button>
-          <Button onClick={handleDelete} color="error" autoFocus>
+        <DialogActions className='iconos'>
+          <Button className='cancelar' onClick={handleCloseDialog}>Cancelar</Button>
+          <Button className='eliminar' onClick={handleDelete} color="error" autoFocus>
             Eliminar
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* ✅ 5. Nuevo Modal para Invitar Veterinario */}
-      <Dialog open={inviteModalOpen} onClose={handleCloseInviteModal} fullWidth maxWidth="sm">
-        <DialogTitle>Invitar a un Nuevo Veterinario</DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ mb: 2 }}>
-            Ingresa el correo electrónico del veterinario para enviarle una invitación para unirse a la plataforma.
+      {/* --- Diálogo para Invitar Veterinario --- */}
+      <Dialog className='invitar-veterinario' open={inviteModalOpen} onClose={handleCloseInviteModal} fullWidth maxWidth="sm">
+        <DialogTitle className='invit'>Invitar a un Nuevo Veterinario</DialogTitle>
+        <DialogContent className='contenido-invitacion'>
+          <DialogContentText className='correo-invitacion' sx={{ mb: 2 }}>
+            Ingresa el correo del veterinario para enviarle una invitación y unirse a la plataforma.
           </DialogContentText>
           <TextField
+            className='input-email'
             autoFocus
-            margin="dense"
-            id="email"
+            fullWidth
             label="Correo Electrónico"
             type="email"
-            fullWidth
             variant="outlined"
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
           />
         </DialogContent>
-        <DialogActions sx={{ p: '0 24px 24px' }}>
+        <DialogActions className='cancelar' sx={{ p: '0 24px 24px' }}>
           <Button onClick={handleCloseInviteModal}>Cancelar</Button>
-          <Button 
+          <Button
+            className='enviar-invitacion'
             onClick={handleSendInvitation} 
             variant="contained" 
             startIcon={<GoogleIcon />}
@@ -191,7 +229,6 @@ const Veterinarios = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
     </Box>
   );
 };

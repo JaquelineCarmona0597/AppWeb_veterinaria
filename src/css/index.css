@@ -1,30 +1,29 @@
 /* Paleta de Colores Mejorada para Patita Feliz */
 :root {
-  /* Colores Primarios (para acciones principales) */
-  --color-primario: #457B9D;         /* Azul Confianza (Para Login, Guardar, etc.) */
-  --color-primario-oscuro: #335c79;  /* Versión oscura para hover */
-  --color-primario-claro: #EBF2F7;   /* Tono muy claro para fondos de alerta o highlights */
+  /* Colores Primarios y de Marca (Naranja Cálido) */
+  --color-primario: #FFA726;         /* Naranja principal para botones y acciones */
+  --color-primario-oscuro: #F59B1A;  /* Un tono ligeramente más oscuro para hover */
 
-  /* Colores de Marca y Acento */
-  --color-marca: #8B5A3E;            /* Marrón Caramelo (Para títulos y elementos de marca) */
-  --color-marca-oscuro: #6d4731;     /* Versión oscura para texto o hover */
-  
-  /* Colores de Estado y Notificación */
-  --color-exito: #2A9D8F;            /* Verde Salud (Para mensajes de éxito) */
-  --color-advertencia: #F4A261;      /* Naranja Suave (Para avisos o alertas no críticas) */
-  --color-peligro: #E63946;          /* Rojo Corazón (Para errores o acciones destructivas) */
-  --color-peligro-oscuro: #c42d39;   /* Versión oscura para hover */
+  /* Color de Acento (Azul Sereno) */
+  --color-acento: #4DB6AC;           /* Azul para íconos, enlaces y detalles secundarios */
+  --color-acento-oscuro: #45A39A;    /* Versión más oscura para hover */
 
   /* Colores Neutros y de Fondo */
-  --color-fondo: #F5F5DC;            /* Beige Claro (Fondo general de la app) */
-  --color-superficie: #FFFFFF;       /* Blanco (Para cards, modales, y fondos de sección) */
-  --color-borde: #D1D1D1;            /* Gris claro para bordes de inputs y separadores */
+  --color-fondo: #FFF7F0;            /* Blanco cálido, fondo principal de la app */
+  --color-superficie: #FFFFFF;       /* Blanco puro para cards, modales, etc. */
+  --color-borde: #EAE0D6;            /* Un color de borde sutil derivado del fondo */
   
   /* Colores de Texto */
-  --color-texto-principal: #333333;  /* Gris oscuro para párrafos y texto importante */
-  --color-texto-secundario: #555555; /* Gris medio para texto menos importante o placeholders */
-  --color-texto-blanco: #FFFFFF;     /* Texto sobre fondos oscuros o de color */
+  --color-texto-principal: #2D2D2D;  /* Gris oscuro para máxima legibilidad */
+  --color-texto-secundario: #6B6B6B; /* Gris medio para texto secundario */
+  --color-texto-blanco: #FFFFFF;    /* Texto sobre fondos de color */
 
+  /* Colores de Estado y Notificación (Adaptados) */
+  --color-exito: #57a773;            /* Verde Éxito (Se mantiene, es un estándar) */
+  --color-advertencia: #FFA726;      /* Naranja principal, perfecto para advertencias */
+  --color-peligro: #E63946;          /* Rojo Corazón (Se mantiene, es un buen rojo) */
+  --color-peligro-oscuro: #c42d39;      /* Texto sobre fondos oscuros o de color */
+  
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   font-weight: 400;
@@ -41,7 +40,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   margin-top: 0;
   margin-bottom: 0.5rem;
-  color: var(--color-marca); /* Usamos el color de marca para los títulos */
+  color: var(--color-acento); /* Usamos el color de marca para los títulos */
 }
 
 a {

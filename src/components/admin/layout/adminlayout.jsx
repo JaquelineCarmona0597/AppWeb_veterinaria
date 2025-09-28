@@ -1,56 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // <-- 1. AÑADE useState
+import { Box, Paper } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import { Box, Toolbar, CssBaseline } from '@mui/material';
 
 import Sidebar from '../components/Sidebar';
-import Footer from '../components/Footer';
-import Breadcrumb from '..//components/Breadcrumb'; // ✅ 1. Importa el nuevo componente
 import Header from '../components/Header';
+import Breadcrumb from '../components/Breadcrumb';
+import '../../../css/adminCss/adminlayout.css';
 
+// ¡YA NO RECIBE PROPS!
 const AdminLayout = () => {
+  
+  // ✅ 2. LA LÓGICA AHORA VIVE AQUÍ DENTRO
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const drawerWidth = 240;
 
-  const toggleSidebar = () => {
-
+  const handleToggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
-
   };
 
-
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <Header isSidebarOpen={isSidebarOpen} handleToggleSidebar={toggleSidebar} />
+    <Box className="dashboard-layout">
+      {/* 3. Pasa el estado y la función a sus hijos directos */}
       <Sidebar isSidebarOpen={isSidebarOpen} />
       
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: `calc(100% - ${drawerWidth}px)`,
-          transition: (theme) => theme.transitions.create('margin', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
-          marginLeft: `-${drawerWidth}px`,
-          ...(isSidebarOpen && {
-            transition: (theme) => theme.transitions.create('margin', {
-              easing: theme.transitions.easing.easeOut,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
-            marginLeft: 0,
-          }),
-        }}
-      >
-        <Toolbar />
-        
-        {/* ✅ 2. Añade el componente Breadcrumb aquí */}
+      <Box component="main" className="main-content">
+        <Header 
+          isSidebarOpen={isSidebarOpen} 
+          handleToggleSidebar={handleToggleSidebar} 
+        />
         <Breadcrumb />
-
-        <Outlet />
-        <Footer />
+        <Box className="page-content">
+          <Paper elevation={0} className="content-card">
+            <Outlet />
+          </Paper>
+        </Box>
       </Box>
     </Box>
   );

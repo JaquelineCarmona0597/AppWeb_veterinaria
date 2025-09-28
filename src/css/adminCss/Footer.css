@@ -1,54 +1,53 @@
-/* src/css/adminCss/Footer.css */
-
 .footer-container {
-  padding: 1.5rem 0;
-  background-color: transparent; /* Se integra con el fondo del layout */
-}
+  /* Estilo de la tarjeta "flotante" */
+  background-color: var(--color-superficie);
+  border-radius: 12px;
+  padding: 16px 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-borde);
+  
+  /* Márgenes para alinearlo con las tarjetas de arriba y darle espacio abajo */
+  margin: 0 24px 24px 24px; 
 
-.copyright-text,
-.copyright-text a {
-  font-size: 0.875rem; /* 14px */
-  color: #8898aa; /* Un gris suave para el texto */
-  text-decoration: none;
-}
-
-.copyright-text a:hover {
-  color: var(--color-confianza); /* Usa el color de confianza de tu paleta */
-}
-
-.footer-nav {
+  /* Propiedades para alinear el contenido de adentro (copyright y links) */
   display: flex;
-  justify-content: flex-end; /* Alinea los enlaces a la derecha */
-  flex-wrap: wrap; /* Permite que los enlaces pasen a la siguiente línea si no caben */
+  flex-wrap: wrap; 
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px; 
 }
 
-.footer-nav .nav-link {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #8898aa; /* Mismo color que el copyright */
-  padding: 0 1rem;
-  background-color: transparent !important; /* Sobrescribe estilos de bootstrap */
-  transition: color 0.2s ease-in-out;
+/* Estilo para el texto de copyright */
+.footer-copyright {
+  color: var(--color-texto-secundario);
 }
 
-.footer-nav .nav-link:hover {
-  color: var(--color-confianza);
+/* Contenedor de los enlaces y redes sociales */
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-/* --- Media Query para Responsividad --- */
-@media (max-width: 1199.98px) {
-  /* En pantallas más pequeñas, centramos todo */
-  .footer-container .row > [class*="col-"] {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-  }
+/* Estilo para los enlaces de texto */
+.footer-links .MuiLink-root {
+  color: var(--color-texto-secundario);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
 
-  .copyright-text {
-    margin-bottom: 1rem;
-  }
+.footer-links .MuiLink-root:hover {
+  color: var(--color-primario);
+  text-decoration: underline;
+}
 
-  .footer-nav {
-    justify-content: center;
-  }
+/* Estilo para los botones de redes sociales */
+.footer-links .MuiIconButton-root {
+  color: var(--color-texto-secundario);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-links .MuiIconButton-root:hover {
+  color: var(--color-primario);
+  transform: translateY(-2px);
 }

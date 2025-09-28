@@ -1,11 +1,12 @@
-// src/components/Sidebar/Sidebar.jsx
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
+// ✅ Añadimos Typography para el título
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import { Home as DashboardIcon, CalendarMonth as HorariosIcon, MedicalServices as VeterinariosIcon } from '@mui/icons-material';
 
-// ✅ El componente recibe 'isSidebarOpen' para saber si debe mostrarse
+// ✅ Importamos nuestro nuevo archivo de estilos
+import '../../../css/adminCss/Sidebar.css';
+
 const Sidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
   const drawerWidth = 240;
@@ -18,22 +19,35 @@ const Sidebar = ({ isSidebarOpen }) => {
 
   return (
     <Drawer
-      variant="persistent" // 'persistent' funciona bien con este enfoque
+      className='sidebar'
+      variant="persistent"
       anchor="left"
-      open={isSidebarOpen} // ✅ Su visibilidad depende de esta prop
+      open={isSidebarOpen}
       sx={{
-        width: drawerWidth,
+        width: isSidebarOpen ? drawerWidth : 0, // El ancho es 0 si está cerrado
         flexShrink: 0,
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           boxSizing: 'border-box',
         },
+        // Transición suave para abrir y cerrar
+        transition: (theme) => theme.transitions.create('width', {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
       }}
     >
-      <Toolbar /> {/* Un espacio para que no quede debajo del Header */}
-      <List>
+      {/* ✅ MEJORA: Añadimos un título en el Toolbar */}
+      <Toolbar>
+        <Typography variant="h6" noWrap component="div" sx={{ color: 'white', fontWeight: 'bold' }}>
+          🐾 Patita Feliz
+        </Typography>
+      </Toolbar>
+      
+      <List className='lista-sidebar'>
         {structure.map((item) => (
           <ListItem 
+            className='item-sidebar'
             button 
             key={item.label} 
             component={Link} 

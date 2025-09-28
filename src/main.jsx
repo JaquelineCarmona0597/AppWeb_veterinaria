@@ -7,7 +7,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import App from './App';
 import './css/index.css';
-
+import { AuthProvider } from './context/AuthContext.jsx';
 const theme = createTheme();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -16,7 +16,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <CssBaseline />
 
       <BrowserRouter>
+      <AuthProvider>
         <App />
+      </AuthProvider>
+        
       </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>,

@@ -1,10 +1,9 @@
 // 1. IMPORTACIONES
-// -----------------------------------------------------------------------------
-// React y Librerías
+// ... (Tus importaciones están perfectas)
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// Componentes de Material-UI
+import { auth } from '../../firebase'; 
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -18,40 +17,39 @@ import MuiLink from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-
-// Íconos de Material-UI
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
-// Componentes y Estilos Locales
 import { GoogleIcon } from './customicons';
 import ForgotPasswordModal from './ForgotPassword';
 import '../../css/authCss/Login.css';
+// Al inicio de login.jsx, junto a tus otras importaciones
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db } from '../../firebase'; // Asegúrate de importar 'db'
+
 
 // 2. COMPONENTE PRINCIPAL
 // -----------------------------------------------------------------------------
 export default function Login() {
   // --- Estados del Componente ---
+  // ... (Tus estados están perfectos)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  // Estados para errores de validación
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
-
+  const [firebaseError, setFirebaseError] = useState('');
   const navigate = useNavigate();
 
   // --- Manejadores de Eventos (Handlers) ---
   const validateInputs = () => {
+    // ... (Tu validación está perfecta)
     let isValid = true;
-    // Validación de Email
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
       setEmailErrorMessage('Por favor, introduce un email válido.');
@@ -60,7 +58,6 @@ export default function Login() {
       setEmailError(false);
       setEmailErrorMessage('');
     }
-    // Validación de Contraseña
     if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('La contraseña debe tener al menos 6 caracteres.');
@@ -71,18 +68,73 @@ export default function Login() {
     }
     return isValid;
   };
-
-  const handleSubmit = (event) => {
+  
+  // Lógica de Firebase para Email y Contraseña (la versión correcta)
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setFirebaseError(''); 
     if (!validateInputs()) return;
 
     setIsLoading(true);
-    // Simulación de una llamada a API
-    setTimeout(() => {
-      console.log({ email, password });
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log('Inicio de sesión exitoso!');
+      navigate('/');
+    } catch (error) {
+      console.error("Error en Firebase:", error.code);
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        setFirebaseError('El correo o la contraseña son incorrectos.');
+      } else {
+        setFirebaseError('Ocurrió un error. Por favor, intenta de nuevo.');
+      }
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
+  
+  // Lógica de Firebase para Google
+// En tu archivo login.jsx
+
+const handleGoogleLogin = async () => {
+  setIsLoading(true);
+  setFirebaseError('');
+  const provider = new GoogleAuthProvider();
+  
+  try {
+    // 1. Inicia sesión como antes
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    // 2. ¡NUEVO! Verificamos si el usuario ya existe en Firestore
+    const userDocRef = doc(db, 'users', user.uid);
+    const docSnap = await getDoc(userDocRef);
+
+    // 3. Si el documento NO existe, lo creamos
+    if (!docSnap.exists()) {
+      await setDoc(userDocRef, {
+        uid: user.uid,
+        email: user.email,
+        name: user.displayName, // Google nos da el nombre, ¡aprovechémoslo!
+        role: "client",
+        createdAt: serverTimestamp()
+      });
+      console.log('Nuevo usuario de Google guardado en Firestore.');
+    }
+
+    console.log('Inicio de sesión con Google exitoso!');
+    navigate('/admin'); // Te redirige al dashboard principal
+
+  } catch (error) {
+    console.error("Error con Google:", error.code);
+    if (error.code !== 'auth/popup-closed-by-user') {
+      setFirebaseError('No se pudo iniciar sesión con Google. Intenta de nuevo.');
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+  // --- ELIMINADO: Se borró la función handleSubmit duplicada que estaba aquí. ---
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => event.preventDefault();
@@ -97,63 +149,58 @@ export default function Login() {
       <CssBaseline />
       <Stack direction="column" justifyContent="space-between" className="login-container">
         <Card variant="outlined" className="login-card">
-          {/* --- Encabezado --- */}
           <Box className="login-header">
             <img src="/src/assets/Logo.png" alt="Logo" className="login-logo-image" />
-            <Typography component="h1" variant="h4" className="login-title">
-              Inicia Sesión
-            </Typography>
+            <Typography component="h1" variant="h4" className="login-title">Inicia Sesión</Typography>
           </Box>
 
-          {/* --- Formulario Principal --- */}
           <Box component="form" onSubmit={handleSubmit} noValidate className="login-form">
+          <TextField
+          className="input"
+          label="Email"
+          id="email"
+          type="email"
+          placeholder="tu@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          error={emailError}
+          helperText={emailErrorMessage}
+          required
+          fullWidth
+          variant="outlined"
+          InputProps={{
+          startAdornment: (
+          <InputAdornment position="start"><MailOutlineIcon color="action" /></InputAdornment>
+          ),
+          }}
+          />
             <TextField
-              className="input"
-              label="Email"
-              id="email"
-              type="email"
-              placeholder="tu@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              error={emailError}
-              helperText={emailErrorMessage}
-              required
-              fullWidth
-              variant="outlined"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start"><MailOutlineIcon color="action" /></InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              className="input"
-              label="Contraseña"
-              id="password"
-              placeholder="••••••"
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              error={passwordError}
-              helperText={passwordErrorMessage}
-              required
-              fullWidth
-              variant="outlined"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start"><LockOutlinedIcon color="action" /></InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end">
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
+            className="input"
+            label="Contraseña"
+            id="password"
+            placeholder="••••••"
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={passwordError}
+            helperText={passwordErrorMessage}
+            required
+            fullWidth
+            variant="outlined"
+            InputProps={{
+            startAdornment: (
+            <InputAdornment position="start"><LockOutlinedIcon color="action" /></InputAdornment>
+            ),
+            endAdornment: (
+            <InputAdornment position="end">
+            <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end">
+            {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+            </InputAdornment>
+            ),
+            }}
             />
             
-            {/* --- Opciones del Formulario --- */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -164,7 +211,12 @@ export default function Login() {
               </MuiLink>
             </Box>
 
-            {/* --- Botón de Envío --- */}
+            {firebaseError && (
+              <Typography color="error" variant="body2" sx={{ my: 2, textAlign: 'center' }}>
+                {firebaseError}
+              </Typography>
+            )}
+
             <Button
               className={`submit-button ${isLoading ? 'loading' : ''}`}
               type="submit"
@@ -176,15 +228,16 @@ export default function Login() {
             </Button>
           </Box>
 
-          {/* --- Separador y Login Social --- */}
           <Divider sx={{ my: 2 }}>o</Divider>
+          
           <Box className="social-login-container">
             <Button
               className="google-button"
               fullWidth
               variant="outlined"
-              onClick={() => alert('Iniciar sesión con Google')}
+              onClick={handleGoogleLogin} // <-- CORREGIDO: Se conectó la función real
               startIcon={<GoogleIcon />}
+              disabled={isLoading}
             >
               Google
             </Button>

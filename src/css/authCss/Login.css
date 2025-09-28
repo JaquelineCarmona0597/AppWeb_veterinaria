@@ -1,24 +1,3 @@
-/**
- * Estilos para el componente de Login de Patita Feliz
- * Organizado por secciones lógicas.
- */
-
-/* -------------------------------------------------------------------------- */
-/* 1. VARIABLES GLOBALES (PALETA DE COLORES)                                  */
-/* -------------------------------------------------------------------------- */
-:root {
-  --color-primario: #457B9D;
-  --color-primario-oscuro: #335c79;
-  --color-primario-claro: #EBF2F7;
-  --color-marca: #8B5A3E;
-  --color-peligro: #E63946;
-  --color-fondo: #F5F5DC;
-  --color-superficie: #FFFFFF;
-  --color-borde: #D1D1D1;
-  --color-texto-principal: #333333;
-  --color-texto-secundario: #555555;
-  --color-texto-blanco: #FFFFFF;
-}
 
 /* -------------------------------------------------------------------------- */
 /* 2. LAYOUT PRINCIPAL Y TARJETA                                              */
@@ -28,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-fondo);
+  background-color: var(--color-primario);
   padding: 1rem;
 }
 
@@ -63,12 +42,14 @@
 }
 
 .login-title {
-  color: var(--color-texto-principal) !important;
+  text-align: center;
+  color: var(--color-marca) !important;
+  font-weight: 600 !important;
   margin-bottom: 2rem !important;
 }
 
 .forgot-password-link, .signup-text {
-  color: var(--color-texto-secundario) !important;
+  color: var(--color-primario) !important;
   text-align: center;
 }
 

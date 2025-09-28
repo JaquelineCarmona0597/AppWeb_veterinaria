@@ -3,34 +3,38 @@ import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { Breadcrumbs, Link, Typography } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
-// Un mapa para traducir las rutas a nombres más amigables
+// ✅ 1. Importamos el archivo CSS que vamos a crear
+import '../../../css/adminCss/Breadcrumb.css';
+
 const breadcrumbNameMap = {
   '/admin': 'App',
   '/admin/dashboard': 'Dashboard',
   '/admin/horarios': 'Horarios',
   '/admin/veterinarios': 'Veterinarios',
-  // Añade más rutas aquí si es necesario
 };
 
 const Breadcrumb = () => {
   const location = useLocation();
-  // Obtenemos las partes de la URL, quitando elementos vacíos
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
     <Breadcrumbs 
+      // ✅ 2. Añadimos una clase al contenedor principal
+      className="breadcrumb-container"
       separator={<NavigateNextIcon fontSize="small" />}
       aria-label="breadcrumb"
-      sx={{ marginBottom: 2 }} // Un poco de espacio inferior
     >
-      {/* Siempre mostramos el enlace principal */}
-      <Link component={RouterLink} underline="hover" color="inherit" to="/admin">
+      <Link 
+        component={RouterLink} 
+        underline="hover" 
+        to="/admin"
+        // ✅ 3. Añadimos una clase para los enlaces
+        className="breadcrumb-link"
+      >
         {breadcrumbNameMap['/admin']}
       </Link>
       
-      {/* Mapeamos el resto de las partes de la ruta */}
       {pathnames.map((value, index) => {
-        // Ignoramos 'admin' porque ya lo pusimos como 'App'
         if (value === 'admin') return null;
 
         const last = index === pathnames.length - 1;
@@ -38,13 +42,21 @@ const Breadcrumb = () => {
         const name = breadcrumbNameMap[to];
 
         return last ? (
-          // El último elemento no es un enlace, es texto simple
-          <Typography color="text.primary" key={to}>
+          <Typography 
+            key={to}
+            // ✅ 4. Y una clase para la página actual (el último elemento)
+            className="breadcrumb-current"
+          >
             {name}
           </Typography>
         ) : (
-          // Los elementos intermedios son enlaces
-          <Link component={RouterLink} underline="hover" color="inherit" to={to} key={to}>
+          <Link 
+            component={RouterLink} 
+            underline="hover" 
+            to={to} 
+            key={to}
+            className="breadcrumb-link" // La misma clase para los enlaces
+          >
             {name}
           </Link>
         );

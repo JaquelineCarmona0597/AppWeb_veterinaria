@@ -2,15 +2,11 @@
 // -----------------------------------------------------------------------------
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// Componentes de Material-UI
-// CORRECTO
+import { auth, db } from '../../firebase';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Box, Button, Card, Checkbox, CssBaseline, Divider, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField, Typography } from '@mui/material';
-
-// Íconos de Material-UI
 import { LockOutlined as LockOutlinedIcon, MailOutline as MailOutlineIcon, Visibility, VisibilityOff } from '@mui/icons-material';
-
-// Estilos Locales
 import '../../css/authCss/SignUp.css';
 
 // 2. COMPONENTE PRINCIPAL
@@ -21,7 +17,8 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false); // Nuevo estado para los términos
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // <-- AÑADIDO: Estado para la carga
 
   // Estados para errores de validación
   const [emailError, setEmailError] = useState('');
@@ -32,37 +29,55 @@ export default function SignUp() {
 
   // --- Manejadores de Eventos (Handlers) ---
   const validate = () => {
+    // ... (Tu función de validación está perfecta, no cambia)
     let isValid = true;
-    // Email
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError('Por favor, introduce un email válido.');
       isValid = false;
-    } else {
-      setEmailError('');
-    }
-    // Contraseña
+    } else { setEmailError(''); }
     if (!password || password.length < 8) {
       setPasswordError('La contraseña debe tener al menos 8 caracteres.');
       isValid = false;
-    } else {
-      setPasswordError('');
-    }
-    // Confirmar Contraseña
+    } else { setPasswordError(''); }
     if (password !== confirmPassword) {
       setConfirmPasswordError('Las contraseñas no coinciden.');
       isValid = false;
-    } else {
-      setConfirmPasswordError('');
-    }
+    } else { setConfirmPasswordError(''); }
     return isValid;
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!validate()) return; // Detiene el envío si la validación falla
+  // --- ELIMINADO: La versión vieja de handleSubmit fue borrada de aquí ---
 
-    console.log({ email, password });
-    alert('¡Cuenta creada exitosamente!');
+  // Lógica de Firebase para el Registro (La única y correcta versión)
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validate()) return; 
+
+    setIsLoading(true);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        role: "client",
+        createdAt: serverTimestamp()
+      });
+
+      console.log('¡Cuenta creada exitosamente!', user);
+      navigate('/admin/dashboard');
+
+    } catch (error) {
+      console.error("Error al registrar:", error.code);
+      if (error.code === 'auth/email-already-in-use') {
+        setEmailError('Este correo electrónico ya está en uso.');
+      } else {
+        setEmailError('Ocurrió un error al crear la cuenta.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
   
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -85,6 +100,7 @@ export default function SignUp() {
               className='input'
               label="Email"
               type="email"
+              placeholder="tu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               error={!!emailError} // El doble signo de exclamación convierte el string en booleano
@@ -99,6 +115,7 @@ export default function SignUp() {
             <TextField
               className='input'
               label="Contraseña"
+              placeholder="••••••"
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)} // Corregido el error de escritura
@@ -121,6 +138,7 @@ export default function SignUp() {
             <TextField
               className='input'
               label="Confirmar Contraseña"
+              placeholder="••••••"
               type={showPassword ? 'text' : 'password'}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -163,9 +181,9 @@ export default function SignUp() {
               fullWidth 
               variant="contained" 
               className="signup-button"
-              disabled={!termsAccepted} // El botón se deshabilita si los términos no están aceptados
+              disabled={!termsAccepted || isLoading } // El botón se deshabilita si los términos no están aceptados
             >
-              Registrarme
+              {isLoading ? 'Registrando...' : 'Registrarme'}
             </Button>
 
             <Divider sx={{ my: 1 }} />

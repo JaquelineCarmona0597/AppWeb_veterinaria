@@ -1,51 +1,120 @@
+/* ==========================================
+   IMPORTS
+   ========================================== */
+// React y Hooks
 import React, { useState } from 'react';
+
+// Componentes de Material-UI
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
+
+// Servicios de Firebase
 import { sendPasswordResetEmail } from 'firebase/auth';
+// ¡CAMBIO 1: Importamos 'auth' directamente!
+import { auth } from '../../firebase'; // <-- Asegúrate de que la ruta a tu archivo firebase.js sea correcta
+
+// Estilos locales
 import '../../css/authCss/ForgotPasswird.css';
 
+
+/* ==========================================
+   DEFINICIÓN DEL COMPONENTE
+   ========================================== */
+// ¡CAMBIO 2: Ya no necesitamos recibir 'auth' como prop!
 const ForgotPasswordModal = ({ open, onClose }) => {
+  
+  /* ==========================================
+     ESTADO DEL COMPONENTE
+     ========================================== */
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [error, setError] = useState(''); // Estado separado para errores
 
+  
+  /* ==========================================
+     LÓGICA Y MANEJADORES DE EVENTOS
+     ========================================== */
   const handlePasswordReset = async () => {
+    // Limpiamos mensajes anteriores
+    setMessage('');
+    setError('');
+
+    if (!email) {
+      setError('Por favor, ingresa tu correo electrónico.');
+      return;
+    }
+    
     try {
       await sendPasswordResetEmail(auth, email);
-      setMessage('Se ha enviado un correo electrónico para restablecer tu contraseña. Revisa tu bandeja de entrada.');
+      setMessage('¡Correo enviado! Revisa tu bandeja de entrada (y la carpeta de spam) para restablecer tu contraseña.');
     } catch (error) {
-      setMessage(`Error: ${error.message}`);
+      console.error("Error al enviar correo de restablecimiento:", error.code);
+      if (error.code === 'auth/user-not-found') {
+        setError('No se encontró ninguna cuenta con ese correo electrónico.');
+      } else {
+        setError('Hubo un problema al enviar el correo. Inténtalo de nuevo.');
+      }
     }
   };
 
+  // Función para limpiar el estado cuando el modal se cierra
+  const handleClose = () => {
+    setMessage('');
+    setError('');
+    setEmail('');
+    onClose();
+  };
+
+  
+  /* ==========================================
+     RENDERIZADO DEL COMPONENTE (JSX)
+     ========================================== */
   return (
-    <Dialog className='dialog' open={open} onClose={onClose}>
-      <DialogTitle className='ttituloDial'>Restablecer contraseña</DialogTitle>
+    <Dialog 
+      className='dialog' 
+      open={open} 
+      onClose={handleClose} // Usamos la nueva función de cierre
+    >
+      <DialogTitle className='ttituloDial'>
+        Restablecer Contraseña
+      </DialogTitle>
+
       <DialogContent className='cuerpoDial'>
         <DialogContentText className='textoDial'>
-          Ingrese la dirección de correo electrónico de su cuenta y le enviaremos un enlace para restablecer su contraseña.
+          Ingresa el correo de tu cuenta y te enviaremos un enlace para que puedas crear una nueva contraseña.
         </DialogContentText>
+        
         <TextField
-          className='inputDial'
           autoFocus
-          margin="dense"
+          fullWidth
+          className='inputDial'
           id="email-reset"
           label="Dirección de correo electrónico"
+          margin="dense"
           type="email"
-          fullWidth
           variant="standard"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          error={!!error} // El campo se marca en rojo si hay un error
         />
-        {message && <p>{message}</p>}
+        
+        {/* Mostramos los mensajes de estado con colores diferentes */}
+        {message && <p className='mensaje-estado exito'>{message}</p>}
+        {error && <p className='mensaje-estado error'>{error}</p>}
       </DialogContent>
+
       <DialogActions className='accionesDial'>
-        <Button className='botonDialog' onClick={onClose}>Cancelar</Button>
-        <Button className='botonDialog' onClick={handlePasswordReset}>Continuar</Button>
+        <Button className='botonDialog' onClick={handleClose}>
+          Cancelar
+        </Button>
+        <Button className='botonDialog' onClick={handlePasswordReset}>
+          Enviar Correo
+        </Button>
       </DialogActions>
     </Dialog>
   );
