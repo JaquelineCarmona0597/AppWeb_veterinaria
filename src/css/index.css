@@ -40,7 +40,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   margin-top: 0;
   margin-bottom: 0.5rem;
-  color: var(--color-acento); /* Usamos el color de marca para los títulos */
+  color: var(--color-primario-oscuro); /* Usamos el color de marca para los títulos */
 }
 
 a {

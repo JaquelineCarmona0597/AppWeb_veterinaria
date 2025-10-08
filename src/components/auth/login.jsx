@@ -150,7 +150,7 @@ const handleGoogleLogin = async () => {
       <Stack direction="column" justifyContent="space-between" className="login-container">
         <Card variant="outlined" className="login-card">
           <Box className="login-header">
-            <img src="/src/assets/Logo.png" alt="Logo" className="login-logo-image" />
+            <img src="/src/assets/logoN.png" alt="Logo" className="login-logo-image" />
             <Typography component="h1" variant="h4" className="login-title">Inicia Sesión</Typography>
           </Box>
 
