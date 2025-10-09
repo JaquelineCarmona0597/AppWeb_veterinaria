@@ -1,135 +1,91 @@
+/* ==========================================
+    IMPORTS
+   ========================================== */
+// React y Hooks
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 // Componentes de Material-UI
-import { Box, Button, TextField, Typography, Paper } from '@mui/material';
+import {
+  Box, Button, TextField, Grid, CircularProgress, InputAdornment
+} from '@mui/material';
 
-const NuevoVeterinario = () => {
-  const navigate = useNavigate();
+// Iconos
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import SchoolIcon from '@mui/icons-material/School';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+import SaveIcon from '@mui/icons-material/Save';
 
-  // --- Estados para cada campo del formulario ---
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
+// Importaciones de Firebase
+import { db } from '../../firebase';
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+
+/* ==========================================
+    DEFINICIÓN DEL COMPONENTE: NuevoVeterinario
+   ========================================== */
+// --- MODIFICADO: El componente ahora acepta props ---
+const NuevoVeterinario = ({ onClose, onVetAdded }) => {
+
+  // --- Estados para los campos del formulario ---
+  const [name, setName] = useState('');
   const [especialidad, setEspecialidad] = useState('');
   const [email, setEmail] = useState('');
-  const [telefono, setTelefono] = useState(''); // ✅ 1. Nuevo estado para el teléfono
+  const [telefono, setTelefono] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // --- Manejador del envío del formulario ---
-  const handleSubmit = (e) => {
-    e.preventDefault(); 
-    
-    // Objeto con los datos del nuevo veterinario
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
     const nuevoVeterinario = {
-      nombre,
-      apellido,
+      name,
       especialidad,
       email,
-      telefono, // ✅ 2. Añadimos el teléfono al objeto
+      telefono,
+      role: 'vet',
+      createdAt: serverTimestamp(),
     };
 
-    console.log("Datos del nuevo veterinario:", nuevoVeterinario);
-    
-    // navigate('/admin/veterinarios'); 
+    try {
+      const docRef = await addDoc(collection(db, "users"), nuevoVeterinario);
+      console.log("Veterinario guardado con ID: ", docRef.id);
+      
+      // --- MODIFICADO: Llama a la función del padre para actualizar la tabla ---
+      onVetAdded({ id: docRef.id, ...nuevoVeterinario });
+      onClose(); // Cierra el modal a través de la función del padre
+
+    } catch (error) {
+      console.error("Error al guardar el veterinario: ", error);
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <Box 
-      sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        p: 3 
-      }}
-    >
-      <Paper 
-        component="form" 
-        onSubmit={handleSubmit}
-        sx={{ 
-          p: 4, 
-          width: '100%', 
-          maxWidth: '600px',
-          borderRadius: 4 // ✅ Aumentamos el borde del contenedor para que coincida
-        }}
-      >
-        <Typography variant="h5" component="h1" sx={{ mb: 3, textAlign: 'center' }}>
-          Agregar Nuevo Veterinario
-        </Typography>
-
-        {/* --- Campos de texto --- */}
-        <TextField
-          label="Nombres"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          required
-          // ✅ 4. Estilo para redondear las puntas
-          sx={{ '& .MuiOutlinedInput-root': { borderRadius: '20px' } }}
-        />
-        <TextField
-          label="Apellidos"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={apellido}
-          onChange={(e) => setApellido(e.target.value)}
-          required
-          sx={{ '& .MuiOutlinedInput-root': { borderRadius: '20px' } }}
-        />
-        <TextField
-          label="Especialidad"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={especialidad}
-          onChange={(e) => setEspecialidad(e.target.value)}
-          required
-          sx={{ '& .MuiOutlinedInput-root': { borderRadius: '20px' } }}
-        />
-        <TextField
-          label="E-mail"
-          type="email"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          sx={{ '& .MuiOutlinedInput-root': { borderRadius: '20px' } }}
-        />
-
-        {/* ✅ 3. Nuevo campo para el número de teléfono */}
-        <TextField
-          label="Número de teléfono"
-          type="tel" // El tipo "tel" ayuda en móviles a mostrar el teclado numérico
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-          sx={{ '& .MuiOutlinedInput-root': { borderRadius: '20px' } }}
-        />
-
-        {/* --- Botones de acción --- */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-          <Button 
-            variant="outlined" 
-            color="secondary" 
-            onClick={() => navigate('/admin/veterinarios')}
-            sx={{ mr: 2, borderRadius: '20px' }} // ✅ Redondeamos botones también
-          >
-            Cancelar
-          </Button>
-          <Button 
-            type="submit"
-            variant="contained" 
-            color="primary"
-            sx={{ borderRadius: '20px' }} // ✅ Redondeamos botones también
-          >
-            Guardar
-          </Button>
-        </Box>
-      </Paper>
+    // El formulario ahora se renderiza directamente, sin Paper o título aquí
+    <Box component="form" onSubmit={handleSubmit}>
+      <Grid container spacing={2} sx={{ mt: 1, p: 2 }}>
+        <Grid item xs={12}>
+          <TextField label="Nombre Completo" fullWidth value={name} onChange={(e) => setName(e.target.value)} required InputProps={{ startAdornment: (<InputAdornment position="start"><PersonOutlineIcon /></InputAdornment>) }} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField label="Especialidad" fullWidth value={especialidad} onChange={(e) => setEspecialidad(e.target.value)} required InputProps={{ startAdornment: (<InputAdornment position="start"><SchoolIcon /></InputAdornment>) }} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField label="Número de Teléfono" type="tel" fullWidth value={telefono} onChange={(e) => setTelefono(e.target.value)} InputProps={{ startAdornment: (<InputAdornment position="start"><PhoneOutlinedIcon /></InputAdornment>) }} />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField label="Correo Electrónico" type="email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} required InputProps={{ startAdornment: (<InputAdornment position="start"><EmailOutlinedIcon /></InputAdornment>) }} />
+        </Grid>
+      </Grid>
+      
+      {/* --- Los botones ahora están fuera del Grid, para ser usados en DialogActions --- */}
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: '16px 24px' }}>
+        <Button onClick={onClose} color="secondary" sx={{ mr: 2 }}>Cancelar</Button>
+        <Button type="submit" variant="contained" disabled={isSubmitting} startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}>
+          {isSubmitting ? 'Guardando...' : 'Guardar Veterinario'}
+        </Button>
+      </Box>
     </Box>
   );
 };

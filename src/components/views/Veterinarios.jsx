@@ -1,70 +1,94 @@
 /* ==========================================
-   IMPORTS
+    IMPORTS
    ========================================== */
-// React y Hooks de React Router
-import React, { useState, useEffect } from 'react'; 
-import { useNavigate } from 'react-router-dom'
+// React y Hooks
+import React, { useState, useEffect } from 'react';
+
 // Componentes de Material-UI
-import { 
-  Box, 
-  Button, 
-  Dialog, 
-  DialogActions, 
-  DialogContent, 
-  DialogContentText, 
-  DialogTitle, 
-  Typography, 
-  TextField 
+import {
+  Avatar, 
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
+  TextField,
+  CircularProgress
 } from '@mui/material';
 
 // Componentes de Data Grid
-import { DataGrid, GridToolbar } from '@mui/x-data-grid'; 
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 // Iconos de Material-UI
-import AddIcon from '@mui/icons-material/Add'; 
+import AddIcon from '@mui/icons-material/Add';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import GoogleIcon from '@mui/icons-material/Google';
+
+// Componentes de Formularios
+import NuevoVeterinario from './NuevoVeterinario'; 
+// --- AÑADIDO: Importamos el componente de edición ---
+import EditarVeterinario from './EditarVeterinario';
 
 // Estilos locales
 import '../../css/authCss/Veterinarios.css';
 
-
-/* ==========================================
-   DATOS DE MUESTRA (PARA DESARROLLO)
-   ========================================== */
-const datosDeMuestra = [
-  { id: '1', nombre: 'Juan', apellido: 'Pérez', especialidad: 'Cardiología', email: 'juan.perez@email.com' },
-  { id: '2', nombre: 'Ana', apellido: 'García', especialidad: 'Dermatología', email: 'ana.garcia@email.com' },
-  { id: '3', nombre: 'Carlos', apellido: 'López', especialidad: 'Cirugía General', email: 'carlos.lopez@email.com' },
-];
+// Importaciones de Firebase
+import { db } from '../../firebase';
+import { collection, query, where, getDocs, doc, deleteDoc } from "firebase/firestore";
 
 
 /* ==========================================
-   DEFINICIÓN DEL COMPONENTE: Veterinarios
+    DEFINICIÓN DEL COMPONENTE: Veterinarios
    ========================================== */
 const Veterinarios = () => {
 
   /* ==========================================
-     ESTADO DEL COMPONENTE (HOOKS)
+    ESTADO DEL COMPONENTE (HOOKS)
      ========================================== */
-  const navigate = useNavigate();
-  const [veterinarios, setVeterinarios] = useState(datosDeMuestra); // Almacena los datos de la tabla
-  const [loading, setLoading] = useState(false); // Controla el estado de carga de la tabla
   
-  // Estados para el diálogo de confirmación de borrado
+  const [veterinarios, setVeterinarios] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
-
-  // Estados para el modal de invitación
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
+  const [addModalOpen, setAddModalOpen] = useState(false);
+
+  // --- AÑADIDO: Estados para el modal de edición ---
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [vetToEdit, setVetToEdit] = useState(null);
 
 
   /* ==========================================
-     LÓGICA Y MANEJADORES DE EVENTOS
+    LÓGICA PARA CARGAR DATOS DE FIREBASE
      ========================================== */
-  
-  // --- Lógica para Diálogo de Borrado ---
+  useEffect(() => {
+    const fetchVeterinarios = async () => {
+      setLoading(true);
+      try {
+        const q = query(collection(db, "users"), where("role", "==", "vet"));
+        const querySnapshot = await getDocs(q);
+        const vetsData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setVeterinarios(vetsData);
+      } catch (error) {
+        console.error("Error al obtener los veterinarios: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchVeterinarios();
+  }, []);
+
+
+  /* ==========================================
+    LÓGICA Y MANEJADORES DE EVENTOS
+     ========================================== */
   const handleOpenDialog = (id) => {
     setIdToDelete(id);
     setDialogOpen(true);
@@ -75,37 +99,65 @@ const Veterinarios = () => {
     setIdToDelete(null);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (idToDelete) {
-      // Filtra los datos para "eliminar" el registro (en modo de prueba)
-      setVeterinarios(veterinarios.filter(v => v.id !== idToDelete));
-      handleCloseDialog();
+      try {
+        const vetDocRef = doc(db, 'users', idToDelete);
+        await deleteDoc(vetDocRef);
+        setVeterinarios(veterinarios.filter(v => v.id !== idToDelete));
+        console.log(`Veterinario con ID: ${idToDelete} eliminado exitosamente.`);
+      } catch (error) {
+        console.error("Error al eliminar el veterinario: ", error);
+      } finally {
+        handleCloseDialog();
+      }
     }
   };
 
-  // --- Lógica para Modal de Invitación ---
+  const handleVetAdded = (nuevoVet) => {
+    setVeterinarios(prevVets => [...prevVets, nuevoVet]);
+  };
+  
+  // --- AÑADIDO: Función para actualizar la tabla cuando se edita un veterinario ---
+  const handleVetUpdated = (updatedVetData) => {
+    setVeterinarios(prevVets => 
+      prevVets.map(vet => vet.id === updatedVetData.id ? updatedVetData : vet)
+    );
+  };
+
   const handleOpenInviteModal = () => {
     setInviteModalOpen(true);
   };
 
   const handleCloseInviteModal = () => {
     setInviteModalOpen(false);
-    setInviteEmail(''); // Limpia el campo de email al cerrar
+    setInviteEmail('');
   };
 
   const handleSendInvitation = () => {
-    // Lógica para enviar la invitación (actualmente solo simula con un log)
     console.log(`Invitación enviada a: ${inviteEmail}`);
     handleCloseInviteModal();
   };
-  
-  
+
+  const handleOpenAddModal = () => setAddModalOpen(true);
+  const handleCloseAddModal = () => setAddModalOpen(false);
+
+  // --- AÑADIDO: Manejadores para el modal de edición ---
+  const handleOpenEditModal = (vet) => {
+    setVetToEdit(vet);
+    setEditModalOpen(true);
+  };
+  const handleCloseEditModal = () => {
+    setVetToEdit(null);
+    setEditModalOpen(false);
+  };
+
   /* ==========================================
-     CONFIGURACIÓN DE LA TABLA (COLUMNAS)
+    CONFIGURACIÓN DE LA TABLA (COLUMNAS)
      ========================================== */
   const columns = [
-    { field: 'nombre', headerName: 'Nombres', width: 150 },
-    { field: 'apellido', headerName: 'Apellidos', width: 150 },
+    { field: 'photoURL', headerName: 'Foto', width: 80, renderCell: (params) => (<Avatar src={params.value} />), sortable: false, filterable: false, },
+    { field: 'name', headerName: 'Nombre', width: 150 },
     { field: 'especialidad', headerName: 'Especialidad', width: 180 },
     { field: 'email', headerName: 'E-mail', width: 200 },
     {
@@ -115,11 +167,12 @@ const Veterinarios = () => {
       width: 250,
       renderCell: (params) => (
         <Box>
+          {/* --- MODIFICADO: onClick ahora llama a handleOpenEditModal --- */}
           <Button
             variant="contained"
             color="primary"
             size="small"
-            onClick={() => navigate(`/admin/veterinarios/${params.id}/edit`)}
+            onClick={() => handleOpenEditModal(params.row)} // Pasamos todos los datos de la fila
             sx={{ mr: 1 }}
           >
             Editar
@@ -139,47 +192,33 @@ const Veterinarios = () => {
 
 
   /* ==========================================
-     RENDERIZADO DEL COMPONENTE (JSX)
+    RENDERIZADO DEL COMPONENTE (JSX)
      ========================================== */
   return (
     <Box className='containeer-box'>
-      
-      {/* --- Cabecera: Título y Botones de Acción --- */}
+
       <Box className='sub-container' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography className='titulo' variant="h5" component="h1">
           Gestión de Veterinarios
         </Typography>
-        
         <Box className='action-buttons'>
-          <Button
-            className='invite-button'
-            variant="outlined"
-            startIcon={<PersonAddIcon />}
-            onClick={handleOpenInviteModal}
-            sx={{ mr: 2 }}
-          >
+          <Button className='invite-button' variant="outlined" startIcon={<PersonAddIcon />} onClick={handleOpenInviteModal} sx={{ mr: 2 }}>
             Invitar Veterinario
           </Button>
-          <Button
-            className='add-button'
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => navigate('/admin/veterinarios/nuevo')}
-          >
+          <Button className='add-button' variant="contained" startIcon={<AddIcon />} onClick={handleOpenAddModal} >
             Agregar Veterinario
           </Button>
         </Box>
       </Box>
 
-      {/* --- Tabla de Datos --- */}
       <Box className='box-edit' sx={{ height: 600, width: '100%' }}>
-        <DataGrid
-          className='data-grid'
-          rows={veterinarios}
-          columns={columns}
-          loading={loading}
-          components={{ Toolbar: GridToolbar }}
-        />
+        {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CircularProgress />
+            </Box>
+        ) : (
+            <DataGrid className='data-grid' rows={veterinarios} columns={columns} components={{ Toolbar: GridToolbar }} />
+        )}
       </Box>
 
       {/* --- Diálogo de Confirmación de Borrado --- */}
@@ -197,9 +236,9 @@ const Veterinarios = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
+      
       {/* --- Diálogo para Invitar Veterinario --- */}
-      <Dialog className='invitar-veterinario' open={inviteModalOpen} onClose={handleCloseInviteModal} fullWidth maxWidth="sm">
+            <Dialog className='invitar-veterinario' open={inviteModalOpen} onClose={handleCloseInviteModal} fullWidth maxWidth="sm">
         <DialogTitle className='invit'>Invitar a un Nuevo Veterinario</DialogTitle>
         <DialogContent className='contenido-invitacion'>
           <DialogContentText className='correo-invitacion' sx={{ mb: 2 }}>
@@ -220,13 +259,32 @@ const Veterinarios = () => {
           <Button onClick={handleCloseInviteModal}>Cancelar</Button>
           <Button
             className='enviar-invitacion'
-            onClick={handleSendInvitation} 
-            variant="contained" 
+            onClick={handleSendInvitation}
+            variant="contained"
             startIcon={<GoogleIcon />}
           >
             Enviar Invitación
           </Button>
         </DialogActions>
+      </Dialog>
+
+      {/* --- MODAL PARA AGREGAR VETERINARIO --- */}
+      <Dialog open={addModalOpen} onClose={handleCloseAddModal} fullWidth maxWidth="sm">
+        <DialogTitle>Registrar Nuevo Veterinario</DialogTitle>
+        <NuevoVeterinario 
+          onClose={handleCloseAddModal}
+          onVetAdded={handleVetAdded}
+        />
+      </Dialog>
+      
+      {/* --- AÑADIDO: MODAL PARA EDITAR VETERINARIO --- */}
+      <Dialog open={editModalOpen} onClose={handleCloseEditModal} fullWidth maxWidth="sm">
+        <DialogTitle>Editar Información del Veterinario</DialogTitle>
+        <EditarVeterinario 
+          vetData={vetToEdit}
+          onClose={handleCloseEditModal}
+          onVetUpdated={handleVetUpdated}
+        />
       </Dialog>
     </Box>
   );
