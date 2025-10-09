@@ -1,4 +1,5 @@
 🐶 Panel Web Administrativo | Patita Feliz
+
 Este repositorio contiene el código fuente para el Panel Web Administrativo de "Patita Feliz", la plataforma de gestión integral para clínicas veterinarias.
 
 Este módulo está diseñado para ser utilizado por el personal interno de la clínica (Administradores, dueños) y actúa como el centro de control de citas y veterinarios.
