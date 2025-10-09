@@ -2,9 +2,8 @@
    IMPORTS
    ========================================== */
 // React y Hooks de React Router
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
+import React, { useState, useEffect } from 'react'; 
+import { useNavigate } from 'react-router-dom'
 // Componentes de Material-UI
 import { 
   Box, 

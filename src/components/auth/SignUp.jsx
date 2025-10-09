@@ -125,7 +125,7 @@ export default function SignUp() {
         createdAt: serverTimestamp()
       });
       console.log('¡Cuenta creada exitosamente!', user);
-      navigate('/admin/dashboard');
+      navigate('/');
     } catch (error) {
       console.error("Error al registrar:", error.code);
       if (error.code === 'auth/email-already-in-use') {

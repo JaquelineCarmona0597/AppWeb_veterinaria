@@ -1,27 +1,38 @@
-// src/components/routes/ProtectedRoute.jsx
-
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // Ajusta la ruta si es necesario
+import { useAuth } from '../../context/useAuth';
+import LoadingScreen from '../auth/LoadingScreen';
 
+/**
+ * Un componente que protege una ruta. Solo permite el acceso si el usuario
+ * ha iniciado sesión y su rol coincide con los roles permitidos.
+ */
 const ProtectedRoute = ({ children, roles }) => {
   const { currentUser, userData, loading } = useAuth();
 
+  // Si la sesión inicial todavía se está verificando, mostramos la pantalla de carga.
   if (loading) {
-    return null; // O un spinner
+    return <LoadingScreen />;
   }
 
+  // Si terminó de cargar y no hay usuario, lo enviamos al login.
   if (!currentUser) {
     return <Navigate to="/auth/login" replace />;
   }
 
-  // ✅ LÓGICA SIMPLIFICADA
-  // Si la ruta requiere roles y el rol del usuario no está en la lista...
-  if (roles && !roles.includes(userData?.role)) {
-    // ...lo enviamos directamente a la página de "Acceso Denegado".
+  // Si hay usuario pero aún no tenemos sus datos (rol), también esperamos.
+  // Esto es clave para evitar el "parpadeo" de la página de acceso denegado.
+  if (!userData) {
+    return <LoadingScreen />;
+  }
+
+  // Si la ruta requiere roles específicos y el rol del usuario no está incluido,
+  // lo enviamos a la página de "Acceso Denegado".
+  if (roles && !roles.includes(userData.role)) {
     return <Navigate to="/unauthorized" replace />;
   }
 
+  // Si todas las comprobaciones pasan, renderizamos el componente hijo (la página).
   return children;
 };
 

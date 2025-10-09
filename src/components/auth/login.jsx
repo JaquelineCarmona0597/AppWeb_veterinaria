@@ -122,7 +122,7 @@ const handleGoogleLogin = async () => {
     }
 
     console.log('Inicio de sesión con Google exitoso!');
-    navigate('/admin'); // Te redirige al dashboard principal
+    navigate('/'); // Te redirige al dashboard principal
 
   } catch (error) {
     console.error("Error con Google:", error.code);

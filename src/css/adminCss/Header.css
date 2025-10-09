@@ -1,36 +1,90 @@
-.header-container {
-  /* Estilo de la tarjeta "flotante" */
-  background-color: var(--color-superficie) !important;
-  border-radius: 12px !important;
+/* ================================================================== */
+/* Barra Superior (Header)                                            */
+/* ================================================================== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  background-color: var(--color-superficie);
+  border-bottom: 1px solid var(--color-borde);
   padding: 12px 24px;
-  border: 1px solid var(--color-borde);
-  
-  /* Márgenes: 24px arriba, 24px a los lados, y CERO abajo */
-  margin: 24px 24px 0; 
 }
 
-/* Estilos para el contenido interno */
 .header-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding: 12px 24px;
 }
 
 .titulo-header {
   color: var(--color-texto-principal);
   font-weight: 600;
   margin-left: 16px;
+  white-space: nowrap;
 }
 
 .menu-button-header {
   color: var(--color-texto-principal) !important;
 }
 
-.avatar {
-  background-color: var(--color-marca) !important;
+/* Estilo para el botón de logout */
+.logoutbutton {
+  transition: background-color 0.2s ease;
+}
+.logoutbutton:hover {
+  background-color: rgba(230, 57, 70, 0.1) !important; /* Fondo rojo muy sutil al pasar el ratón */
 }
 
-.serrarsecion {
-  color: var(--color-peligro) !important;
+/* ================================================================== */
+/* Diálogo de Confirmación (Modal)                                    */
+/* ================================================================== */
+
+/* Estilo para el contenedor principal del diálogo (la tarjeta visible) */
+.containermodal .MuiDialog-paper {
+  border-radius: 16px !important;
+  padding: 16px !important;
+  background-color: var(--color-superficie);
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Título del diálogo: "¿Estás seguro...?" */
+.modalestasseguro {
+  padding: 8px 16px !important;
+}
+.modalestasseguro .MuiTypography-root {
+  font-weight: 600 !important;
+  color: var(--color-texto-principal);
+}
+
+/* Texto de descripción del diálogo */
+.modaltext .text {
+  color: var(--color-texto-secundario);
+}
+
+/* ================================================================== */
+/* Botones de Acción del Diálogo                                      */
+/* ================================================================== */
+.botonesmodal {
+  padding: 16px 8px 8px !important;
+  gap: 8px;
+}
+
+/* Botón "Cancelar" */
+.cancelarmodalbutton {
+  border-radius: 8px !important;
+  color: var(--color-texto-secundario) !important;
+  border: 1px solid var(--color-borde) !important;
+  padding: 6px 16px !important;
+}
+.cancelarmodalbutton:hover {
+  background-color: var(--color-fondo) !important;
+}
+
+/* Botón "Cerrar Sesión" de confirmación */
+.cerrarmodal {
+  border-radius: 8px !important;
+  padding: 6px 16px !important;
+  /* El color rojo ya se lo das con 'sx', aquí podemos añadir otros estilos si quieres */
 }
