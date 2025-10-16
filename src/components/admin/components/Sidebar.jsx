@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Drawer, List, ListItemIcon, ListItemText, Toolbar, Typography, Box, Avatar, ListItemButton } from '@mui/material';
 import { Home as DashboardIcon, CalendarMonth as HorariosIcon, MedicalServices as VeterinariosIcon } from '@mui/icons-material';
 
-import { useAuth } from '../../../context/useAuth'; 
+import { useAuth } from '../../../context/AuthContext'; 
 import logoPatitaFeliz from '../../../assets/logoN.png';
 import '../../../css/adminCss/Sidebar.css';
 
@@ -72,17 +72,17 @@ const Sidebar = ({ isSidebarOpen }) => {
         <Box className="user-profile">
           <Avatar 
             className='avatar' 
-            alt={userData?.name}
+            alt={userData?.nombre}
             src={currentUser?.photoURL || ''} 
           >
-            {userData?.name?.[0]}
+            {userData?.nombre?.[0]}
           </Avatar>
           <Box className="user-info">
             <Typography variant="subtitle1" className="user-name">
-              {userData?.name || 'Usuario'}
+              {userData?.nombre || 'Usuario'}
             </Typography>
             <Typography variant="body2" className="user-account-type">
-              {userData?.role === 'admin' ? 'Administrador' : 'Cliente'}
+              {userData?.rol === 'admin' ? 'Administrador' : 'Cliente'}
             </Typography>
           </Box>
         </Box>

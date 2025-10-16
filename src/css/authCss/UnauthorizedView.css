@@ -36,7 +36,7 @@
 }
 
 .unauthorized-button {
-  background-color: var(--color-acento) !important;
+  background-color: var(--color-primario) !important;
   color: var(--color-texto-blanco) !important;
   padding: 12px 24px !important;
   border-radius: 8px !important;
@@ -45,5 +45,5 @@
 }
 
 .unauthorized-button:hover {
-  background-color: var(--color-acento-oscuro) !important;
+  background-color: var(--color-primario-oscuro) !important;
 }

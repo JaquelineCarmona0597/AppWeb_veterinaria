@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../context/useAuth';
+import { useAuth } from '../../context/AuthContext';
 import LoadingScreen from '../auth/LoadingScreen';
 
 /**
@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children, roles }) => {
 
   // Si la ruta requiere roles específicos y el rol del usuario no está incluido,
   // lo enviamos a la página de "Acceso Denegado".
-  if (roles && !roles.includes(userData.role)) {
+  if (roles && !roles.includes(userData.rol)) {
     return <Navigate to="/unauthorized" replace />;
   }
 

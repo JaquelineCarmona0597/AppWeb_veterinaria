@@ -69,7 +69,8 @@ const Veterinarios = () => {
     const fetchVeterinarios = async () => {
       setLoading(true);
       try {
-        const q = query(collection(db, "users"), where("role", "==", "vet"));
+        // Se cambia "users" por "usuarios" y "role" por "rol"
+        const q = query(collection(db, "usuarios"), where("rol", "==", "vet"));
         const querySnapshot = await getDocs(q);
         const vetsData = querySnapshot.docs.map(doc => ({
           id: doc.id,
@@ -83,7 +84,7 @@ const Veterinarios = () => {
       }
     };
     fetchVeterinarios();
-  }, []);
+}, []);
 
 
   /* ==========================================
@@ -102,7 +103,7 @@ const Veterinarios = () => {
   const handleDelete = async () => {
     if (idToDelete) {
       try {
-        const vetDocRef = doc(db, 'users', idToDelete);
+        const vetDocRef = doc(db, 'usuarios', idToDelete);
         await deleteDoc(vetDocRef);
         setVeterinarios(veterinarios.filter(v => v.id !== idToDelete));
         console.log(`Veterinario con ID: ${idToDelete} eliminado exitosamente.`);
@@ -156,23 +157,47 @@ const Veterinarios = () => {
     CONFIGURACIÓN DE LA TABLA (COLUMNAS)
      ========================================== */
   const columns = [
-    { field: 'photoURL', headerName: 'Foto', width: 80, renderCell: (params) => (<Avatar src={params.value} />), sortable: false, filterable: false, },
-    { field: 'name', headerName: 'Nombre', width: 150 },
-    { field: 'especialidad', headerName: 'Especialidad', width: 180 },
-    { field: 'email', headerName: 'E-mail', width: 200 },
+    { 
+      field: 'photoURL', 
+      headerName: 'Foto', 
+      width: 80, 
+      renderCell: (params) => (<Avatar src={params.value} />), 
+      sortable: false, 
+      filterable: false, 
+    },
+    { 
+      field: 'nombre', // Corregido de 'name' a 'nombre'
+      headerName: 'Nombre', 
+      width: 150 
+    },
+    { 
+      field: 'especialidad', 
+      headerName: 'Especialidad', 
+      width: 180 
+    },
+    { 
+      field: 'correo', // Corregido de 'email' a 'correo'
+      headerName: 'E-mail', 
+      width: 200 
+    },
+    { 
+      field: 'telefono', // ¡Añadido!
+      headerName: 'Teléfono', 
+      width: 150 
+    },
     {
       field: 'actions',
       headerName: 'Acciones',
       sortable: false,
+      filterable: false, // Las acciones no se deben poder filtrar
       width: 250,
       renderCell: (params) => (
         <Box>
-          {/* --- MODIFICADO: onClick ahora llama a handleOpenEditModal --- */}
           <Button
             variant="contained"
             color="primary"
             size="small"
-            onClick={() => handleOpenEditModal(params.row)} // Pasamos todos los datos de la fila
+            onClick={() => handleOpenEditModal(params.row)}
             sx={{ mr: 1 }}
           >
             Editar
@@ -189,7 +214,6 @@ const Veterinarios = () => {
       ),
     },
   ];
-
 
   /* ==========================================
     RENDERIZADO DEL COMPONENTE (JSX)

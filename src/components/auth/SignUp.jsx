@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../../firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { useAuth } from '../../context/AuthContext';
 // <-- AÑADIDO: Componentes para el Dialog (Modal) ---
 import { Box, Button, Card, Checkbox, CssBaseline, Divider, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField, Typography, List, ListItem, ListItemIcon, ListItemText, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { PersonOutline as PersonOutlineIcon, LockOutlined as LockOutlinedIcon, MailOutline as MailOutlineIcon, Visibility, VisibilityOff, CheckCircleOutline, HighlightOff } from '@mui/icons-material';
@@ -18,6 +19,7 @@ export default function SignUp() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { refreshUserData } = useAuth();
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -109,7 +111,7 @@ export default function SignUp() {
     return isValid;
   };
 
-  const handleSubmit = async (event) => {
+const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validate()) return; 
 
@@ -117,15 +119,23 @@ export default function SignUp() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        name: name,
-        email: user.email,
-        role: "client",
-        createdAt: serverTimestamp()
+
+      await setDoc(doc(db, "usuarios", user.uid), {
+        id: user.uid,
+        nombre: name,
+        correo: user.email,
+        rol: "cliente",
+        telefono: "",
+        fechaCreacion: serverTimestamp()
       });
-      console.log('¡Cuenta creada exitosamente!', user);
-      navigate('/');
+      
+      // ▼▼▼ ¡LA MAGIA SUCEDE AQUÍ! ▼▼▼
+      // 2. Justo después de guardar los datos, le decimos al contexto que los vuelva a leer
+      await refreshUserData(user);
+
+      // 3. Ahora sí, navegamos de forma normal. El contexto ya tiene la información actualizada.
+      navigate('/dashboard'); 
+
     } catch (error) {
       console.error("Error al registrar:", error.code);
       if (error.code === 'auth/email-already-in-use') {

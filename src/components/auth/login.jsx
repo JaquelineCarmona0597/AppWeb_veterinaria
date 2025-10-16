@@ -105,20 +105,22 @@ const handleGoogleLogin = async () => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    // 2. ¡NUEVO! Verificamos si el usuario ya existe en Firestore
-    const userDocRef = doc(db, 'users', user.uid);
+    // 2. Verificamos si el usuario ya existe en la colección 'usuarios'
+    const userDocRef = doc(db, 'usuarios', user.uid); // <-- ¡AQUÍ ESTÁ EL CAMBIO!
     const docSnap = await getDoc(userDocRef);
 
     // 3. Si el documento NO existe, lo creamos
     if (!docSnap.exists()) {
+      // Usamos 'setDoc' para crear un nuevo documento en la colección 'usuarios'
       await setDoc(userDocRef, {
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName, // Google nos da el nombre, ¡aprovechémoslo!
-        role: "client",
-        createdAt: serverTimestamp()
+        id: user.uid,              // <-- Corregido
+        nombre: user.displayName,  // <-- Corregido
+        correo: user.email,        // <-- Corregido
+        rol: "cliente",            // <-- Corregido (rol en minúsculas)
+        telefono: "",              // <-- Añadido (inicialmente vacío)
+        fechaCreacion: serverTimestamp() // <-- Corregido
       });
-      console.log('Nuevo usuario de Google guardado en Firestore.');
+      console.log('Nuevo usuario de Google guardado en la colección "usuarios".');
     }
 
     console.log('Inicio de sesión con Google exitoso!');

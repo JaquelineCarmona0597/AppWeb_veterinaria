@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../../context/useAuth';
+import { useAuth } from '../../../context/AuthContext';
 import { auth } from '../../../firebase';
 import { signOut } from 'firebase/auth';
 
@@ -49,7 +49,7 @@ const Header = ({ isSidebarOpen, handleToggleSidebar }) => {
           </IconButton>
           
           <Typography variant="h6" noWrap component="div" className="titulo-header">
-            Bienvenido, {userData?.name || 'Usuario'}
+            Bienvenido, {userData?.nombre || 'Usuario'}
           </Typography>
           
 
