@@ -2,6 +2,7 @@
 
 import React from 'react';
 import './css/App.css'
+import './css/authCss/Login.css'
 import AppRouter from './components/routes/AppRouter'; 
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 

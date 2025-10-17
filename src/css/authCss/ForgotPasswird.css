@@ -1,99 +1,122 @@
-/* -------------------------------------------------------------------------- */
-/* 6. ESTILOS PARA EL MODAL (DIALOG) DE "OLVIDÉ MI CONTRASEÑA"                */
-/* -------------------------------------------------------------------------- */
+/* ==========================================================================
+   ESTILOS PARA EL MODAL DE RESTABLECER CONTRASEÑA
+   ========================================================================== */
 
-/* Animación de entrada para el modal */
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Contenedor principal del modal */
-.dialog .MuiDialog-paper {
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDOR PRINCIPAL DEL MODAL (REUTILIZAMOS ESTILOS)                   */
+/* -------------------------------------------------------------------------- */
+/* Estos estilos son consistentes con los otros modales de la aplicación */
+.modal-contenedor .MuiDialog-paper {
   border-radius: 16px !important;
-  background-color: var(--color-superficie) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  animation: zoomInFade 0.3s ease-out; /* Animación de entrada */
   width: 100%;
-  max-width: 450px;
-  animation: fadeInScale 0.3s ease-out;
+  max-width: 450px; /* Ancho ideal para este tipo de modal */
 }
 
-/* Título del modal */
-.ttituloDial {
-  color: var(--color-marca) !important;
+@keyframes zoomInFade {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. TÍTULO Y TEXTO DEL MODAL                                                */
+/* -------------------------------------------------------------------------- */
+.Titulo-modal {
   font-weight: 600 !important;
-  padding: 1.5rem !important;
-  border-bottom: 1px solid var(--color-borde);
+  color: var(--color-texto-principal) !important;
 }
 
-/* Cuerpo del modal */
-.cuerpoDial {
-  padding: 1.5rem !important;
-}
-
-.textoDial {
+.texto-modal {
   color: var(--color-texto-secundario) !important;
   line-height: 1.6;
 }
 
-/* Campo de texto (variante "standard") */
-.inputDial {
-  margin-top: 1rem !important;
+/* -------------------------------------------------------------------------- */
+/* 3. CAMPO DE TEXTO (TEXTFIELD VARIANT="STANDARD")                           */
+/* -------------------------------------------------------------------------- */
+.Formulario-secion {
+  margin-top: 16px !important;
 }
 
-/* Línea inferior del input */
-.inputDial .MuiInput-underline:before {
-  border-bottom-color: var(--color-borde) !important;
+/* Línea inferior del input en estado normal */
+.Formulario-secion .MuiInput-underline:before {
+  border-bottom: 2px solid var(--color-borde) !important;
 }
-.inputDial .MuiInput-underline:hover:not(.Mui-disabled):before {
-  border-bottom-color: var(--color-texto-principal) !important;
+
+/* Línea inferior al pasar el mouse */
+.Formulario-secion .MuiInput-underline:hover:not(.Mui-disabled):before {
+  border-bottom: 2px solid var(--color-texto-secundario) !important;
 }
-.inputDial .MuiInput-underline:after {
-  /* Línea que aparece al hacer foco */
+
+/* Línea inferior y etiqueta cuando el input está enfocado */
+.Formulario-secion .MuiInput-underline:after {
   border-bottom: 2px solid var(--color-primario) !important;
 }
-
-/* Etiqueta del input al hacer foco */
-.inputDial .MuiInputLabel-root.Mui-focused {
+.Formulario-secion .MuiInputLabel-root.Mui-focused {
   color: var(--color-primario) !important;
 }
 
-/* Contenedor de los botones */
-.accionesDial {
-  padding: 1rem 1.5rem !important;
-  background-color: var(--color-primario-claro);
-  border-top: 1px solid var(--color-borde);
+/* Estilo cuando hay un error */
+.Formulario-secion .MuiInput-underline.Mui-error:after {
+  border-bottom-color: var(--color-peligro) !important;
+}
+.Formulario-secion .MuiInputLabel-root.Mui-error {
+  color: var(--color-peligro) !important;
 }
 
-/* Estilos para los botones del modal */
-.botonDialog {
+
+/* -------------------------------------------------------------------------- */
+/* 4. MENSAJES DE ESTADO (ÉXITO Y ERROR)                                      */
+/* -------------------------------------------------------------------------- */
+.mensaje-estado {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.mensaje-estado.exito {
+  background-color: color-mix(in srgb, var(--color-exito) 15%, transparent);
+  color: var(--color-exito);
+}
+
+.mensaje-estado.error {
+  background-color: color-mix(in srgb, var(--color-peligro) 15%, transparent);
+  color: var(--color-peligro);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. BOTONES DE ACCIÓN                                                       */
+/* -------------------------------------------------------------------------- */
+.boton-contendeor {
+  padding: 16px 24px !important;
+  gap: 8px;
+}
+
+.boton-modal {
   border-radius: 8px !important;
-  padding: 8px 16px !important;
   font-weight: 600 !important;
   text-transform: none !important;
-  transition: all 0.3s ease !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s ease-out !important;
 }
 
-/* Botón "Continuar" (el último botón) */
-.botonDialog:last-of-type {
-  background-color: var(--color-primario) !important;
-  color: var(--color-texto-blanco) !important;
-}
-.botonDialog:last-of-type:hover {
-  background-color: var(--color-primario-oscuro) !important;
-  transform: translateY(-2px);
-}
-
-/* Botón "Cancelar" (el primer botón) */
-.botonDialog:first-of-type {
+/* Botón "Cancelar" (Primer botón en el DOM) */
+.boton-modal:first-of-type {
   color: var(--color-texto-secundario) !important;
 }
-.botonDialog:first-of-type:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+.boton-modal:first-of-type:hover {
+  background-color: var(--color-fondo) !important;
+}
+
+/* Botón "Enviar Correo" (Último botón en el DOM) */
+.boton-modal:last-of-type {
+  color: var(--color-primario) !important;
+  font-weight: 700 !important;
+}
+.boton-modal:last-of-type:hover {
+  background-color: color-mix(in srgb, var(--color-primario) 15%, transparent) !important;
 }

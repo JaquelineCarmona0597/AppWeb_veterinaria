@@ -1,115 +1,131 @@
+/* ==========================================================================
+   ESTILOS PARA LA PÁGINA DE GESTIÓN DE EMPLEADOS (Veterinarios.css)
+   ========================================================================== */
 
-/* ==========================================
-   ESTILOS GENERALES DEL CONTENEDOR
-   ========================================== */
-/* ✅ ESTE ES EL CAMBIO PRINCIPAL PARA EL EFECTO "NUBE" */
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDORES PRINCIPALES                                                */
+/* -------------------------------------------------------------------------- */
 .containeer-box {
-  background-color: var(--color-superficie); /* Fondo blanco para la tarjeta */
-  padding: 24px;
-  border-radius: 12px; /* Bordes redondeados como el header */
-  border: 1px solid var(--color-borde); /* Borde sutil a juego */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Sombra para el efecto flotante */
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Espacio entre la cabecera y la tabla */
+  height: 100%;
 }
 
-.titulo {
-  color: var(--color-texto-principal);
+.sub-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Para que se ajuste en pantallas pequeñas */
+  gap: 16px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. CABECERA Y BOTONES DE ACCIÓN                                            */
+/* -------------------------------------------------------------------------- */
+.Titulos {
+  font-weight: 700 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.invite-button, .add-button {
+  border-radius: 8px !important;
   font-weight: 600 !important;
+  text-transform: none !important;
+  transition: all 0.2s ease-out !important;
+  padding: 8px 16px !important;
 }
 
-/* ==========================================
-   ESTILOS DE BOTONES
-   ========================================== */
-/* Botón principal: "Agregar Veterinario" */
+/* Botón "Agregar" (Primario) */
 .add-button {
   background-color: var(--color-primario) !important;
   color: var(--color-texto-blanco) !important;
-  transition: background-color 0.3s ease !important;
 }
 .add-button:hover {
   background-color: var(--color-primario-oscuro) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primario) 30%, transparent) !important;
 }
 
-/* Botón secundario: "Invitar Veterinario" */
+/* Botón "Invitar" (Secundario) */
 .invite-button {
-  color: var(--color-marca) !important;
-  border-color: var(--color-marca) !important;
-  transition: background-color 0.3s ease, color 0.3s ease !important;
+  border-color: var(--color-primario) !important;
+  color: var(--color-primario) !important;
 }
 .invite-button:hover {
-  background-color: rgba(42, 157, 143, 0.08) !important;
-  border-color: var(--color-marca-oscuro) !important;
+  background-color: color-mix(in srgb, var(--color-primario) 10%, transparent) !important;
+  transform: translateY(-2px);
 }
 
-/* Botones de acción dentro de la tabla */
-.MuiButton-containedPrimary {
-  background-color: var(--color-primario) !important;
-}
-.MuiButton-containedPrimary:hover {
-  background-color: var(--color-primario-oscuro) !important;
-}
-.MuiButton-containedError {
-  background-color: var(--color-peligro) !important;
-}
-.MuiButton-containedError:hover {
-  background-color: var(--color-peligro-oscuro) !important;
+/* -------------------------------------------------------------------------- */
+/* 3. TABLA DE DATOS (DATAGRID)                                               */
+/* -------------------------------------------------------------------------- */
+.box-edit {
+  flex-grow: 1; /* Hace que la tabla ocupe el espacio restante */
+  width: 100%;
+  height: 70vh; /* Altura considerable para la tabla */
 }
 
-/* ==========================================
-   ESTILOS DE LA TABLA (DataGrid)
-   ========================================== */
-/* ✅ AJUSTE: Se quita el estilo de tarjeta a la tabla para que se integre */
 .data-grid {
-  border: none !important; /* Quitamos el borde propio de la tabla */
+  border: none !important; /* Quitamos el borde por defecto de DataGrid */
 }
 
-/* Cabecera de la tabla */
+/* Estilo para la cabecera de la tabla */
 .data-grid .MuiDataGrid-columnHeaders {
-  background-color: var(--color-primario-claro);
-  border-bottom: 1px solid var(--color-borde);
-  color: var(--color-texto-principal);
+  background-color: var(--color-fondo);
+  border-bottom: 1px solid var(--color-borde) !important;
 }
 
-/* Celdas de la tabla */
+.data-grid .MuiDataGrid-columnHeaderTitle {
+  font-weight: 600 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+/* Estilo para las celdas */
 .data-grid .MuiDataGrid-cell {
-  border-bottom: 1px solid var(--color-borde);
-  color: var(--color-texto-secundario);
-}
-.data-grid .MuiDataGrid-cell:focus,
-.data-grid .MuiDataGrid-cell:focus-within {
-  outline: none !important;
+  border-bottom: 1px solid var(--color-borde) !important;
 }
 
-/* Quita el borde de la última fila */
-.data-grid .MuiDataGrid-virtualScrollerRenderZone .MuiDataGrid-row:last-child .MuiDataGrid-cell {
-  border-bottom: none;
+/* Eliminar borde de la última fila */
+.data-grid .MuiDataGrid-row:last-child .MuiDataGrid-cell {
+  border-bottom: none !important;
 }
 
-/* ==========================================
-   ESTILOS DE DIÁLOGOS (MODALES)
-   ========================================== */
-.MuiDialog-paper {
-  border-radius: 12px !important;
+/* Estilo para la barra de herramientas de la tabla */
+.data-grid .MuiToolbar-root {
+  padding: 8px;
 }
 
-/* Títulos de los diálogos */
-.invit, .confirmacion {
-  color: var(--color-texto-principal);
+/* -------------------------------------------------------------------------- */
+/* 4. MODALES / DIÁLOGOS                                                      */
+/* -------------------------------------------------------------------------- */
+.modal-contenedor .MuiDialog-paper {
+  border-radius: 16px !important;
 }
 
-/* Texto de contenido */
-.correo-invitacion, .texto-dialog {
-  color: var(--color-texto-secundario);
+.modal-contenedor .MuiDialogTitle-root {
+  font-weight: 600 !important;
+  color: var(--color-texto-principal) !important;
 }
 
-/* Botón de enviar invitación */
-.enviar-invitacion {
-  background-color: var(--color-primario) !important;
-}
-.enviar-invitacion:hover {
-  background-color: var(--color-primario-oscuro) !important;
+.modal-contenedor .MuiDialogContentText-root, .correo-invitacion {
+  color: var(--color-texto-secundario) !important;
 }
 
-/* Botón de eliminar en el diálogo */
+/* Botones dentro de los modales */
+.modal-contenedor .MuiDialogActions-root button {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 8px 16px !important;
+}
+
+/* --- Estilos específicos para el modal de borrado --- */
 .eliminar {
   background-color: var(--color-peligro) !important;
   color: var(--color-texto-blanco) !important;
@@ -117,3 +133,73 @@
 .eliminar:hover {
   background-color: var(--color-peligro-oscuro) !important;
 }
+
+/* --- Estilos específicos para el modal de invitación --- */
+.contenido-invitacion {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px !important; /* Pequeño ajuste para que respire */
+}
+
+/* --- Campo de texto (Input) --- */
+.input-email .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+}
+.input-email .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-borde) !important;
+}
+.input-email .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-texto-secundario) !important;
+}
+/* Estado enfocado ahora usa el color primario */
+.input-email .MuiOutlinedInput-root.Mui-focused {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primario) 20%, transparent) !important;
+}
+.input-email .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primario) !important;
+}
+.input-email .MuiInputLabel-root.Mui-focused {
+  color: var(--color-primario) !important;
+}
+
+/* --- Contenedor de botones y botones individuales --- */
+.botones-container {
+  padding: 16px 24px !important;
+  border-top: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.enviar-invitacion, .boton-camcelar-invt {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s ease-out !important;
+}
+
+/* ▼▼▼ CAMBIO DE COLOR AQUÍ ▼▼▼ */
+/* Botón "Enviar Invitación" ahora es un botón primario */
+.enviar-invitacion {
+  background-color: var(--color-primario) !important; /* Color naranja principal */
+  color: var(--color-texto-blanco) !important;
+}
+.enviar-invitacion:hover {
+  background-color: var(--color-primario-oscuro) !important; /* Naranja oscuro en hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primario) 35%, transparent) !important;
+}
+
+/* Botón "Cancelar" (Secundario) */
+.boton-camcelar-invt {
+  border: 1px solid var(--color-borde) !important;
+  color: var(--color-texto-secundario) !important;
+}
+.boton-camcelar-invt:hover {
+  background-color: var(--color-fondo) !important;
+  border-color: var(--color-texto-secundario) !important;
+}
+

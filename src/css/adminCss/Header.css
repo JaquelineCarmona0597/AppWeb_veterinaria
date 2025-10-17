@@ -1,90 +1,105 @@
-/* ================================================================== */
-/* Barra Superior (Header)                                            */
-/* ================================================================== */
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 1100;
-  background-color: var(--color-superficie);
-  border-bottom: 1px solid var(--color-borde);
-  padding: 12px 24px;
+/* ==========================================================================
+   ESTILOS PARA EL HEADER (VERSIÓN NUBE FLOTANTE)
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDOR PRINCIPAL DEL HEADER (¡EL GRAN CAMBIO!)                      */
+/* -------------------------------------------------------------------------- */
+.header-container {
+  position: sticky !important;
+  top: 16px; /* 1. Lo despegamos de la parte superior */
+  z-index: 1201;
+  transition: all 0.3s ease-in-out !important;
+
+  /* --- La Magia de la Nube --- */
+  
+  /* 2. Fondo blanco sólido */
+  background-color: var(--color-superficie) !important;
+  
+  /* 3. Bordes redondeados */
+  border-radius: 12px !important;
+
+  /* 4. Sombra para el efecto "flotante" */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+
+  /* 5. Margen lateral para que no toque los bordes */
+  margin: 0 24px; 
+  
+  /* 6. Ajustamos el ancho (ya no es 100%) */
+  width: calc(100% - 48px) !important;
+  
+  /* 7. Quitamos el borde inferior */
+  border-bottom: none !important; 
 }
 
 .header-content {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  width: 100%;
-  padding: 12px 24px;
+  align-items: center;
+  padding: 0 16px !important;
+  min-height: 64px;
 }
 
-.titulo-header {
-  color: var(--color-texto-principal);
-  font-weight: 600;
-  margin-left: 16px;
-  white-space: nowrap;
+/* -------------------------------------------------------------------------- */
+/* 2. ICONOS Y TÍTULO (Oscuros para contrastar)                               */
+/* -------------------------------------------------------------------------- */
+.menu-button-header, .logioutbutton {
+  transition: all 0.2s ease-in-out !important;
 }
 
-.menu-button-header {
-  color: var(--color-texto-principal) !important;
-}
-
-/* Estilo para el botón de logout */
-.logoutbutton {
-  transition: background-color 0.2s ease;
-}
-.logoutbutton:hover {
-  background-color: rgba(230, 57, 70, 0.1) !important; /* Fondo rojo muy sutil al pasar el ratón */
-}
-
-/* ================================================================== */
-/* Diálogo de Confirmación (Modal)                                    */
-/* ================================================================== */
-
-/* Estilo para el contenedor principal del diálogo (la tarjeta visible) */
-.containermodal .MuiDialog-paper {
-  border-radius: 16px !important;
-  padding: 16px !important;
-  background-color: var(--color-superficie);
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1) !important;
-}
-
-/* Título del diálogo: "¿Estás seguro...?" */
-.modalestasseguro {
-  padding: 8px 16px !important;
-}
-.modalestasseguro .MuiTypography-root {
-  font-weight: 600 !important;
-  color: var(--color-texto-principal);
-}
-
-/* Texto de descripción del diálogo */
-.modaltext .text {
-  color: var(--color-texto-secundario);
-}
-
-/* ================================================================== */
-/* Botones de Acción del Diálogo                                      */
-/* ================================================================== */
-.botonesmodal {
-  padding: 16px 8px 8px !important;
-  gap: 8px;
-}
-
-/* Botón "Cancelar" */
-.cancelarmodalbutton {
-  border-radius: 8px !important;
-  color: var(--color-texto-secundario) !important;
-  border: 1px solid var(--color-borde) !important;
-  padding: 6px 16px !important;
-}
-.cancelarmodalbutton:hover {
+/* Usamos el fondo cálido para el hover */
+.menu-button-header:hover, .logioutbutton:hover {
+  transform: scale(1.1);
   background-color: var(--color-fondo) !important;
 }
 
-/* Botón "Cerrar Sesión" de confirmación */
-.cerrarmodal {
-  border-radius: 8px !important;
-  padding: 6px 16px !important;
-  /* El color rojo ya se lo das con 'sx', aquí podemos añadir otros estilos si quieres */
+.header-content .Titulos {
+  font-size: 1.25rem !important;
+  color: var(--color-texto-secundario) !important; 
+  font-weight: 500 !important;
+}
+
+.logioutbutton .MuiSvgIcon-root {
+  color: var(--color-peligro) !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. AJUSTE EN EL CONTENIDO DE LA PÁGINA                                     */
+/* -------------------------------------------------------------------------- */
+/* IMPORTANTE: Para que esto funcione, también debes hacer un pequeño
+   ajuste en tu 'adminlayout.css' para que el contenido de la 
+   página no quede debajo del header flotante.
+*/
+
+/* --- En 'adminlayout.css', MODIFICA .page-content --- */
+
+/* .page-content {
+    flex-grow: 1;
+    padding: 24px; 
+    width: 100%;
+} */
+
+/* --- REEMPLÁZALO CON ESTO --- */
+
+/* .page-content {
+    flex-grow: 1;
+    padding: 16px 24px 24px 24px;  <-- CAMBIO AQUÍ (menos padding arriba)
+    width: 100%;
+} */
+
+
+/* -------------------------------------------------------------------------- */
+/* 4. MODAL DE CIERRE DE SESIÓN (Se queda exactamente igual)                  */
+/* -------------------------------------------------------------------------- */
+@keyframes zoomInFade {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-contenedor .MuiDialog-paper {
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  animation: zoomInFade 0.3s ease-out;
+  width: 100%;
+  max-width: 400px;
 }

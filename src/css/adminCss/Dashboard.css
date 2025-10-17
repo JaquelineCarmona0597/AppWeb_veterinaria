@@ -1,71 +1,109 @@
-/* Estilos para la página de iconos */
-.icons-container {
-  /* Esto empuja el contenedor hacia arriba para que se solape con el Header */
-  margin-top: -7rem;
-  padding-bottom: 3rem;
+/* ==========================================================================
+   ESTILOS PARA EL DASHBOARD DEL ADMINISTRADOR
+   ========================================================================== */
+
+/* Animación de entrada para los elementos */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.icons-card {
-  border: none;
-  box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
-}
-
-.icons-card-header {
-  background-color: transparent;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.icons-card-title {
-  margin-bottom: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--color-base); /* Color de Patita Feliz */
-}
-
-.icons-grid {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.icon-item {
-  padding: 15px;
-  text-align: center;
-}
-
-.icon-clipboard-button {
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDORES Y CABECERA                                                 */
+/* -------------------------------------------------------------------------- */
+.dashboard-container {
   display: flex;
   flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-header {
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.dashboard-title {
+  font-weight: 700 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+.dashboard-subtitle {
+  color: var(--color-texto-secundario) !important;
+  margin-top: 4px !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. TARJETAS DE INDICADORES (KPI)                                           */
+/* -------------------------------------------------------------------------- */
+.kpi-card {
+  display: flex;
   align-items: center;
+  gap: 16px;
+  padding: 20px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--color-borde) !important;
+  background-color: var(--color-superficie) !important;
+  transition: all 0.2s ease-out !important;
+  animation: fadeInUp 0.5s ease-out backwards;
+  min-height: 100px; /* Altura mínima para que se vea bien el loader */
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07) !important;
+  border-color: var(--color-primario) !important;
+}
+
+/* Retraso escalonado para la animación de entrada */
+.kpi-grid .MuiGrid-item:nth-child(1) .kpi-card { animation-delay: 0.1s; }
+.kpi-grid .MuiGrid-item:nth-child(2) .kpi-card { animation-delay: 0.2s; }
+.kpi-grid .MuiGrid-item:nth-child(3) .kpi-card { animation-delay: 0.3s; }
+.kpi-grid .MuiGrid-item:nth-child(4) .kpi-card { animation-delay: 0.4s; }
+
+.kpi-icon {
+  width: 50px !important;
+  height: 50px !important;
+  color: var(--color-texto-blanco) !important;
+}
+
+.kpi-value {
+  font-size: 1.75rem !important;
+  font-weight: 700 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+.kpi-title {
+  color: var(--color-texto-secundario) !important;
+  font-size: 0.9rem !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. TARJETAS DE GRÁFICOS Y ACTIVIDAD                                        */
+/* -------------------------------------------------------------------------- */
+.chart-card, .activity-card {
+  padding: 24px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--color-borde) !important;
+  height: 100%;
+  animation: fadeInUp 0.5s ease-out backwards;
+  animation-delay: 0.5s;
+}
+
+.card-title {
+  font-weight: 600 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+/* Placeholder para el gráfico/contenido */
+.chart-container {
+  min-height: 200px; /* Altura mínima */
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  width: 100%;
-  padding: 1.5rem;
-  font-size: 1rem;
-  border-radius: .375rem;
-  border: 1px solid #dee2e6;
-  background-color: #fff;
-  color: #525f7f;
-  transition: all 0.15s ease;
-  cursor: pointer;
-}
-
-.icon-clipboard-button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
-  border-color: var(--color-confianza); /* Color de Patita Feliz */
-  color: var(--color-confianza);
-}
-
-.icon-clipboard-button i {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: var(--color-accion); /* Color de Patita Feliz */
-}
-
-.icon-clipboard-button span {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  color: #8898aa;
-  word-break: break-all;
+  align-items: center;
+  gap: 16px;
+  color: var(--color-texto-secundario);
+  background-color: var(--color-fondo);
+  border-radius: 8px;
+  margin-top: 16px;
+  padding: 24px;
 }

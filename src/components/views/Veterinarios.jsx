@@ -27,10 +27,7 @@ import AddIcon from '@mui/icons-material/Add';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import GoogleIcon from '@mui/icons-material/Google';
 
-// Componentes de Formularios
-import NuevoVeterinario from './NuevoVeterinario'; 
-// --- AÑADIDO: Importamos el componente de edición ---
-import EditarVeterinario from './EditarVeterinario';
+
 
 // Estilos locales
 import '../../css/authCss/Veterinarios.css';
@@ -38,6 +35,8 @@ import '../../css/authCss/Veterinarios.css';
 // Importaciones de Firebase
 import { db } from '../../firebase';
 import { collection, query, where, getDocs, doc, deleteDoc } from "firebase/firestore";
+import NuevoEmpleado from './NuevoEmpleado';
+import EditarEmpleado from './EditarEmpleado';
 
 
 /* ==========================================
@@ -70,8 +69,7 @@ const Veterinarios = () => {
       setLoading(true);
       try {
         // Se cambia "users" por "usuarios" y "role" por "rol"
-        const q = query(collection(db, "usuarios"), where("rol", "==", "vet"));
-        const querySnapshot = await getDocs(q);
+        const q = query(collection(db, "usuarios"), where("rol", "in", ["vet", "recepcionista"]));        const querySnapshot = await getDocs(q);
         const vetsData = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
@@ -186,6 +184,17 @@ const Veterinarios = () => {
       width: 150 
     },
     {
+    field: 'rol',
+    headerName: 'Rol',
+    width: 150,
+    // (Opcional) Esta función muestra el texto más amigable
+    renderCell: (params) => (
+      <Typography>
+        {params.value === 'vet' ? 'Veterinario' : 'Recepcionista'}
+      </Typography>
+    )
+    },
+    {
       field: 'actions',
       headerName: 'Acciones',
       sortable: false,
@@ -221,23 +230,23 @@ const Veterinarios = () => {
   return (
     <Box className='containeer-box'>
 
-      <Box className='sub-container' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography className='titulo' variant="h5" component="h1">
-          Gestión de Veterinarios
+      <Box className='sub-container'>
+        <Typography className='Titulos' variant="h5" component="h1">
+          Gestión de empleados
         </Typography>
         <Box className='action-buttons'>
-          <Button className='invite-button' variant="outlined" startIcon={<PersonAddIcon />} onClick={handleOpenInviteModal} sx={{ mr: 2 }}>
-            Invitar Veterinario
+          <Button className='invite-button' variant="outlined" startIcon={<PersonAddIcon />} onClick={handleOpenInviteModal} >
+            Invitar empleado
           </Button>
           <Button className='add-button' variant="contained" startIcon={<AddIcon />} onClick={handleOpenAddModal} >
-            Agregar Veterinario
+            agregar empleado
           </Button>
         </Box>
       </Box>
 
-      <Box className='box-edit' sx={{ height: 600, width: '100%' }}>
+      <Box className='box-edit' >
         {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <Box  >
                 <CircularProgress />
             </Box>
         ) : (
@@ -246,9 +255,11 @@ const Veterinarios = () => {
       </Box>
 
       {/* --- Diálogo de Confirmación de Borrado --- */}
-      <Dialog className='container-dialog' open={dialogOpen} onClose={handleCloseDialog}>
+      <Dialog 
+        className='modal-contenedor' 
+        open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle className='confirmacion'>Confirmar eliminación</DialogTitle>
-        <DialogContent>
+        <DialogContent className='contenedordialog'>
           <DialogContentText className='texto-dialog'>
             ¿Estás seguro de que quieres eliminar este registro? Esta acción no se puede deshacer.
           </DialogContentText>
@@ -262,14 +273,16 @@ const Veterinarios = () => {
       </Dialog>
       
       {/* --- Diálogo para Invitar Veterinario --- */}
-            <Dialog className='invitar-veterinario' open={inviteModalOpen} onClose={handleCloseInviteModal} fullWidth maxWidth="sm">
-        <DialogTitle className='invit'>Invitar a un Nuevo Veterinario</DialogTitle>
+        <Dialog 
+          className='modal-contenedor' 
+          open={inviteModalOpen} onClose={handleCloseInviteModal} fullWidth maxWidth="sm">
+        <DialogTitle className='invit'>Invitar a un Nuevo empleado</DialogTitle>
         <DialogContent className='contenido-invitacion'>
-          <DialogContentText className='correo-invitacion' sx={{ mb: 2 }}>
+          <DialogContentText className='correo-invitacion' >
             Ingresa el correo del veterinario para enviarle una invitación y unirse a la plataforma.
           </DialogContentText>
           <TextField
-            className='input-email'
+            className='secion-inputs'
             autoFocus
             fullWidth
             label="Correo Electrónico"
@@ -279,8 +292,8 @@ const Veterinarios = () => {
             onChange={(e) => setInviteEmail(e.target.value)}
           />
         </DialogContent>
-        <DialogActions className='cancelar' sx={{ p: '0 24px 24px' }}>
-          <Button onClick={handleCloseInviteModal}>Cancelar</Button>
+        <DialogActions className='botones-container' >
+          <Button className='boton-camcelar-invt' onClick={handleCloseInviteModal}>Cancelar</Button>
           <Button
             className='enviar-invitacion'
             onClick={handleSendInvitation}
@@ -294,8 +307,8 @@ const Veterinarios = () => {
 
       {/* --- MODAL PARA AGREGAR VETERINARIO --- */}
       <Dialog open={addModalOpen} onClose={handleCloseAddModal} fullWidth maxWidth="sm">
-        <DialogTitle>Registrar Nuevo Veterinario</DialogTitle>
-        <NuevoVeterinario 
+        <DialogTitle>Registrar un nuevo empleado</DialogTitle>
+        <NuevoEmpleado 
           onClose={handleCloseAddModal}
           onVetAdded={handleVetAdded}
         />
@@ -303,8 +316,8 @@ const Veterinarios = () => {
       
       {/* --- AÑADIDO: MODAL PARA EDITAR VETERINARIO --- */}
       <Dialog open={editModalOpen} onClose={handleCloseEditModal} fullWidth maxWidth="sm">
-        <DialogTitle>Editar Información del Veterinario</DialogTitle>
-        <EditarVeterinario 
+        <DialogTitle>Editar Información del empleado</DialogTitle>
+        <EditarEmpleado 
           vetData={vetToEdit}
           onClose={handleCloseEditModal}
           onVetUpdated={handleVetUpdated}

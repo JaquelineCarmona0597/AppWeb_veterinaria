@@ -1,0 +1,134 @@
+/* ==========================================================================
+   ESTILOS PARA EL FORMULARIO DE EDICIÓN DE EMPLEADO
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDOR PRINCIPAL Y LAYOUT DEL MODAL                                 */
+/* -------------------------------------------------------------------------- */
+.contenedor-edit {
+  background-color: var(--color-superficie);
+}
+
+.modalmm {
+  padding: 24px !important;
+}
+
+.gird-container {
+  /* Usamos gap para un espaciado consistente entre los campos del formulario */
+  display: grid !important;
+  gap: 24px 16px; /* 24px de espacio vertical, 16px horizontal */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. ESTILOS GENÉRICOS PARA TODOS LOS CAMPOS DEL FORMULARIO                  */
+/* -------------------------------------------------------------------------- */
+.formulairo-edit .MuiOutlinedInput-root,
+.nombreedit .MuiOutlinedInput-root,
+.especialidad-edit .MuiOutlinedInput-root,
+.telefonoedit .MuiOutlinedInput-root,
+.correoedit .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.formulairo-edit .MuiOutlinedInput-notchedOutline,
+.nombreedit .MuiOutlinedInput-notchedOutline,
+.especialidad-edit .MuiOutlinedInput-notchedOutline,
+.telefonoedit .MuiOutlinedInput-notchedOutline,
+.correoedit .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-borde) !important;
+}
+
+/* --- Estado Hover --- */
+.formulairo-edit .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline,
+.nombreedit .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline,
+.especialidad-edit .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline,
+.telefonoedit .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline,
+.correoedit .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-texto-secundario) !important;
+}
+
+/* --- Estado Enfocado (Focused) --- */
+.formulairo-edit .MuiOutlinedInput-root.Mui-focused,
+.nombreedit .MuiOutlinedInput-root.Mui-focused,
+.especialidad-edit .MuiOutlinedInput-root.Mui-focused,
+.telefonoedit .MuiOutlinedInput-root.Mui-focused,
+.correoedit .MuiOutlinedInput-root.Mui-focused {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primario) 20%, transparent) !important;
+}
+
+.formulairo-edit .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.nombreedit .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.especialidad-edit .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.telefonoedit .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.correoedit .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primario) !important;
+  border-width: 1px !important;
+}
+
+.formulairo-edit .MuiInputLabel-root.Mui-focused,
+.nombreedit .MuiInputLabel-root.Mui-focused,
+.especialidad-edit .MuiInputLabel-root.Mui-focused,
+.telefonoedit .MuiInputLabel-root.Mui-focused,
+.correoedit .MuiInputLabel-root.Mui-focused {
+  color: var(--color-primario) !important;
+}
+
+/* --- Estado de Error --- */
+.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-peligro) !important;
+}
+.MuiFormHelperText-root.Mui-error,
+.MuiInputLabel-root.Mui-error {
+  color: var(--color-peligro) !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. BOTONES DE ACCIÓN DEL MODAL                                             */
+/* -------------------------------------------------------------------------- */
+.action {
+  padding: 16px 24px !important;
+  border-top: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.guardarcambiso, .botoncance {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s ease-out !important;
+}
+
+/* Botón "Guardar Cambios" (Primario) */
+.guardarcambiso {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto-blanco) !important;
+}
+
+.guardarcambiso:hover {
+  background-color: var(--color-primario-oscuro) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primario) 30%, transparent) !important;
+}
+
+.guardarcambiso:disabled {
+  background-color: #EAE0D6 !important;
+  color: #6B6B6B !important;
+  transform: none;
+  box-shadow: none !important;
+}
+
+/* Botón "Cancelar" (Secundario) */
+.botoncance {
+  border: 1px solid var(--color-borde) !important;
+  color: var(--color-texto-secundario) !important;
+}
+
+.botoncance:hover {
+  background-color: var(--color-fondo) !important;
+  border-color: var(--color-texto-secundario) !important;
+}

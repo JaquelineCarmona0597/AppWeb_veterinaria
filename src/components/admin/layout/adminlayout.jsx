@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import { Box, Paper } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 
 import '../../../css/adminCss/adminlayout.css';
 
+
+const drawerWidth = 240;
+
 const AdminLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-
+  const location = useLocation();
   const handleToggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
 
   return (
     <Box className="dashboard-layout">
-      <Sidebar isSidebarOpen={isSidebarOpen} />
+      <Sidebar isSidebarOpen={isSidebarOpen} drawerWidth={drawerWidth}/>
       
       <Box component="main" className="main-content">
         {/* Este es el Header que queremos dejar fijo */}
@@ -27,7 +30,12 @@ const AdminLayout = () => {
         />
 
         <Box className="page-content">
-          <Paper component="header" elevation={0} className="content-card">
+          <Paper 
+            key={location.pathname} // <-- ¡LA MAGIA ESTÁ AQUÍ!
+            component="header" 
+            elevation={0} 
+            className="content-card"
+          >
             <Outlet />
           </Paper>
         </Box>

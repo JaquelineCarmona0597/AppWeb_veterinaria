@@ -23,11 +23,9 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { GoogleIcon } from './customicons';
 import ForgotPasswordModal from './ForgotPassword';
-import '../../css/authCss/Login.css';
 // Al inicio de login.jsx, junto a tus otras importaciones
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from '../../firebase'; // Asegúrate de importar 'db'
-
 
 // 2. COMPONENTE PRINCIPAL
 // -----------------------------------------------------------------------------
@@ -92,8 +90,6 @@ export default function Login() {
     }
   };
   
-  // Lógica de Firebase para Google
-// En tu archivo login.jsx
 
 const handleGoogleLogin = async () => {
   setIsLoading(true);
@@ -136,29 +132,38 @@ const handleGoogleLogin = async () => {
   }
 };
 
-  // --- ELIMINADO: Se borró la función handleSubmit duplicada que estaba aquí. ---
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => event.preventDefault();
   const handleNavigateToSignup = () => navigate('/auth/signup');
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  // 3. RENDERIZADO DEL JSX
-  // -----------------------------------------------------------------------------
+
   return (
     <>
       <CssBaseline />
-      <Stack direction="column" justifyContent="space-between" className="login-container">
-        <Card variant="outlined" className="login-card">
-          <Box className="login-header">
-            <img src="/src/assets/logoN.png" alt="Logo" className="login-logo-image" />
-            <Typography component="h1" variant="h4" className="login-title">Inicia Sesión</Typography>
+      <Stack
+        className="secion-container"
+        >
+        <Card 
+          className='formilario-contenedor'
+          >
+          <Box className="contenedor-Titulo-imagen">
+            <img
+              className='secion-imagen'
+              src="/src/assets/logoN.png" 
+              alt="Logo"/>
+            <Typography 
+              className='secion-Titulo'>
+                Inicia Sesión
+            </Typography>
           </Box>
 
-          <Box component="form" onSubmit={handleSubmit} noValidate className="login-form">
+          <Box
+          className='Formulario-secion'
+          component="form" onSubmit={handleSubmit} noValidate>
           <TextField
-          className="input"
+          className="secion-inputs"
           label="Email"
           id="email"
           type="email"
@@ -177,7 +182,7 @@ const handleGoogleLogin = async () => {
           }}
           />
             <TextField
-            className="input"
+            className="secion-inputs"
             label="Contraseña"
             id="password"
             placeholder="••••••"
@@ -203,12 +208,12 @@ const handleGoogleLogin = async () => {
             }}
             />
             
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label={<Typography variant="body2">Recuérdame</Typography>}
-              />
-              <MuiLink component="button" type="button" onClick={handleOpenModal} variant="body2" className="forgot-password-link">
+            <Box 
+            className="olvidar_contraseña">
+              <MuiLink 
+              className='redireccion-boton'
+              component="button" 
+              type="button" onClick={handleOpenModal} variant="body2" >
                 ¿Olvidaste tu contraseña?
               </MuiLink>
             </Box>
@@ -220,7 +225,7 @@ const handleGoogleLogin = async () => {
             )}
 
             <Button
-              className={`submit-button ${isLoading ? 'loading' : ''}`}
+              className='secion-boton'
               type="submit"
               fullWidth
               variant="contained"
@@ -230,11 +235,16 @@ const handleGoogleLogin = async () => {
             </Button>
           </Box>
 
-          <Divider sx={{ my: 2 }}>o</Divider>
+          <Divider 
+          className='Linea-divisora'
+          >
+            o
+          </Divider>
           
-          <Box className="social-login-container">
+          <Box 
+          className="google-conenedor">
             <Button
-              className="google-button"
+              className="google-boton"
               fullWidth
               variant="outlined"
               onClick={handleGoogleLogin} // <-- CORREGIDO: Se conectó la función real
@@ -243,9 +253,13 @@ const handleGoogleLogin = async () => {
             >
               Google
             </Button>
-            <Typography variant="body2" className="signup-text">
+            <Typography 
+            className="secion-pregunta">
               ¿No tienes una cuenta?{' '}
-              <Button className="registrate" variant="text" size="small" onClick={handleNavigateToSignup}>
+              <Button 
+              className="secion-boton-pregunta" 
+              variant="text" 
+              onClick={handleNavigateToSignup}>
                 Regístrate
               </Button>
             </Typography>

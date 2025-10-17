@@ -76,23 +76,23 @@ const ForgotPasswordModal = ({ open, onClose }) => {
      ========================================== */
   return (
     <Dialog 
-      className='dialog' 
+      className='modal-contenedor' 
       open={open} 
       onClose={handleClose} // Usamos la nueva función de cierre
     >
-      <DialogTitle className='ttituloDial'>
+      <DialogTitle className='Titulo-modal'>
         Restablecer Contraseña
       </DialogTitle>
 
-      <DialogContent className='cuerpoDial'>
-        <DialogContentText className='textoDial'>
+      <DialogContent className='cuermo-modal'>
+        <DialogContentText className='texto-modal'>
           Ingresa el correo de tu cuenta y te enviaremos un enlace para que puedas crear una nueva contraseña.
         </DialogContentText>
         
         <TextField
           autoFocus
           fullWidth
-          className='inputDial'
+          className='Formulario-secion'
           id="email-reset"
           label="Dirección de correo electrónico"
           margin="dense"
@@ -108,11 +108,11 @@ const ForgotPasswordModal = ({ open, onClose }) => {
         {error && <p className='mensaje-estado error'>{error}</p>}
       </DialogContent>
 
-      <DialogActions className='accionesDial'>
-        <Button className='botonDialog' onClick={handleClose}>
+      <DialogActions className='boton-contendeor'>
+        <Button className='boton-modal' onClick={handleClose}>
           Cancelar
         </Button>
-        <Button className='botonDialog' onClick={handlePasswordReset}>
+        <Button className='boton-modal' onClick={handlePasswordReset}>
           Enviar Correo
         </Button>
       </DialogActions>

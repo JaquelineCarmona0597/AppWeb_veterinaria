@@ -1,87 +1,127 @@
-/* ================================================================== */
-/* Contenedor Principal del Sidebar                                   */
-/* ================================================================== */
-.contenedorsider {
-    background-color: var(--color-fondo)
-}
-.MuiDrawer-paper {
-  background-color: var(--color-primario) !important;
-  color: var(--color-texto-blanco) !important;
-  border-right: none !important;
-  border-radius: 0 0px 16px 0 !important;
-  box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.1);
+/* ==========================================================================
+   ESTILOS PARA EL SIDEBAR (Inspirado en el diseño del Login)
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDOR PRINCIPAL DEL DRAWER                                         */
+/* -------------------------------------------------------------------------- */
+.contenedorsider .MuiDrawer-paper {
+  background-color: var(--color-superficie) !important; /* Fondo blanco puro */
+  border-right: none !important; /* Quitamos el borde por defecto */
+  box-shadow: 5px 0px 25px rgba(0, 0, 0, 0.05) !important; /* Sombra suave para darle profundidad */
+  transition: width 0.3s ease-in-out !important; /* Animación de apertura/cierre */
 }
 
-/* ================================================================== */
-/* Cabecera (Logo y Nombre)                                           */
-/* ================================================================== */
+/* -------------------------------------------------------------------------- */
+/* 2. ENCABEZADO CON LOGO Y TÍTULO                                            */
+/* -------------------------------------------------------------------------- */
 .sidebar-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 8px !important;
-  min-height: 64px;
+  padding: 16px !important;
+  border-bottom: 1px solid var(--color-borde); /* Línea divisora sutil */
 }
 
 .sidebar-logo-image {
-  height: 32px;
+  height: 40px;
+  width: auto;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Transición con "rebote" */
 }
 
-.sidebar-title {
-  font-weight: 600 !important;
-  color: var(--color-texto-blanco);
+.contenedorsider:hover .sidebar-logo-image {
+  transform: rotate(360deg) scale(1.1); /* Animación divertida al pasar el mouse */
 }
 
-/* ================================================================== */
-/* Contenedor de la Lista (para empujar el footer hacia abajo)        */
-/* ================================================================== */
+.Titulos {
+  font-weight: 700 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. LISTA DE NAVEGACIÓN Y SUS ITEMS                                         */
+/* -------------------------------------------------------------------------- */
 .sidebar-list-container {
-  flex-grow: 1; /* ¡Esta es la magia! Hace que este contenedor ocupe todo el espacio disponible */
+  flex-grow: 1; /* Empuja el footer hacia abajo */
+  padding: 12px;
 }
 
-/* ================================================================== */
-/* Ítems de Navegación                                                */
-/* ================================================================== */
+/* Animación de entrada para los items */
+@keyframes slideInFade {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .sidebar-item {
+  margin-bottom: 8px !important;
   border-radius: 8px !important;
-  margin: 0 16px 8px !important; /* Añadimos padding horizontal a la lista */
-  transition: background-color 0.2s ease-in-out !important;
+  transition: all 0.25s ease-out !important;
+  color: var(--color-texto-secundario) !important;
+  
+  /* Aplicamos la animación de entrada */
+  animation: slideInFade 0.4s backwards;
 }
 
-/* --- Estado Normal de los Ítems --- */
-.sidebar-item .sidebar-item-icon {
-  color: var(--color-texto-blanco);
-  min-width: 45px;
+/* Retraso escalonado para que aparezcan uno tras otro */
+.sidebar-item:nth-child(1) { animation-delay: 0.1s; }
+.sidebar-item:nth-child(2) { animation-delay: 0.2s; }
+.sidebar-item:nth-child(3) { animation-delay: 0.3s; }
+.sidebar-item:nth-child(4) { animation-delay: 0.4s; }
+
+
+.sidebar-item-icon {
+  color: var(--color-texto-secundario) !important;
+  min-width: 45px !important;
+  transition: color 0.25s ease-out !important;
 }
 
-.sidebar-item .MuiListItemText-primary {
-  color: var(--color-texto-blanco);
-  font-weight: 500;
-}
-
-/* --- Estado Hover (al pasar el ratón) --- */
+/* --- ESTADO HOVER: Cuando el mouse está encima --- */
 .sidebar-item:hover {
-  background-color: var(--color-primario-oscuro) !important;
+  background-color: color-mix(in srgb, var(--color-primario) 10%, transparent) !important;
+  color: var(--color-primario-oscuro) !important;
+  transform: translateX(4px); /* Ligero movimiento hacia la derecha */
 }
 
-/* --- ✅ ESTADO SELECCIONADO CORREGIDO --- */
-/* Cuando un ítem está seleccionado, su fondo es blanco */
+.sidebar-item:hover .sidebar-item-icon {
+  color: var(--color-primario-oscuro) !important;
+}
+
+/* --- ESTADO SELECCIONADO: La página activa --- */
 .sidebar-item.Mui-selected {
-  background-color: var(--color-texto-blanco) !important;
-}
-
-/* Y su contenido (ícono y texto) debe ser del color primario (naranja) */
-.sidebar-item.Mui-selected .sidebar-item-icon,
-.sidebar-item.Mui-selected .MuiListItemText-primary {
-  color: var(--color-primario) !important;
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto-blanco) !important;
   font-weight: 600 !important;
+  box-shadow: 0 4px 15px -2px color-mix(in srgb, var(--color-primario) 40%, transparent) !important;
+  position: relative;
 }
 
-/* ================================================================== */
-/* Pie de Página (Perfil de Usuario)                                  */
-/* ================================================================== */
+.sidebar-item.Mui-selected .sidebar-item-icon {
+  color: var(--color-texto-blanco) !important;
+}
+
+/* Barra lateral indicadora para el item activo */
+.sidebar-item.Mui-selected::before {
+  content: '';
+  position: absolute;
+  left: -12px; /* Se posiciona fuera del padding del contenedor */
+  top: 15%;
+  height: 70%;
+  width: 4px;
+  background-color: var(--color-primario-oscuro);
+  border-radius: 4px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. FOOTER CON PERFIL DE USUARIO                                            */
+/* -------------------------------------------------------------------------- */
 .sidebar-footer {
-  padding-top: 16px;
+  padding: 16px;
   border-top: 1px solid var(--color-borde);
 }
 
@@ -89,27 +129,30 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px;
+  background-color: var(--color-fondo); /* Fondo cálido para destacar */
+  padding: 12px;
+  border-radius: 10px;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
-.user-avatar {
-  width: 40px;
-  height: 40px;
+.user-profile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.07);
 }
 
-.user-info {
-  display: flex;
-  flex-direction: column;
+.avatar {
+  width: 44px !important;
+  height: 44px !important;
+  border: 2px solid var(--color-primario);
 }
 
 .user-name {
   font-weight: 600 !important;
-  color: var(--color-texto-blanco);
-  line-height: 1.2 !important;
+  color: var(--color-texto-principal) !important;
 }
 
 .user-account-type {
-  color: var(--color-texto-blanco);
   font-size: 0.8rem !important;
+  color: var(--color-texto-secundario) !important;
+  text-transform: capitalize;
 }
-

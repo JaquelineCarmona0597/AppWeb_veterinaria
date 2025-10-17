@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Drawer, List, ListItemIcon, ListItemText, Toolbar, Typography, Box, Avatar, ListItemButton } from '@mui/material';
-import { Home as DashboardIcon, CalendarMonth as HorariosIcon, MedicalServices as VeterinariosIcon } from '@mui/icons-material';
+import { Home as DashboardIcon, CalendarMonth as HorariosIcon, MedicalServices as VeterinariosIcon, AccountCircle as ProfileIcon } from '@mui/icons-material';
 
 import { useAuth } from '../../../context/AuthContext'; 
 import logoPatitaFeliz from '../../../assets/logoN.png';
@@ -16,8 +16,9 @@ const Sidebar = ({ isSidebarOpen }) => {
 
   const structure = [
     { id: 0, label: 'Dashboard', link: '/admin/dashboard', icon: <DashboardIcon /> },
-    { id: 1, label: 'Citas', link: '/admin/horarios', icon: <HorariosIcon /> },
-    { id: 2, label: 'Veterinarios', link: '/admin/veterinarios', icon: <VeterinariosIcon /> },
+    { id: 1, label: 'Empleados', link: '/admin/veterinarios', icon: <VeterinariosIcon /> },
+    { id: 2, label: 'perfil', link: '/admin/perfil', icon: < ProfileIcon/> },
+    
   ];
 
   return (
@@ -44,7 +45,9 @@ const Sidebar = ({ isSidebarOpen }) => {
       {/* --- SECCIÓN SUPERIOR: LOGO --- */}
       <Toolbar className='sidebar-header'>
         <img src={logoPatitaFeliz} alt="Logo Patita Feliz" className="sidebar-logo-image" />
-        <Typography variant="h6" component="span" className="sidebar-title">
+        <Typography
+          className='Titulos'
+          variant="h6" component="span" >
           Patita Feliz
         </Typography>
       </Toolbar>

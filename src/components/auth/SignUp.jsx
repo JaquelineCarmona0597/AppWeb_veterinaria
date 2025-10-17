@@ -9,7 +9,6 @@ import { useAuth } from '../../context/AuthContext';
 // <-- AÑADIDO: Componentes para el Dialog (Modal) ---
 import { Box, Button, Card, Checkbox, CssBaseline, Divider, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField, Typography, List, ListItem, ListItemIcon, ListItemText, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { PersonOutline as PersonOutlineIcon, LockOutlined as LockOutlinedIcon, MailOutline as MailOutlineIcon, Visibility, VisibilityOff, CheckCircleOutline, HighlightOff } from '@mui/icons-material';
-import '../../css/authCss/SignUp.css';
 import TermsAndConditions from '../views/TermsAndConditions';
 
 // 2. COMPONENTE PRINCIPAL
@@ -167,45 +166,75 @@ const handleSubmit = async (event) => {
   return (
     <>
       <CssBaseline />
-      <Stack direction="column" justifyContent="center" className="signup-container">
-        <Card variant="outlined" className="signup-card">
-          <Typography className='creaCuenta' component="h1" variant="h4">
-            Crea tu Cuenta
-          </Typography>
-          <Box className='box' component="form" onSubmit={handleSubmit} noValidate>
+      <Stack 
+        className='secion-container'
+        >
+        <Card 
+          className='formilario-contenedor'
+          >
+          <Box 
+          className="contenedor-Titulo-imagen">
+            <img
+              className='secion-imagen'
+              src="/src/assets/logoN.png" 
+              alt="Logo"/>
+            <Typography 
+              className='secion-Titulo'>
+                Crea tu cuenta
+            </Typography>
+          </Box>
+          <Box 
+          className='Formulario-secion' 
+          component="form" onSubmit={handleSubmit} noValidate>
             {/* ... Campos de texto para nombre, email, contraseña ... (sin cambios) */}
-            <TextField className='input' label="Nombre Completo" placeholder="Ej: Nombres Apellidos" value={name} onChange={handleNameChange} error={!!nameError} helperText={nameError} required fullWidth variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><PersonOutlineIcon color="action" /></InputAdornment>), }} />
-            <TextField className='input' label="Email" type="email" placeholder="tu@email.com" value={email} onChange={handleEmailChange} error={!!emailError} helperText={emailError} required fullWidth variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><MailOutlineIcon color="action" /></InputAdornment>), }} />
-            <TextField className='input' label="Contraseña" placeholder="••••••" type={showPassword ? 'text' : 'password'} value={password} onChange={handlePasswordChange} error={!!passwordError} helperText={passwordError} required fullWidth variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><LockOutlinedIcon color="action" /></InputAdornment>), endAdornment: ( <InputAdornment position="end"> <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end"> {showPassword ? <VisibilityOff /> : <Visibility />} </IconButton> </InputAdornment> ), }} />
+            <TextField className='secion-inputs' label="Nombre Completo" placeholder="Ej: Nombres Apellidos" value={name} onChange={handleNameChange} error={!!nameError} helperText={nameError} required fullWidth variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><PersonOutlineIcon color="action" /></InputAdornment>), }} />
+            <TextField className='secion-inputs' label="Email" type="email" placeholder="tu@email.com" value={email} onChange={handleEmailChange} error={!!emailError} helperText={emailError} required fullWidth variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><MailOutlineIcon color="action" /></InputAdornment>), }} />
+            <TextField className='secion-inputs' label="Contraseña" placeholder="••••••" type={showPassword ? 'text' : 'password'} value={password} onChange={handlePasswordChange} error={!!passwordError} helperText={passwordError} required fullWidth variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><LockOutlinedIcon color="action" /></InputAdornment>), endAdornment: ( <InputAdornment position="end"> <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end"> {showPassword ? <VisibilityOff /> : <Visibility />} </IconButton> </InputAdornment> ), }} />
             {password && ( <Card variant="outlined" sx={{ p: 1, mb: 2, bgcolor: '#f5f5f5' }}> <List dense> <PasswordCriteriaItem met={passwordCriteria.minLength} text="Mínimo 6 caracteres" /> <PasswordCriteriaItem met={passwordCriteria.hasUppercase} text="Mínimo una mayúscula (A-Z)" /> <PasswordCriteriaItem met={passwordCriteria.hasNumber} text="Mínimo un número (0-9)" /> <PasswordCriteriaItem met={passwordCriteria.hasSpecialChar} text="Mínimo un carácter especial (!@#$...)" /> </List> </Card> )}
-            <TextField className='input' label="Confirmar Contraseña" placeholder="••••••" type={showPassword ? 'text' : 'password'} value={confirmPassword} onChange={handleConfirmPasswordChange} error={!!confirmPasswordError} helperText={confirmPasswordError} required fullWidth variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><LockOutlinedIcon color="action" /></InputAdornment>), endAdornment: ( <InputAdornment position="end"> <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end"> {showPassword ? <VisibilityOff /> : <Visibility />} </IconButton> </InputAdornment> ), }} />
+            <TextField className='secion-inputs' label="Confirmar Contraseña" placeholder="••••••" type={showPassword ? 'text' : 'password'} value={confirmPassword} onChange={handleConfirmPasswordChange} error={!!confirmPasswordError} helperText={confirmPasswordError} required fullWidth variant="outlined" InputProps={{ startAdornment: (<InputAdornment position="start"><LockOutlinedIcon color="action" /></InputAdornment>), endAdornment: ( <InputAdornment position="end"> <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end"> {showPassword ? <VisibilityOff /> : <Visibility />} </IconButton> </InputAdornment> ), }} />
 
             <FormControlLabel
+            className='aceptar-trerminos'
               control={
                 <Checkbox 
+                  className='cudro-aceptar'
                   checked={termsAccepted}
                   onChange={(e) => setTermsAccepted(e.target.checked)}
-                  color="primary" 
                 />
               }
               label={
                 // <-- MODIFICADO: El Link ahora es un botón que abre el modal ---
-                <Typography variant="body2">
+                <Typography 
+                className='acepto-los'
+                variant="body2">
                   Acepto los{' '}
-                  <Link component="button" type="button" variant="body2" onClick={handleOpenTerms} className="forgot-password-link">
+                  <Link
+                  className='redireccion-boton'
+                  component="button" 
+                  type="button" variant="body2" 
+                  onClick={handleOpenTerms} 
+                  >
                     Términos y Condiciones
                   </Link>
                 </Typography>
               }
             />
 
-            <Button type="submit" fullWidth variant="contained" className="signup-button" disabled={!termsAccepted || isLoading }>
+            <Button
+            className={`secion-boton ${isLoading ? 'loading' : ''}`}
+            type="submit" 
+            fullWidth variant="contained" 
+            disabled={!termsAccepted || isLoading }
+            >
               {isLoading ? 'Registrando...' : 'Registrarme'}
             </Button>
-            <Divider sx={{ my: 1 }} />
-            <Typography className="login-prompt">
+            <Typography 
+            className="secion-pregunta">
               ¿Ya tienes una cuenta?{' '}
-              <Button className='iniciar-secion' variant="text" size="small" onClick={onNavigateToLogin}>
+              <Button 
+              className='secion-boton-pregunta' 
+              variant="text" 
+              onClick={onNavigateToLogin}>
                 Inicia Sesión
               </Button>
             </Typography>
@@ -214,7 +243,10 @@ const handleSubmit = async (event) => {
       </Stack>
 
       {/* --- AÑADIDO: Componente Dialog para los Términos y Condiciones --- */}
-      <Dialog open={openTermsModal} onClose={handleCloseTerms} scroll="paper">
+      <Dialog
+        className='modal-contenedor'
+        open={openTermsModal} onClose={handleCloseTerms} 
+        scroll="paper">
         <DialogTitle>Términos y Condiciones de Uso</DialogTitle>
         <DialogContent dividers={true}>
           {/* ▼▼▼ 2. REEMPLAZA EL CONTENIDO ANTERIOR POR ESTO ▼▼▼ */}
@@ -223,7 +255,7 @@ const handleSubmit = async (event) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button className='iniciar-secion' onClick={handleCloseTerms}>Cerrar</Button>
+          <Button  onClick={handleCloseTerms}>Cerrar</Button>
         </DialogActions>
       </Dialog>
     </>

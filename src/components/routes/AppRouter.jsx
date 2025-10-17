@@ -6,7 +6,6 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import AdminLayout from '../admin/layout/adminlayout';
 import Dashboard from '../views/Dashboard';
 import Veterinarios from '../views/Veterinarios';
-import NuevoVeterinario from '../views/NuevoVeterinario';
 import Horarios from '../views/Horarios';
 import Login from '../auth/login';
 import SignUp from '../auth/SignUp';
@@ -17,6 +16,8 @@ import ProtectedRoute from './ProtectedRoute';
 import { UnarchiveOutlined } from '@mui/icons-material';
 import LoadingScreen from '../auth/LoadingScreen.jsx';
 import WorkInProgressView from '../views/UnauthorizedView.jsx.jsx';
+import UserProfile from '../views/Perfil.jsx';
+import NuevoEmpleado from '../views/NuevoEmpleado.jsx';
 
 
 /**
@@ -33,6 +34,16 @@ function RedirectBasedOnRole() {
     return <Navigate to="/admin/dashboard" replace />;
   }
   return <Navigate to="/dashboard" replace />;
+}
+function AdminProfilePage() {
+  const { userData, loading } = useAuth(); // Obtenemos datos del contexto
+
+  if (loading) {
+    return <LoadingScreen />; // Muestra una pantalla de carga mientras se obtienen los datos
+  }
+
+  // Una vez que tenemos los datos, renderizamos el perfil
+  return <UserProfile user={userData} />;
 }
 
 
@@ -55,8 +66,9 @@ function AppRouter() {
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="veterinarios" element={<Veterinarios />} />
-        <Route path="veterinarios/nuevo" element={<NuevoVeterinario />} />
+        <Route path="veterinarios/nuevo" element={<NuevoEmpleado />} />
         <Route path="horarios" element={<Horarios />} />
+        <Route path="perfil" element={<UserProfile />} />
       </Route>
 
       <Route 
