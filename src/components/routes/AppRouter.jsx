@@ -18,6 +18,8 @@ import LoadingScreen from '../auth/LoadingScreen.jsx';
 import WorkInProgressView from '../views/UnauthorizedView.jsx.jsx';
 import UserProfile from '../views/Perfil.jsx';
 import NuevoEmpleado from '../views/NuevoEmpleado.jsx';
+import RecepcionistaLayout from '../recepcionista/RecepcionistaLayout.jsx';
+import GestionCitasRecepcionista from '../views/Horarios';
 
 
 /**
@@ -30,20 +32,20 @@ function RedirectBasedOnRole() {
   if (loading || !userData) {
     return <LoadingScreen />;
   }
+  
   if (userData.rol === 'admin') {
     return <Navigate to="/admin/dashboard" replace />;
   }
-  return <Navigate to="/dashboard" replace />;
-}
-function AdminProfilePage() {
-  const { userData, loading } = useAuth(); // Obtenemos datos del contexto
-
-  if (loading) {
-    return <LoadingScreen />; // Muestra una pantalla de carga mientras se obtienen los datos
+  
+  // --- MODIFICACIÓN AQUÍ ---
+  // Añadimos la redirección para el rol 'recepcionista'
+  if (userData.rol === 'recepcionista') {
+    return <Navigate to="/recepcion/dashboard" replace />;
   }
+  // --- FIN DE MODIFICACIÓN ---
 
-  // Una vez que tenemos los datos, renderizamos el perfil
-  return <UserProfile user={userData} />;
+  // Los roles 'cliente' y 'vet' irán a /dashboard
+  return <Navigate to="/dashboard" replace />;
 }
 
 
@@ -70,12 +72,25 @@ function AppRouter() {
         <Route path="horarios" element={<Horarios />} />
         <Route path="perfil" element={<UserProfile />} />
       </Route>
-
+     {/* --- NUEVO BLOQUE DE RUTAS PARA RECEPCIONISTA --- */}
+      <Route 
+        path="/recepcion/*" 
+        element={
+          <ProtectedRoute roles={['recepcionista']}>
+            <RecepcionistaLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="dashboard" replace />} />
+        <Route path="citas" element={<GestionCitasRecepcionista />} />
+        <Route path="perfil" element={<UserProfile />} />
+      </Route>
+      {/* --- FIN DEL NUEVO BLOQUE --- */}
       <Route 
         path="/dashboard" 
         element={
           <ProtectedRoute roles={['cliente', 'vet']}>
-          
+            <WorkInProgressView/>
           </ProtectedRoute>
         }
       />

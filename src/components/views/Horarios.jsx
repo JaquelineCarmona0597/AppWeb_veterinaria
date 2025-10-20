@@ -1,160 +1,231 @@
-/* ==========================================
-   IMPORTS
-   ========================================== */
-import React, { useState } from 'react';
-// Usaremos date-fns para manejar las horas de forma sencilla y segura
-import { format, parse, addMinutes, isBefore } from 'date-fns';
-import '../../css/authCss/Horarios.css'; // Reutilizamos y actualizamos el mismo CSS
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Button, Paper, TextField, Chip, CircularProgress, Alert } from '@mui/material';
+import moment from 'moment';
+import 'moment/locale/es';
+import '../../css/authCss/gestionarcitas.css';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
-/* ==========================================
-   CONFIGURACIÓN INICIAL
-   ========================================== */
-const DIAS_SEMANA = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-const DURACIONES = [15, 20, 30, 45, 60];
+// --- CAMBIO: Importaciones de Firestore ---
+import { db } from '../../firebase'; // Ajusta esta ruta a tu archivo de config
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
-/* ==========================================
-   DEFINICIÓN DEL COMPONENTE: GeneradorHorariosAvanzado
-   ========================================== */
-const GeneradorHorariosAvanzado = () => {
-  /* ==========================================
-     ESTADO DEL COMPONENTE (HOOKS)
-     ========================================== */
-  const [horarios, setHorarios] = useState({ Lunes: [], Martes: [], Miércoles: [], Jueves: [], Viernes: [] });
+moment.locale('es');
 
-  // Estado para el formulario
-  const [diasSeleccionados, setDiasSeleccionados] = useState({ Lunes: false, Martes: false, Miércoles: false, Jueves: false, Viernes: false, Sábado: false, Domingo: false });
-  const [horaInicio, setHoraInicio] = useState('09:00');
-  const [horaFin, setHoraFin] = useState('17:00');
-  const [duracion, setDuracion] = useState(30);
+// --- CAMBIO: Función para generar los slots ---
+/**
+ * Genera un array de slots de tiempo en intervalos de 30 minutos.
+ * @param {string} inicio - Hora de inicio (ej. "09:00")
+ * @param {string} fin - Hora de fin (ej. "15:00")
+ * @returns {string[]} - Array de slots (ej. ["09:00", "09:30", ..., "14:30"])
+ */
+const generarSlots = (inicio, fin) => {
+  const slots = [];
+  let actual = moment(inicio, 'HH:mm');
+  const final = moment(fin, 'HH:mm');
 
-  /* ==========================================
-     LÓGICA Y MANEJADORES DE EVENTOS
-     ========================================== */
-  // Maneja el cambio en las casillas de los días
-  const handleDiaChange = (dia) => {
-    setDiasSeleccionados(prev => ({ ...prev, [dia]: !prev[dia] }));
-  };
-  
-  // Atajo para seleccionar/deseleccionar Lunes a Viernes
-  const seleccionarLunesAViernes = () => {
-    const todosSeleccionados = DIAS_SEMANA.slice(0, 5).every(dia => diasSeleccionados[dia]);
-    const nuevosDias = { ...diasSeleccionados };
-    DIAS_SEMANA.slice(0, 5).forEach(dia => nuevosDias[dia] = !todosSeleccionados);
-    setDiasSeleccionados(nuevosDias);
-  };
-  
-  // La nueva función para generar horarios en lote
-  const handleGenerarHorarios = (e) => {
-    e.preventDefault();
-    const diasParaActualizar = Object.keys(diasSeleccionados).filter(dia => diasSeleccionados[dia]);
-    
-    if (diasParaActualizar.length === 0) {
-      alert('Por favor, selecciona al menos un día.');
-      return;
-    }
-    if (!horaInicio || !horaFin || horaInicio >= horaFin) {
-      alert('Por favor, ingresa un rango de horas válido.');
-      return;
-    }
-
-    // --- Lógica de generación de citas ---
-    const nuevosSlots = [];
-    const fechaBase = new Date(); // Usamos una fecha cualquiera, solo nos importan las horas
-    let slotActual = parse(horaInicio, 'HH:mm', fechaBase);
-    const horaFinDate = parse(horaFin, 'HH:mm', fechaBase);
-
-    while (isBefore(slotActual, horaFinDate)) {
-      const slotFin = addMinutes(slotActual, duracion);
-      if (!isBefore(slotFin, horaFinDate) && slotFin.getTime() !== horaFinDate.getTime()) {
-        break; // No agregar si el slot termina después de la hora final
-      }
-      nuevosSlots.push({
-        id: Date.now() + Math.random(),
-        inicio: format(slotActual, 'HH:mm'),
-        fin: format(slotFin, 'HH:mm'),
-      });
-      slotActual = slotFin;
-    }
-    
-    // Actualizamos el estado para todos los días seleccionados
-    const horariosActualizados = { ...horarios };
-    diasParaActualizar.forEach(dia => {
-      horariosActualizados[dia] = nuevosSlots; // Reemplaza los horarios del día
-    });
-    
-    setHorarios(horariosActualizados);
-  };
-  
-  const handleEliminarHorario = (dia, idAEliminar) => {
-    const horariosActualizados = horarios[dia].filter(h => h.id !== idAEliminar);
-    setHorarios({ ...horarios, [dia]: horariosActualizados });
-  };
-
-  /* ==========================================
-     RENDERIZADO DEL COMPONENTE (JSX)
-     ========================================== */
-return (
-    <div className="main-container">
-        <div className="gestion-horarios-container">
-            <h2>Generador de Horarios</h2>
-            <form onSubmit={handleGenerarHorarios} className="horarios-form">
-                
-                {/* --- NUEVO: Selector de días con Checkboxes --- */}
-                <div className="form-group span-full">
-                <label>Días de la Semana</label>
-                <div className="dias-selector">
-                    <div className="dias-checkbox-container">
-                    {DIAS_SEMANA.map(dia => (
-                        <label key={dia} className="checkbox-label">
-                        <input type="checkbox" checked={diasSeleccionados[dia]} onChange={() => handleDiaChange(dia)} />
-                            <span>{dia.substring(0, 3)}</span>
-                        </label>
-                    ))}
-                    </div>
-                    <button type="button" className="btn-shortcut" onClick={seleccionarLunesAViernes}>Lunes a Viernes</button>
-                </div>
-                </div>
-
-                <div className="form-group">
-                <label htmlFor="hora-inicio">Hora Inicio</label>
-                <input id="hora-inicio" type="time" className="form-input" value={horaInicio} onChange={e => setHoraInicio(e.target.value)} />
-                </div>
-                <div className="form-group">
-                <label htmlFor="hora-fin">Hora Fin</label>
-                <input id="hora-fin" type="time" className="form-input" value={horaFin} onChange={e => setHoraFin(e.target.value)} />
-                </div>
-                <div className="form-group span-full">
-                <label htmlFor="duracion">Duración por Cita (minutos)</label>
-                <select id="duracion" className="form-select" value={duracion} onChange={e => setDuracion(Number(e.target.value))}>
-                    {DURACIONES.map(d => <option key={d} value={d}>{d} minutos</option>)}
-                </select>
-                </div>
-                <button type="submit" className="btn-agregar span-full">Generar Horarios</button>
-            </form>
-            
-            <div className="horarios-configurados">
-                <h3>Horarios Generados</h3>
-                <div className="horarios-lista">
-                {DIAS_SEMANA.map(dia => (
-                    horarios[dia] && horarios[dia].length > 0 && (
-                    <div key={dia} className="dia-grupo">
-                        <h4>{dia}</h4>
-                        {horarios[dia].map(h => (
-                        <div key={h.id} className="horario-item">
-                            <span>{h.inicio} - {h.fin}</span>
-                            <button onClick={() => handleEliminarHorario(dia, h.id)} className="eliminar-btn">Eliminar</button>
-                        </div>
-                        ))}
-                    </div>
-                    )
-                ))}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
-);
+  // Bucle mientras la hora actual sea ANTERIOR a la hora final
+  while (actual.isBefore(final)) {
+    slots.push(actual.format('HH:mm'));
+    actual.add(30, 'minutes'); // Añade 30 minutos para el siguiente slot
+  }
+  return slots;
 };
 
-export default GeneradorHorariosAvanzado;
+function GestionCitasRecepcionista() {
+  
+  // --- Estados para el día seleccionado y los horarios ---
+  const [selectedDate, setSelectedDate] = useState(moment());
+  // Este estado guardará los SLOTS (ej. ["09:00", "09:30"])
+  const [slotsDelDia, setSlotsDelDia] = useState([]);
+  
+  // Estados para el formulario de añadir bloques
+  const [newInicio, setNewInicio] = useState('09:00');
+  const [newFin, setNewFin] = useState('12:00');
+
+  // --- CAMBIO: Estados de carga y feedback ---
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({ open: false, message: '', severity: 'success' });
+
+  // --- CAMBIO: Cargar datos de Firestore al cambiar la fecha ---
+  useEffect(() => {
+    const cargarHorariosDelDia = async () => {
+      setIsLoading(true);
+      const dateStr = selectedDate.format('YYYY-MM-DD');
+      const docRef = doc(db, 'disponibilidad', dateStr);
+      
+      try {
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          // Si el documento existe, cargamos los horarios guardados
+          setSlotsDelDia(docSnap.data().horarios || []);
+        } else {
+          // Si no existe, reseteamos los horarios
+          setSlotsDelDia([]);
+        }
+      } catch (error) {
+        console.error("Error al cargar horarios: ", error);
+        setAlertInfo({ open: true, message: 'Error al cargar los horarios.', severity: 'error' });
+      }
+      setIsLoading(false);
+    };
+
+    cargarHorariosDelDia();
+  }, [selectedDate]); // Se ejecuta cada vez que 'selectedDate' cambia
+
+  // --- CAMBIO: Lógica para AÑADIR SLOTS (generados desde un bloque) ---
+  const handleAddBloque = () => {
+    if (!newInicio || !newFin) return;
+
+    if (moment(newFin, 'HH:mm').isSameOrBefore(moment(newInicio, 'HH:mm'))) {
+      setAlertInfo({ open: true, message: 'La hora de fin debe ser posterior a la hora de inicio.', severity: 'warning' });
+      return;
+    }
+
+    // Generamos los slots a partir del bloque
+    const nuevosSlots = generarSlots(newInicio, newFin);
+    
+    // Usamos un Set para evitar duplicados y luego convertimos a array y ordenamos
+    const slotsActualizados = [...new Set([...slotsDelDia, ...nuevosSlots])].sort();
+    
+    setSlotsDelDia(slotsActualizados);
+    setAlertInfo({ open: true, message: `Slots de ${newInicio} a ${newFin} añadidos.`, severity: 'success' });
+  };
+
+  // --- CAMBIO: Lógica para ELIMINAR un slot individual ---
+  const handleRemoveSlot = (slotToRemove) => {
+    setSlotsDelDia(prevSlots => prevSlots.filter(slot => slot !== slotToRemove));
+  };
+
+  // --- CAMBIO: Lógica para GUARDAR los slots en Firestore ---
+  const handleSaveToFirestore = async () => {
+    setIsSaving(true);
+    const dateStr = selectedDate.format('YYYY-MM-DD');
+    const docRef = doc(db, 'disponibilidad', dateStr);
+
+    try {
+      // Guardamos el documento con los slots actuales.
+      // Si el array de slots está vacío, se guardará un array vacío.
+      await setDoc(docRef, { 
+        horarios: slotsDelDia,
+        fecha: selectedDate.toDate() // Guardamos también la fecha como Timestamp
+      });
+      setAlertInfo({ open: true, message: `Horarios para el ${dateStr} guardados con éxito.`, severity: 'success' });
+    } catch (error) {
+      console.error("Error al guardar en Firestore: ", error);
+      setAlertInfo({ open: true, message: 'Error al guardar. Inténtalo de nuevo.', severity: 'error' });
+    }
+    setIsSaving(false);
+  };
+
+  // --- Renderizado del componente ---
+  return (
+    <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="es">
+      <Box className='contenedordisponivilidadcitas'>
+        <Typography className='Titulo'>Gestión de Disponibilidad</Typography>
+
+        {/* --- Panel de selección de fecha y gestión de horarios --- */}
+        <Paper className='configurarhoras' >
+          
+          {/* Columna del Calendario */}
+          <Box  className='columnacalendario'>
+            <Typography className='selecionardia' >Selecciona un Día</Typography>
+            <DateCalendar
+              className='calendario'
+              value={selectedDate}
+              onChange={(newDate) => setSelectedDate(newDate)}
+              // Deshabilitamos días pasados
+              shouldDisableDate={(day) => day.isBefore(moment().startOf('day'))}
+            />
+          </Box>
+
+          {/* Columna de gestión de horas para el día seleccionado */}
+          <Box className='gestiondehorarios'>
+            <Typography className='Titulo' gutterBottom>
+              Configurar Horarios para: <strong>{selectedDate.format('dddd, D [de] MMMM')}</strong>
+            </Typography>
+
+            {/* Formulario para añadir bloques */}
+            <Paper variant="outlined" className='formularioañadirbloque' >
+              <Typography variant="subtitle1" gutterBottom>Añadir bloque de 30 min</Typography>
+              <Box className='formulario'>
+                <TextField
+                  className='hora'
+                  label="Hora Inicio"
+                  type="time"
+                  value={newInicio}
+                  onChange={(e) => setNewInicio(e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <TextField
+                  className='hora'
+                  label="Hora Fin"
+                  type="time"
+                  value={newFin}
+                  onChange={(e) => setNewFin(e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <Button className='añadirbloque' variant="contained" onClick={handleAddBloque}>
+                  Añadir Slots
+                </Button>
+              </Box>
+            </Paper>
+
+            {/* Visualización de los slots generados */}
+            <Typography className='Titulo'>
+              Slots Disponibles ({slotsDelDia.length})
+            </Typography>
+            <Paper variant="outlined" className='visualizacionhorarios' >
+              {isLoading ? (
+                <CircularProgress />
+              ) : (
+                <Box className='contenedrodedias'>
+                  {slotsDelDia.length === 0 ? (
+                    <Typography className='alertanohayslots'>No hay slots definidos para este día.</Typography>
+                  ) : (
+                    slotsDelDia.map((slot, idx) => (
+                      <Chip
+                        className='chips'
+                        key={idx}
+                        label={slot}
+                        onDelete={() => handleRemoveSlot(slot)}
+                      />
+                    ))
+                  )}
+                </Box>
+              )}
+            </Paper>
+
+            {/* Botón de Guardar en Firestore */}
+            <Button
+              className='boton-guardar'
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={handleSaveToFirestore}
+              disabled={isSaving || isLoading}
+            >
+              {isSaving ? <CircularProgress size={24} /> : `Guardar Cambios para el ${selectedDate.format('D/MM')}`}
+            </Button>
+
+            {/* Alerta de Feedback */}
+            {alertInfo.open && (
+              <Alert 
+                className='alerta'
+                severity={alertInfo.severity} 
+                onClose={() => setAlertInfo({ ...alertInfo, open: false })}
+            
+              >
+                {alertInfo.message}
+              </Alert>
+            )}
+          </Box>
+        </Paper>
+      </Box>
+    </LocalizationProvider>
+  );
+}
+
+export default GestionCitasRecepcionista;

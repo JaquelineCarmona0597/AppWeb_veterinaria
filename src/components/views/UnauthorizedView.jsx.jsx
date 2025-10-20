@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase'; // Asegúrate que la ruta sea correcta
 import ConstructionIcon from '@mui/icons-material/Construction'; // Ícono para "en construcción"
-
+import '../../css/authCss/UnauthorizedView.css'
 // Importa tus estilos si los tienes
 import '../../css/authCss/UnauthorizedView.css'; // Puedes renombrar este CSS también
 

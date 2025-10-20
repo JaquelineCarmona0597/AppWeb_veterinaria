@@ -30,7 +30,7 @@ const Header = ({ isSidebarOpen, handleToggleSidebar }) => {
             variant="h6" noWrap component="div" 
             sx={{ flexGrow: 1 }} // Esto mantiene el saludo alineado a la izquierda
           >
-            Bienvenido, {userData?.nombre || 'Usuario'}
+            Hola, {userData?.nombre || 'Usuario'}
           </Typography>
           
           {/* El botón de Logout y el Modal han sido removidos */}

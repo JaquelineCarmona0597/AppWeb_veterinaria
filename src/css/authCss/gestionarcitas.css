@@ -1,0 +1,229 @@
+/* ==========================================================================
+   ESTILOS PARA LA PÁGINA DE GESTIÓN DE DISPONIBILIDAD
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. LAYOUT PRINCIPAL Y TÍTULO                                               */
+/* -------------------------------------------------------------------------- */
+.contenedordisponivilidadcitas {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Espacio entre el título y la tarjeta principal */
+}
+
+.Titulo {
+  font-weight: 700 !important;
+  color: var(--color-texto-principal) !important;
+  font-size: 1.75rem !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. TARJETA PRINCIPAL Y LAYOUT DE 2 COLUMNAS                                */
+/* -------------------------------------------------------------------------- */
+.configurarhoras {
+  /* Estilo de tarjeta estándar */
+  background-color: var(--color-superficie) !important;
+  border-radius: 16px !important;
+  border: 1px solid var(--color-borde) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+  padding: 24px !important;
+
+  /* ¡AQUÍ LA MAGIA! Creamos las 2 columnas */
+  display: flex;
+  flex-direction: row; /* Lado a lado */
+  gap: 24px;
+}
+
+/* --- Columna Izquierda (Calendario) --- */
+.columnacalendario {
+  flex-basis: 320px; /* Ancho fijo para el calendario */
+  flex-shrink: 0; /* Evita que se encoja */
+  border-right: 1px solid var(--color-borde);
+  padding-right: 24px;
+}
+
+/* --- Columna Derecha (Gestión) --- */
+.gestiondehorarios {
+  flex-grow: 1; /* Ocupa el resto del espacio */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* --- Responsividad para pantallas pequeñas --- */
+@media (max-width: 900px) {
+  .configurarhoras {
+    flex-direction: column; /* Apila las columnas */
+  }
+  .columnacalendario {
+    flex-basis: auto;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--color-borde);
+    padding-right: 0;
+    padding-bottom: 24px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. COLUMNA IZQUIERDA: CALENDARIO Y TÍTULO                                  */
+/* -------------------------------------------------------------------------- */
+.selecionardia {
+  font-weight: 600 !important;
+  color: var(--color-texto-principal) !important;
+  font-size: 1.1rem !important;
+  margin-bottom: 16px;
+}
+
+.calendario {
+  border: 1px solid var(--color-borde) !important;
+  border-radius: 12px !important;
+  width: 100%;
+}
+/* Día seleccionado */
+.calendario .Mui-selected {
+  background-color: var(--color-primario) !important;
+}
+.calendario .Mui-selected:hover {
+  background-color: var(--color-primario-oscuro) !important;
+}
+/* Día de hoy */
+.calendario .MuiPickersDay-today {
+  border-color: var(--color-primario) !important;
+}
+/* Días deshabilitados */
+.calendario .Mui-disabled {
+  opacity: 0.6;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. COLUMNA DERECHA: FORMULARIO Y SLOTS                                     */
+/* -------------------------------------------------------------------------- */
+.gestiondehorarios .Titulo {
+  font-size: 1.25rem !important; /* Título de sección más pequeño */
+}
+.gestiondehorarios .Titulo strong {
+  color: var(--color-primario); /* Resalta la fecha */
+}
+
+/* Sub-tarjeta para el formulario de añadir */
+.formularioañadirbloque {
+  background-color: var(--color-fondo); /* Fondo cálido */
+  border-radius: 12px !important;
+  border: 1px solid var(--color-borde) !important;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.formulario {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap; /* Para responsividad */
+}
+
+/* Inputs de Hora */
+.hora .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+  background-color: var(--color-superficie); /* Fondo blanco para el input */
+}
+.hora .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-borde) !important;
+}
+.hora .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-texto-secundario) !important;
+}
+.hora .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primario) !important;
+}
+.hora .MuiInputLabel-root.Mui-focused {
+  color: var(--color-primario) !important;
+}
+
+/* Botón "Añadir Slots" */
+.añadirbloque {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto-blanco) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 10px 16px !important; /* Un poco más pequeño que el de guardar */
+  transition: all 0.2s ease-out !important;
+}
+.añadirbloque:hover {
+  background-color: var(--color-primario-oscuro) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primario) 30%, transparent) !important;
+}
+
+
+/* Sub-tarjeta para los slots/chips */
+.visualizacionhorarios {
+  background-color: var(--color-fondo);
+  border: 1px dashed var(--color-borde);
+  border-radius: 12px !important;
+  padding: 16px;
+  min-height: 150px;
+  /* Centra el spinner o el texto de "no hay slots" */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.contenedrodedias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-start; /* Alinea los chips a la izquierda */
+  width: 100%;
+}
+
+.alertanohayslots {
+  color: var(--color-texto-secundario) !important;
+  font-style: italic;
+}
+
+/* Estilo para los Chips (slots de hora) */
+.chips {
+  background-color: var(--color-superficie) !important;
+  /* Usamos el color de acento para los chips */
+  border: 1px solid var(--color-acento) !important;
+  color: var(--color-acento-oscuro) !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+}
+.chips .MuiChip-deleteIcon {
+  color: var(--color-acento) !important;
+  transition: all 0.2s ease !important;
+}
+.chips .MuiChip-deleteIcon:hover {
+  color: var(--color-acento-oscuro) !important;
+  transform: scale(1.1);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. ACCIONES PRINCIPALES (GUARDAR Y ALERTA)                                 */
+/* -------------------------------------------------------------------------- */
+.boton-guardar {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto-blanco) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 12px 24px !important;
+  transition: all 0.2s ease-out !important;
+  align-self: flex-end; /* Alinea el botón a la derecha */
+}
+.boton-guardar:hover {
+  background-color: var(--color-primario-oscuro) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primario) 30%, transparent) !important;
+}
+.boton-guardar:disabled {
+  background-color: #EAE0D6 !important;
+  color: #6B6B6B !important;
+}
+
+.alerta {
+  border-radius: 8px !important;
+}
