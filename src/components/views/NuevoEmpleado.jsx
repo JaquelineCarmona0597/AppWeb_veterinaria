@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
     Box, Button, TextField, Grid, CircularProgress, InputAdornment,
-    FormControl, InputLabel, Select, MenuItem, Typography
+    FormControl, InputLabel, Select, MenuItem, Typography,
+    Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SchoolIcon from '@mui/icons-material/School';
@@ -10,6 +11,7 @@ import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'; // Icono para el Rol
 import { db } from '../../firebase';
+import { useAuth } from '../../context/AuthContext';
 import '../../css/adminCss/NuevoEmpleado.css';
 import { collection, doc, setDoc, serverTimestamp } from "firebase/firestore";
 
@@ -23,6 +25,9 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
     const [especialidad, setEspecialidad] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
+    const [showLinkDialog, setShowLinkDialog] = useState(false);
+    const [generatedLink, setGeneratedLink] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     // --- LÓGICA DE VALIDACIÓN ---
     const validate = () => {
@@ -52,35 +57,66 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
         }
     };
 
+    const { currentUser } = useAuth();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validate()) return;
 
         setIsSubmitting(true);
-        const newEmpleadoRef = doc(collection(db, "usuarios"));
-        
-        // CAMBIO: El objeto a guardar ahora es dinámico
-        const nuevoEmpleado = {
-            id: newEmpleadoRef.id,
+
+        // Generar token de invitación (usar crypto.randomUUID si está disponible)
+        const token = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).slice(2, 10);
+
+        const invitation = {
+            token,
+            email,
             nombre,
-            correo: email,
             telefono,
-            rol, // <-- Se usa el estado del rol
+            rol,
             fechaCreacion: serverTimestamp(),
-            // Se añade 'especialidad' solo si el rol es 'vet'
             ...(rol === 'vet' && { especialidad }),
+            createdBy: currentUser ? currentUser.uid : null,
+            used: false
         };
 
-        try {
-            await setDoc(newEmpleadoRef, nuevoEmpleado);
-            onEmpleadoAgregado(nuevoEmpleado); // <-- Se usa la nueva prop
-            onClose();
-        } catch (error) {
-            console.error("Error al guardar el empleado: ", error);
-        } finally {
-            setIsSubmitting(false);
-        }
+            try {
+                // Guardar la invitación con id = token para búsqueda fácil
+                await setDoc(doc(db, 'invitations', token), invitation);
+
+                // Preparar el enlace
+                const link = `${window.location.origin}/auth/signup?invite=${token}`;
+                if (typeof onEmpleadoAgregado === 'function') {
+                    onEmpleadoAgregado({ ...invitation, link });
+                }
+
+                // Mostrar diálogo con overlay (MUI Dialog)
+                setGeneratedLink(link);
+                setShowLinkDialog(true);
+
+                // Intentar copiar al portapapeles automáticamente
+                try {
+                    navigator.clipboard && await navigator.clipboard.writeText(link);
+                } catch (_err) {
+                    // no-critical
+                }
+
+            } catch (error) {
+                console.error("Error al crear la invitación: ", error);
+                setErrorMessage('No se pudo crear la invitación. Revisa las reglas de Firestore y la conexión.');
+                // Informar al padre si quiere mostrarlo
+                if (typeof onEmpleadoAgregado === 'function') {
+                    onEmpleadoAgregado({ error: error.message });
+                }
+            } finally {
+                setIsSubmitting(false);
+            }
     };
+
+        const handleCloseLinkDialog = () => {
+            setShowLinkDialog(false);
+            onClose();
+        };
 
   return (
         <Box
@@ -199,6 +235,23 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
                     {isSubmitting ? 'Guardando...' : 'Guardar Empleado'}
                 </Button>
             </Box>
+            <Dialog open={showLinkDialog || !!errorMessage} onClose={handleCloseLinkDialog}>
+                <DialogTitle>{errorMessage ? 'Error' : 'Invitación creada'}</DialogTitle>
+                <DialogContent>
+                    {errorMessage ? (
+                        <Typography color="error">{errorMessage}</Typography>
+                    ) : (
+                        <>
+                            <Typography variant="body2">Comparte este enlace con el empleado para que complete su registro:</Typography>
+                            <TextField value={generatedLink} fullWidth margin="normal" InputProps={{ readOnly: true }} />
+                        </>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    {!errorMessage && <Button onClick={() => navigator.clipboard?.writeText(generatedLink)}>Copiar</Button>}
+                    <Button onClick={handleCloseLinkDialog}>{errorMessage ? 'Cerrar' : 'Hecho'}</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };

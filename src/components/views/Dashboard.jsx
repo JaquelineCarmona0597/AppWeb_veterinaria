@@ -32,6 +32,7 @@ const Dashboard = () => {
     nuevosUsuariosSemana: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // --- LÓGICA PARA OBTENER DATOS DE FIRESTORE ---
   useEffect(() => {
@@ -72,6 +73,7 @@ const Dashboard = () => {
 
       } catch (error) {
         console.error("Error al cargar estadísticas: ", error);
+        setError(error);
       } finally {
         setLoading(false);
       }
@@ -114,6 +116,12 @@ const Dashboard = () => {
           </Grid>
         ))}
       </Grid>
+
+      {error && (
+        <Box sx={{ mt: 3 }}>
+          <Typography color="error">No se pudieron cargar las estadísticas: {error.message}</Typography>
+        </Box>
+      )}
       
       {/* --- SECCIÓN DE GRÁFICOS (Próximamente) --- */}
       <Grid container spacing={3} className="main-content-grid">

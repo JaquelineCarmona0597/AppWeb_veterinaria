@@ -1,10 +1,10 @@
 // 1. IMPORTACIONES
 // -----------------------------------------------------------------------------
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { auth, db } from '../../firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp, getDoc, updateDoc } from "firebase/firestore";
 import { useAuth } from '../../context/AuthContext';
 // <-- AÑADIDO: Componentes para el Dialog (Modal) ---
 import { Box, Button, Card, Checkbox, CssBaseline, Divider, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField, Typography, List, ListItem, ListItemIcon, ListItemText, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
@@ -39,6 +39,41 @@ export default function SignUp() {
   });
   
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const inviteToken = searchParams.get('invite');
+  const [inviteData, setInviteData] = useState(null);
+  const [inviteStatus, setInviteStatus] = useState('none'); // 'none' | 'loading' | 'found' | 'notfound' | 'used'
+
+  useEffect(() => {
+    // Si hay token de invitación, intentamos leerlo
+    const fetchInvite = async () => {
+      if (!inviteToken) return;
+      setInviteStatus('loading');
+      try {
+        const inviteRef = doc(db, 'invitations', inviteToken);
+        const snap = await getDoc(inviteRef);
+        if (snap.exists()) {
+          const data = snap.data();
+          setInviteData(data);
+          if (data.used) {
+            setInviteStatus('used');
+          } else {
+            setInviteStatus('found');
+          }
+          // Prellenar campos si vienen en la invitación
+          if (data.email) setEmail(data.email);
+          if (data.nombre) setName(data.nombre);
+        } else {
+          console.warn('Token de invitación no encontrado:', inviteToken);
+          setInviteStatus('notfound');
+        }
+      } catch (err) {
+        console.error('Error al leer invitación:', err);
+        setInviteStatus('notfound');
+      }
+    };
+    fetchInvite();
+  }, [inviteToken]);
 
   // --- AÑADIDO: Handlers para el modal ---
   const handleOpenTerms = () => setOpenTermsModal(true);
@@ -112,28 +147,53 @@ export default function SignUp() {
 
 const handleSubmit = async (event) => {
     event.preventDefault();
+    // Si venimos con token de invitación, asegurarnos que fue encontrado y no usado
+    if (inviteToken && inviteStatus !== 'found') {
+      setEmailError('Invitación inválida, usada o no encontrada. Pide al administrador que reenvíe la invitación.');
+      return;
+    }
+
     if (!validate()) return; 
 
     setIsLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+  // Determinar rol: si vino de una invitación usamos ese rol
+  const assignedRole = inviteData?.rol || 'cliente';
 
       await setDoc(doc(db, "usuarios", user.uid), {
         id: user.uid,
         nombre: name,
         correo: user.email,
-        rol: "cliente",
+        rol: assignedRole,
         telefono: "",
         fechaCreacion: serverTimestamp()
       });
+      console.log('Usuario guardado en Firestore usuarios/', user.uid, 'con rol', assignedRole);
+
+      // Si fue por invitación, marcarla como usada
+      if (inviteToken) {
+        try {
+          const inviteRef = doc(db, 'invitations', inviteToken);
+          await updateDoc(inviteRef, { used: true, usedBy: user.uid, usedAt: serverTimestamp() });
+          setInviteStatus('used');
+        } catch (err) {
+          console.error('No se pudo marcar la invitación como usada:', err);
+        }
+      }
       
-      // ▼▼▼ ¡LA MAGIA SUCEDE AQUÍ! ▼▼▼
       // 2. Justo después de guardar los datos, le decimos al contexto que los vuelva a leer
       await refreshUserData(user);
 
-      // 3. Ahora sí, navegamos de forma normal. El contexto ya tiene la información actualizada.
-      navigate('/dashboard'); 
+      // 3. Navegar según el rol asignado (evita enviar personal al dashboard de clientes)
+      if (assignedRole === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (assignedRole === 'vet' || assignedRole === 'recepcionista') {
+        navigate('/staff/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
 
     } catch (error) {
       console.error("Error al registrar:", error.code);
