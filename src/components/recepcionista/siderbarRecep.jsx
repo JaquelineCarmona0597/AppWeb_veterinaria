@@ -21,8 +21,8 @@ const SidebarRecep = ({ isSidebarOpen }) => {
 
 const structure = [
     { id: 0, label: 'Dashboard', link: '/recepcion/dashboard', icon: <DashboardIcon /> },
-    { id: 1, label: 'Citas', link: '/recepcion/citas', icon: <CitasIcon /> },
-    { id: 2, label: 'Pacientes', link: '/recepcion/pacientes', icon: <PacientesIcon /> },
+    { id: 1, label: 'Disponibilidad', link: '/recepcion/Disponibilidad', icon: <CitasIcon /> },
+    { id: 2, label: 'Citas', link: '/recepcion/invitado', icon: <PacientesIcon /> },
     { id: 3, label: 'Mi Perfil', link: '/recepcion/perfil', icon: <ProfileIcon /> },
   ];
 

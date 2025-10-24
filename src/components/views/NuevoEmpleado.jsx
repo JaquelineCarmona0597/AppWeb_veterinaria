@@ -92,7 +92,7 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
             >
                 
                 <Grid item 
-                className='selector-rol-contenedor'
+                className='especialidad'
                 >
                     <FormControl 
                     className='rol'
@@ -113,7 +113,7 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
 
                 
                 <Grid item 
-                className='unput-nomnre'
+                className='especialidad'
                 >
                     <TextField
                         className='secion-inputs'
@@ -155,7 +155,7 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
                 )}
 
                 {/* --- CAMPO: TELÉFONO --- */}
-                <Grid item sm={rol === 'vet' ? 6 : 12}> {/* Ocupa todo el ancho si especialidad no está */}
+                <Grid className='especialidad' item sm={rol === 'vet' ? 6 : 12}> {/* Ocupa todo el ancho si especialidad no está */}
                     <TextField
                         className='secion-inputs'
                         label="Número de Teléfono"
@@ -170,7 +170,7 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
                 </Grid>
 
                 {/* --- CAMPO: CORREO --- */}
-                <Grid item >
+                <Grid className='especialidad' item >
                     <TextField
                         className='secion-inputs'
                         label="Correo Electrónico"

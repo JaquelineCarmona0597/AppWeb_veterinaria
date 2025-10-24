@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Paper, TextField, Chip, CircularProgress, Alert } from '@mui/material';
 import moment from 'moment';
+// Importamos el locale de español para moment
 import 'moment/locale/es';
 import '../../css/authCss/gestionarcitas.css';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -11,6 +12,7 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { db } from '../../firebase'; // Ajusta esta ruta a tu archivo de config
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
+// Establecemos el idioma español de forma global para moment
 moment.locale('es');
 
 // --- CAMBIO: Función para generar los slots ---
@@ -122,6 +124,7 @@ function GestionCitasRecepcionista() {
 
   // --- Renderizado del componente ---
   return (
+    // Proveedor de localización con el adapterLocale="es"
     <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="es">
       <Box className='contenedordisponivilidadcitas'>
         <Typography className='Titulo'>Gestión de Disponibilidad</Typography>
@@ -132,6 +135,7 @@ function GestionCitasRecepcionista() {
           {/* Columna del Calendario */}
           <Box  className='columnacalendario'>
             <Typography className='selecionardia' >Selecciona un Día</Typography>
+            {/* El adapterLocale="es" de arriba se encarga de traducir este calendario */}
             <DateCalendar
               className='calendario'
               value={selectedDate}
@@ -144,6 +148,7 @@ function GestionCitasRecepcionista() {
           {/* Columna de gestión de horas para el día seleccionado */}
           <Box className='gestiondehorarios'>
             <Typography className='Titulo' gutterBottom>
+              {/* Esta línea usa el locale 'es' de moment para el formato */}
               Configurar Horarios para: <strong>{selectedDate.format('dddd, D [de] MMMM')}</strong>
             </Typography>
 
@@ -205,7 +210,8 @@ function GestionCitasRecepcionista() {
               color="primary"
               size="large"
               onClick={handleSaveToFirestore}
-              disabled={isSaving || isLoading}
+              // --- ¡AQUÍ ESTÁ EL CAMBIO! ---
+              disabled={isSaving || isLoading || slotsDelDia.length === 0}
             >
               {isSaving ? <CircularProgress size={24} /> : `Guardar Cambios para el ${selectedDate.format('D/MM')}`}
             </Button>

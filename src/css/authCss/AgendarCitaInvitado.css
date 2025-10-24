@@ -1,0 +1,181 @@
+/* ==========================================================================
+   ESTILOS PARA AGENDAR CITA (PÚBLICO/INVITADO)
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. LAYOUT PRINCIPAL Y CONTENEDOR                                           */
+/* -------------------------------------------------------------------------- */
+/* Asumimos que el 'body' ya tiene el color --color-fondo */
+
+.agendar-cita-container {
+  display: grid;
+  /* Dos columnas: la 1ra fija, la 2da flexible */
+  grid-template-columns: 420px 1fr; 
+  gap: 24px;
+  max-width: 1300px;
+  margin: 24px auto; /* Centra el layout en la página */
+  padding: 0 24px;
+  align-items: flex-start; /* Alinea las tarjetas arriba */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. TARJETAS DE COLUMNA                                                     */
+/* -------------------------------------------------------------------------- */
+.columna-seleccion,
+.columna-formulario {
+  background-color: var(--color-superficie) !important;
+  border-radius: 16px !important;
+  border: 1px solid var(--color-borde) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+  padding: 24px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espacio entre los elementos internos */
+}
+
+.columna-titulo {
+  font-weight: 700 !important;
+  color: var(--color-texto-principal) !important;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+/* --- Responsividad para pantallas pequeñas --- */
+@media (max-width: 900px) {
+  .agendar-cita-container {
+    grid-template-columns: 1fr; /* Apila las columnas */
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. COLUMNA IZQUIERDA: CALENDARIO Y SLOTS                                   */
+/* -------------------------------------------------------------------------- */
+.calendario .Mui-selected {
+  background-color: var(--color-primario) !important;
+}
+.calendario .MuiPickersDay-today {
+  border-color: var(--color-primario) !important;
+}
+
+.slots-titulo {
+  font-weight: 600 !important;
+  color: var(--color-texto-principal) !important;
+  font-size: 1.1rem !important;
+}
+
+.slots-wrapper {
+  background-color: var(--color-fondo);
+  border: 1px dashed var(--color-borde);
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slots-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.slots-vacio {
+  color: var(--color-texto-secundario) !important;
+  font-style: italic;
+}
+
+/* --- Estilo de los CHIPS de Horarios --- */
+.slot-chip {
+  /* Estado por defecto: sutil */
+  background-color: var(--color-superficie) !important;
+  border: 1px solid var(--color-borde) !important;
+  color: var(--color-texto-secundario) !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease-out !important;
+}
+.slot-chip:hover {
+  /* Hover: resalta con el color de acento */
+  border-color: var(--color-acento) !important;
+  color: var(--color-acento-oscuro) !important;
+  transform: translateY(-2px);
+}
+.slot-chip.selected {
+  /* Seleccionado: Usa el color de acento */
+  background-color: var(--color-acento) !important;
+  color: var(--color-texto-blanco) !important;
+  border-color: var(--color-acento-oscuro) !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-acento) 35%, transparent) !important;
+  transform: translateY(-2px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. COLUMNA DERECHA: FORMULARIO                                             */
+/* -------------------------------------------------------------------------- */
+/* Alerta de "Horario seleccionado" */
+.slot-seleccionado-info {
+  /* Usamos el color de acento para la alerta de info */
+  background-color: color-mix(in srgb, var(--color-acento) 15%, transparent) !important;
+  color: var(--color-acento-oscuro) !important;
+  border: 1px solid color-mix(in srgb, var(--color-acento) 30%, transparent) !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+}
+.slot-seleccionado-info .MuiAlert-icon {
+  color: var(--color-acento) !important;
+}
+
+/* --- Estilos para Inputs y Selects --- */
+.secion-inputs .MuiOutlinedInput-root,
+.secion-inputs .MuiInputBase-root { /* Cubre TextField y Select */
+  border-radius: 12px !important;
+}
+.secion-inputs .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-borde) !important;
+}
+.secion-inputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-texto-secundario) !important;
+}
+/* Focus */
+.secion-inputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primario) !important;
+}
+.secion-inputs .MuiInputLabel-root.Mui-focused {
+  color: var(--color-primario) !important;
+}
+/* Error */
+.secion-inputs .Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-peligro) !important;
+}
+.secion-inputs .MuiFormHelperText-root.Mui-error,
+.secion-inputs .MuiInputLabel-root.Mui-error {
+  color: var(--color-peligro) !important;
+}
+
+/* --- Botón Principal de "Confirmar Cita" --- */
+.boton-guardar {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto-blanco) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 12px 24px !important;
+  transition: all 0.2s ease-out !important;
+}
+.boton-guardar:hover {
+  background-color: var(--color-primario-oscuro) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primario) 30%, transparent) !important;
+}
+.boton-guardar:disabled {
+  background-color: #EAE0D6 !important;
+  color: #6B6B6B !important;
+}
+
+/* Alerta de feedback del formulario */
+.alerta-formulario {
+  margin-top: 16px !important;
+  border-radius: 8px !important;
+}
