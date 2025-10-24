@@ -123,3 +123,48 @@
   background-color: var(--color-fondo) !important;
   border-color: var(--color-texto-secundario) !important;
 }
+
+/* -------------------------------------------------------------------------- */
+/* 4. MODAL DE CONFIRMACIÓN (ANIMACIÓN PALOMITA)                              */
+/* -------------------------------------------------------------------------- */
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1400; /* Above dialogs */
+  background: rgba(0,0,0,0.25);
+}
+
+.confirm-modal-content {
+  width: 160px;
+  height: 160px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fff7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  transform: scale(0.6);
+  animation: confirm-pop 600ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+.confirm-icon {
+  color: #2e7d32; /* verde */
+  font-size: 96px !important;
+  opacity: 0;
+  animation: check-fade 800ms 150ms both;
+}
+
+@keyframes confirm-pop {
+  0% { transform: scale(0.2); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes check-fade {
+  0% { opacity: 0; transform: scale(0.6); }
+  60% { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}

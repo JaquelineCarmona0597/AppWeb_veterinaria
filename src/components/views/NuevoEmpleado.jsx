@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
     Box, Button, TextField, Grid, CircularProgress, InputAdornment,
-    FormControl, InputLabel, Select, MenuItem, Typography
+    FormControl, InputLabel, Select, MenuItem, Typography, Modal
 } from '@mui/material';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SchoolIcon from '@mui/icons-material/School';
@@ -9,6 +9,7 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'; // Icono para el Rol
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { db } from '../../firebase';
 import '../../css/adminCss/NuevoEmpleado.css';
 import { collection, doc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -23,6 +24,7 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
     const [especialidad, setEspecialidad] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
+    const [showConfirm, setShowConfirm] = useState(false);
 
     // --- LÓGICA DE VALIDACIÓN ---
     const validate = () => {
@@ -73,8 +75,13 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
 
         try {
             await setDoc(newEmpleadoRef, nuevoEmpleado);
-            onEmpleadoAgregado(nuevoEmpleado); // <-- Se usa la nueva prop
-            onClose();
+            // Mostrar modal de confirmación durante 5 segundos antes de cerrar
+            setShowConfirm(true);
+            setTimeout(() => {
+                setShowConfirm(false);
+                if (typeof onEmpleadoAgregado === 'function') onEmpleadoAgregado(nuevoEmpleado); // <-- Se usa la nueva prop
+                if (typeof onClose === 'function') onClose();
+            }, 5000);
         } catch (error) {
             console.error("Error al guardar el empleado: ", error);
         } finally {
@@ -199,6 +206,22 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
                     {isSubmitting ? 'Guardando...' : 'Guardar Empleado'}
                 </Button>
             </Box>
+
+            {/* Modal de confirmación con animación */}
+            <Modal
+                open={showConfirm}
+                aria-labelledby="confirmacion-guardado"
+                aria-describedby="empleado-guardado-exitoso"
+                closeAfterTransition
+                disableEscapeKeyDown
+                hideBackdrop={false}
+            >
+                <Box className="confirm-modal-overlay">
+                    <Box className="confirm-modal-content">
+                        <CheckCircleIcon className="confirm-icon" fontSize="inherit" />
+                    </Box>
+                </Box>
+            </Modal>
         </Box>
     );
 };
