@@ -81,7 +81,7 @@ const NuevoEmpleado = ({ onClose, onEmpleadoAgregado }) => {
                 setShowConfirm(false);
                 if (typeof onEmpleadoAgregado === 'function') onEmpleadoAgregado(nuevoEmpleado); // <-- Se usa la nueva prop
                 if (typeof onClose === 'function') onClose();
-            }, 5000);
+            }, 2000);
         } catch (error) {
             console.error("Error al guardar el empleado: ", error);
         } finally {

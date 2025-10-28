@@ -194,3 +194,28 @@
   margin-left: 10px;
   vertical-align: middle;
 }
+
+/* -------------------------------------------------------------------------- */
+/* Ocultar controles nativos de revelado/clear de contraseña (evitar doble ojo) */
+/* -------------------------------------------------------------------------- */
+/* Edge / IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Blink / WebKit based browsers (Chrome, Edge Chromium, Safari) - intentamos cubrir variantes */
+input[type="password"]::-webkit-textfield-decoration-container,
+input[type="password"]::-webkit-textfield-decoration-button,
+input[type="password"]::-webkit-textfield-decoration {
+  display: none !important;
+}
+
+/* Asegurar que el padding derecho deja espacio para el icono de MUI */
+.secion-inputs input[type="password"],
+.MuiInputBase-input[type="password"] {
+  padding-right: 2.5rem; /* ajustar si se solapa */
+}
+
+/* Fallback: si el navegador sigue mostrando algo raro, este selector lo fuerza a ocultar visualmente */
+input[type="password"] { -webkit-appearance: none; }
