@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Drawer, List, ListItemIcon, ListItemText, Toolbar, Typography, Box, Avatar, ListItemButton } from '@mui/material';
-import { Home as DashboardIcon, CalendarMonth as HorariosIcon, MedicalServices as VeterinariosIcon, AccountCircle as ProfileIcon } from '@mui/icons-material';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Drawer, List, ListItemIcon, ListItemText, Toolbar, Typography, Box, Avatar, ListItemButton, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import { Home as DashboardIcon, CalendarMonth as HorariosIcon, MedicalServices as VeterinariosIcon, AccountCircle as ProfileIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
 
 import { useAuth } from '../../../context/AuthContext'; 
 import logoPatitaFeliz from '../../../assets/logoN.png';
@@ -10,7 +10,11 @@ import '../../../css/adminCss/Sidebar.css';
 const Sidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
   // La única lógica que necesita es obtener los datos del usuario para mostrarlos.
-  const { userData, currentUser } = useAuth();
+  const { userData, currentUser, logout } = useAuth();
+  const navigate = useNavigate();
+
+  // Estado para mostrar el diálogo de confirmación
+  const [logoutDialogOpen, setLogoutDialogOpen] = React.useState(false);
   const drawerWidth = 240;
   
 
@@ -89,7 +93,45 @@ const Sidebar = ({ isSidebarOpen }) => {
             </Typography>
           </Box>
         </Box>
+        {/* Botón de cerrar sesión (abre diálogo de confirmación) */}
+        <ListItemButton onClick={() => setLogoutDialogOpen(true)} className="sidebar-logout">
+          <ListItemIcon className='sidebar-item-icon'><ExitToAppIcon /></ListItemIcon>
+          <ListItemText primary={'Cerrar sesión'} />
+        </ListItemButton>
       </Box>
+
+      {/* Diálogo de confirmación para cerrar sesión */}
+      <Dialog
+        open={logoutDialogOpen}
+        onClose={() => setLogoutDialogOpen(false)}
+        aria-labelledby="confirm-logout-title"
+      >
+        <DialogTitle id="confirm-logout-title">Confirmar cierre de sesión</DialogTitle>
+        <DialogContent>
+          <Typography>¿Estás seguro que deseas cerrar sesión?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setLogoutDialogOpen(false)} color="primary">
+            Cancelar
+          </Button>
+          <Button
+            onClick={async () => {
+              try {
+                await logout();
+                setLogoutDialogOpen(false);
+                navigate('/auth/login');
+              } catch (error) {
+                console.error('Error cerrando sesión:', error);
+                setLogoutDialogOpen(false);
+              }
+            }}
+            color="error"
+            variant="contained"
+          >
+            Cerrar sesión
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Drawer>
   );
 };
