@@ -1,0 +1,78 @@
+/* ==========================================================================
+ESTILOS PARA LA PÁGINA DE "EN CONSTRUCCIÓN" (UnauthorizedView.css)
+   ========================================================================== */
+
+/* Animación de entrada para la tarjeta */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDOR DE PÁGINA COMPLETA                                           */
+/* -------------------------------------------------------------------------- */
+.unauthorized-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--color-fondo); /* Fondo cálido de la app */
+    padding: 2rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. TARJETA DE CONTENIDO                                                    */
+/* -------------------------------------------------------------------------- */
+.unauthorized-card {
+    background-color: var(--color-superficie) !important;
+    border-radius: 16px !important;
+    border: 1px solid var(--color-borde) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+    padding: 3rem 2.5rem !important; /* Espaciado generoso */
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. ICONO Y TEXTOS                                                          */
+/* -------------------------------------------------------------------------- */
+.unauthorized-card .MuiSvgIcon-root {
+  /* Hacemos que el ícono tome el color primario de nuestra marca */
+    color: var(--color-primario) !important; 
+}
+
+.unauthorized-title {
+    font-weight: 700 !important;
+    color: var(--color-texto-principal) !important;
+    margin-bottom: 1rem !important;
+}
+
+.unauthorized-subtitle {
+    color: var(--color-texto-secundario) !important;
+    line-height: 1.6;
+    margin-bottom: 2rem !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. BOTÓN DE ACCIÓN                                                         */
+/* -------------------------------------------------------------------------- */
+.unauthorized-button {
+    background-color: var(--color-primario) !important;
+    color: var(--color-texto-blanco) !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    transition: all 0.2s ease-out !important;
+}
+
+.unauthorized-button:hover {
+    background-color: var(--color-primario-oscuro) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primario) 30%, transparent) !important;
+}

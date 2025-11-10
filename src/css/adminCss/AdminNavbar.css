@@ -1,0 +1,136 @@
+/* src/css/adminCss/AdminNavbar.css */
+
+/* --- Contenedor Principal de la Navbar --- */
+
+.contenedornavbar .container-fluid {
+  display: flex !important; /* Forzamos flexbox */
+  flex-direction: row !important; /* Aseguramos la dirección horizontal */
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+/* Flexbox para alinear los elementos en fila.
+  Este es el contenedor directo de los 3 elementos principales:
+  1. El título (Link)
+  2. El buscador (Form)
+  3. El perfil de usuario (Nav)
+*/
+.contenedornavbar > .container-fluid {
+  display: flex;
+  justify-content: space-between; /* Empuja los elementos a los extremos */
+  align-items: center; /* Centra verticalmente los elementos */
+  width: 100%;
+}
+
+/* --- Título/Ubicación (Ej: "TABLES") --- */
+.ubicacion {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+/* --- Contenedor del Buscador --- */
+.contenedorbusqueda {
+  /* Permite que el buscador ocupe un espacio flexible pero no todo */
+  flex-grow: 0.5;
+  margin: 0 2rem; /* Añade espacio a los lados */
+}
+
+/* Anula márgenes por defecto de reactstrap/bootstrap */
+.contenedorbusqueda .form-group {
+  margin-bottom: 0;
+}
+
+.contenedorbusqueda .input-group {
+  width: 100%;
+}
+
+/* Estilo del campo de texto del buscador */
+.contenedorbusqueda input {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 0.375rem !important; /* Asegura el borde redondeado */
+  padding-left: 1rem;
+  box-shadow: none;
+}
+
+.contenedorbusqueda input::placeholder {
+  color: #8898aa;
+}
+
+/* Oculta el contenedor del ícono si no estás usando uno */
+.contenedorbusqueda .input-group-text {
+  display: none;
+}
+
+
+/* --- Contenedor del Perfil de Usuario --- */
+.contenedoruser {
+  align-items: center;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.user-profile__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Hace la imagen redonda */
+  object-fit: cover; /* Asegura que la imagen no se distorsione */
+  margin-right: 10px;
+}
+
+.user-profile__name {
+  font-weight: 600;
+  color: white;
+}
+
+/* --- Menú Desplegable --- */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  
+  /* --- AJUSTES DE POSICIÓN --- */
+  top: 100%;       /* Empuja el menú hacia abajo un 100% de la altura del contenedor padre. */
+  right: 0;        /* Alinea el borde derecho del menú con el borde derecho del padre. */
+  left: auto;      /* Evita que la propiedad 'left' interfiera. */
+  margin-top: 8px; /* (Opcional) Añade un pequeño espacio para que no esté pegado. */
+
+  /* --- ESTILOS VISUALES (ya los tenías) --- */
+  background-color: white; 
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.375rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 2. Muestra el menú SOLO cuando se hace clic (cuando el padre tiene la clase .show) */
+.show > .dropdown-menu {
+  display: block; /* MUY IMPORTANTE: Muestra el menú al hacer clic */
+}
+
+/* 3. Mejora el estilo del texto y los íconos dentro del menú */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  color: #525f7f; /* Color de texto legible */
+  font-weight: 400;
+}
+
+.dropdown-item:hover {
+  background-color: #f6f9fc; /* Color de fondo al pasar el mouse */
+  color: #32325d;
+}
+
+.dropdown-item i {
+  margin-right: 1rem;
+  color: #5e72e4;
+  font-size: 1.1rem;
+}
+.dropdown {
+  position: relative;
+}

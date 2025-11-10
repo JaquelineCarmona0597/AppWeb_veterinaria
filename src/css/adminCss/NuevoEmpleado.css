@@ -1,0 +1,170 @@
+/* ==========================================================================
+   ESTILOS PARA EL FORMULARIO DE NUEVO EMPLEADO
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDOR PRINCIPAL Y LAYOUT                                           */
+/* -------------------------------------------------------------------------- */
+.contenedor-modal-nuevo-empleado {
+  /* Mimics DialogContent for consistent padding */
+  padding: 24px;
+}
+
+.contenedor-modal-nuevo-empleado .MuiGrid-container {
+  /* Replaces the need for a spacing prop in JSX */
+  row-gap: 24px;
+  column-gap: 16px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. ESTILOS PARA LOS CAMPOS DEL FORMULARIO (TEXTFIELD, SELECT)              */
+/* -------------------------------------------------------------------------- */
+.secion-inputs .MuiOutlinedInput-root,
+.rol .MuiOutlinedInput-root,
+.especialidad-con .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.secion-inputs .MuiOutlinedInput-notchedOutline,
+.rol .MuiOutlinedInput-notchedOutline,
+.especialidad-con .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-borde) !important;
+}
+
+.secion-inputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline,
+.rol .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline,
+.especialidad-con .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-texto-secundario) !important;
+}
+
+/* --- Estado Enfocado (Focused) --- */
+.secion-inputs .MuiOutlinedInput-root.Mui-focused,
+.rol .MuiOutlinedInput-root.Mui-focused,
+.especialidad-con .MuiOutlinedInput-root.Mui-focused {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primario) 20%, transparent) !important;
+}
+
+.secion-inputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.rol .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.especialidad-con .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primario) !important;
+  border-width: 1px !important;
+}
+
+.secion-inputs .MuiInputLabel-root.Mui-focused,
+.rol .MuiInputLabel-root.Mui-focused,
+.especialidad-con .MuiInputLabel-root.Mui-focused {
+  color: var(--color-primario) !important;
+}
+
+/* --- Estado de Error --- */
+.secion-inputs .Mui-error .MuiOutlinedInput-notchedOutline,
+.rol.Mui-error .MuiOutlinedInput-notchedOutline,
+.especialidad-con.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-peligro) !important;
+}
+
+.secion-inputs .MuiFormHelperText-root.Mui-error,
+.secion-inputs .MuiInputLabel-root.Mui-error,
+.rol .MuiInputLabel-root.Mui-error,
+.especialidad-con .MuiInputLabel-root.Mui-error {
+  color: var(--color-peligro) !important;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* 3. BOTONES DE ACCIÓN (MIMICS DIALOGACTIONS)                                */
+/* -------------------------------------------------------------------------- */
+.contenedor-modal-nuevo-empleado .MuiBox-root {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 24px;
+  margin: 24px -24px -24px -24px; /* Extends to the edges */
+  border-top: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+}
+
+.boton-guardar, .boton-can {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s ease-out !important;
+}
+
+/* Botón "Guardar" (Primario) */
+.boton-guardar {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto-blanco) !important;
+}
+
+.boton-guardar:hover {
+  background-color: var(--color-primario-oscuro) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primario) 30%, transparent) !important;
+}
+
+.boton-guardar:disabled {
+  background-color: #EAE0D6 !important;
+  color: #6B6B6B !important;
+  transform: none;
+  box-shadow: none !important;
+}
+
+/* Botón "Cancelar" (Secundario) */
+.boton-can {
+  border: 1px solid var(--color-borde) !important;
+  color: var(--color-texto-secundario) !important;
+}
+
+.boton-can:hover {
+  background-color: var(--color-fondo) !important;
+  border-color: var(--color-texto-secundario) !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. MODAL DE CONFIRMACIÓN (ANIMACIÓN PALOMITA)                              */
+/* -------------------------------------------------------------------------- */
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1400; /* Above dialogs */
+  background: rgba(0,0,0,0.25);
+}
+
+.confirm-modal-content {
+  width: 160px;
+  height: 160px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fff7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  transform: scale(0.6);
+  animation: confirm-pop 600ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+.confirm-icon {
+  color: #2e7d32; /* verde */
+  font-size: 96px !important;
+  opacity: 0;
+  animation: check-fade 800ms 150ms both;
+}
+
+@keyframes confirm-pop {
+  0% { transform: scale(0.2); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes check-fade {
+  0% { opacity: 0; transform: scale(0.6); }
+  60% { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}

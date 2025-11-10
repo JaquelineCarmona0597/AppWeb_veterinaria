@@ -1,0 +1,122 @@
+/* ==========================================================================
+   ESTILOS PARA EL MODAL DE RESTABLECER CONTRASEÑA
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDOR PRINCIPAL DEL MODAL (REUTILIZAMOS ESTILOS)                   */
+/* -------------------------------------------------------------------------- */
+/* Estos estilos son consistentes con los otros modales de la aplicación */
+.modal-contenedor .MuiDialog-paper {
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  animation: zoomInFade 0.3s ease-out; /* Animación de entrada */
+  width: 100%;
+  max-width: 450px; /* Ancho ideal para este tipo de modal */
+}
+
+@keyframes zoomInFade {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. TÍTULO Y TEXTO DEL MODAL                                                */
+/* -------------------------------------------------------------------------- */
+.Titulo-modal {
+  font-weight: 600 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+.texto-modal {
+  color: var(--color-texto-secundario) !important;
+  line-height: 1.6;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. CAMPO DE TEXTO (TEXTFIELD VARIANT="STANDARD")                           */
+/* -------------------------------------------------------------------------- */
+.Formulario-secion {
+  margin-top: 16px !important;
+}
+
+/* Línea inferior del input en estado normal */
+.Formulario-secion .MuiInput-underline:before {
+  border-bottom: 2px solid var(--color-borde) !important;
+}
+
+/* Línea inferior al pasar el mouse */
+.Formulario-secion .MuiInput-underline:hover:not(.Mui-disabled):before {
+  border-bottom: 2px solid var(--color-texto-secundario) !important;
+}
+
+/* Línea inferior y etiqueta cuando el input está enfocado */
+.Formulario-secion .MuiInput-underline:after {
+  border-bottom: 2px solid var(--color-primario) !important;
+}
+.Formulario-secion .MuiInputLabel-root.Mui-focused {
+  color: var(--color-primario) !important;
+}
+
+/* Estilo cuando hay un error */
+.Formulario-secion .MuiInput-underline.Mui-error:after {
+  border-bottom-color: var(--color-peligro) !important;
+}
+.Formulario-secion .MuiInputLabel-root.Mui-error {
+  color: var(--color-peligro) !important;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* 4. MENSAJES DE ESTADO (ÉXITO Y ERROR)                                      */
+/* -------------------------------------------------------------------------- */
+.mensaje-estado {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.mensaje-estado.exito {
+  background-color: color-mix(in srgb, var(--color-exito) 15%, transparent);
+  color: var(--color-exito);
+}
+
+.mensaje-estado.error {
+  background-color: color-mix(in srgb, var(--color-peligro) 15%, transparent);
+  color: var(--color-peligro);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. BOTONES DE ACCIÓN                                                       */
+/* -------------------------------------------------------------------------- */
+.boton-contendeor {
+  padding: 16px 24px !important;
+  gap: 8px;
+}
+
+.boton-modal {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s ease-out !important;
+}
+
+/* Botón "Cancelar" (Primer botón en el DOM) */
+.boton-modal:first-of-type {
+  color: var(--color-texto-secundario) !important;
+}
+.boton-modal:first-of-type:hover {
+  background-color: var(--color-fondo) !important;
+}
+
+/* Botón "Enviar Correo" (Último botón en el DOM) */
+.boton-modal:last-of-type {
+  color: var(--color-primario) !important;
+  font-weight: 700 !important;
+}
+.boton-modal:last-of-type:hover {
+  background-color: color-mix(in srgb, var(--color-primario) 15%, transparent) !important;
+}

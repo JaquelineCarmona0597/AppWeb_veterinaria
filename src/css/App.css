@@ -1,0 +1,14 @@
+/* App.css - Estilos para la estructura principal de la aplicación */
+
+/* #root es el div donde usualmente React/Vite monta la aplicación.
+  Le damos una altura mínima del 100% de la pantalla y usamos flexbox 
+  para organizar su contenido en una columna.
+*/
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: auto; /* Asegura que la app ocupe al menos toda la altura de la pantalla */
+  max-width: auto; /* Un ancho máximo para que no se estire demasiado en pantallas grandes */
+  margin: 0 auto;    /* Centra el contenedor principal en la página */
+  text-align: center;/* Centra el texto por defecto, puedes ajustarlo en componentes específicos */
+}

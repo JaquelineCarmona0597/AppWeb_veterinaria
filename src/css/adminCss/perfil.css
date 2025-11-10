@@ -1,0 +1,127 @@
+/* ==========================================================================
+   ESTILOS PARA LA PÁGINA DE PERFIL DE USUARIO (perfil.css)
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDOR Y CABECERA DE LA PÁGINA                                      */
+/* -------------------------------------------------------------------------- */
+.profile-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px !important; /* Espaciado entre los elementos principales */
+}
+
+.page-title {
+  font-weight: 700 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+/* Botón de "Cerrar Sesión" */
+.btn-peligro {
+  background-color: var(--color-peligro) !important;
+  color: var(--color-texto-blanco) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s ease-out !important;
+}
+
+.btn-peligro:hover {
+  background-color: var(--color-peligro-oscuro) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-peligro) 35%, transparent) !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. ENCABEZADO DEL PERFIL (AVATAR Y NOMBRE)                                 */
+/* -------------------------------------------------------------------------- */
+.profile-page-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background-color: var(--color-fondo); /* Fondo cálido para destacar la sección */
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.profile-page-avatar {
+  width: 100px !important;
+  height: 100px !important;
+  border: 4px solid var(--color-primario);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.profile-page-name {
+  font-weight: 700 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+.profile-page-email {
+  color: var(--color-texto-secundario) !important;
+  margin-top: 4px !important;
+}
+/* -------------------------------------------------------------------------- */
+/* 3. TARJETA DE DETALLES (CON ALINEACIÓN CORREGIDA)                          */
+/* -------------------------------------------------------------------------- */
+.details-card {
+  padding: 24px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--color-borde) !important;
+  background-color: var(--color-superficie) !important;
+}
+
+.card-title {
+  font-weight: 600 !important;
+  margin-bottom: 16px !important;
+  padding-bottom: 16px !important;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+/* ▼▼▼ ESTA ES LA MAGIA ▼▼▼ */
+.details-grid {
+  display: grid;
+  /* 1ra columna se ajusta, 2da toma el resto */
+  grid-template-columns: auto 1fr; 
+  /* Espacio vertical y horizontal */
+  gap: 20px 24px; 
+}
+
+.detail-row {
+  /* Hacemos que la fila sea el contenido del grid */
+  display: contents; 
+}
+
+.detail-label {
+  font-weight: 600 !important;
+  color: var(--color-texto-secundario) !important;
+  /* ¡LA CLAVE! Alinea las etiquetas a la derecha */
+  text-align: right; 
+  grid-column: 1; /* Coloca en la primera columna */
+}
+
+.detail-value {
+  color: var(--color-texto-principal) !important;
+  grid-column: 2; /* Coloca en la segunda columna */
+  text-align: left; /* Asegura alineación izquierda */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. MODAL DE CIERRE DE SESIÓN                                               */
+/* -------------------------------------------------------------------------- */
+/* Hereda los estilos de .modal-contenedor de los otros archivos, pero añadimos los botones */
+
+.btn-secundario {
+  border: 1px solid var(--color-borde) !important;
+  color: var(--color-texto-secundario) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s ease-out !important;
+}
+
+.btn-secundario:hover {
+  background-color: var(--color-fondo) !important;
+  border-color: var(--color-texto-secundario) !important;
+}

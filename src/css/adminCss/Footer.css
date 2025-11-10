@@ -1,0 +1,53 @@
+.footer-container {
+  /* Estilo de la tarjeta "flotante" */
+  background-color: var(--color-superficie);
+  border-radius: 12px;
+  padding: 16px 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-borde);
+  
+  /* Márgenes para alinearlo con las tarjetas de arriba y darle espacio abajo */
+  margin: 0 24px 24px 24px; 
+
+  /* Propiedades para alinear el contenido de adentro (copyright y links) */
+  display: flex;
+  flex-wrap: wrap; 
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px; 
+}
+
+/* Estilo para el texto de copyright */
+.footer-copyright {
+  color: var(--color-texto-secundario);
+}
+
+/* Contenedor de los enlaces y redes sociales */
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Estilo para los enlaces de texto */
+.footer-links .MuiLink-root {
+  color: var(--color-texto-secundario);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links .MuiLink-root:hover {
+  color: var(--color-primario);
+  text-decoration: underline;
+}
+
+/* Estilo para los botones de redes sociales */
+.footer-links .MuiIconButton-root {
+  color: var(--color-texto-secundario);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-links .MuiIconButton-root:hover {
+  color: var(--color-primario);
+  transform: translateY(-2px);
+}

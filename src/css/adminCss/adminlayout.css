@@ -1,0 +1,60 @@
+/* ==========================================================================
+   LAYOUT PRINCIPAL (CON ARREGLO DE SIDEBAR)
+   ========================================================================== */
+
+/* --- AÑADIDO: Animación de entrada para las tarjetas --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* El contenedor principal que tendrá el scroll */
+.main-content {
+  flex-grow: 1;
+  background-color: var(--color-fondo);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+
+  /* --- AÑADIDO: Transición y margen por defecto --- */
+  /* Esto hace que el movimiento sea suave y animado */
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: 0; 
+}
+
+/* --- AÑADIDO: Nueva clase para cuando el sidebar está ABIERTO --- */
+.main-content-shifted {
+  /* Este valor (240px) debe ser el MISMO que el ancho de tu sidebar */
+  margin-left: 240px; 
+}
+
+/* El contenido de la página con el espaciado */
+.page-content {
+  flex-grow: 1;
+  padding: 24px;
+}
+
+.content-card {
+  background-color: var(--color-superficie);
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  min-height: 100%;
+  
+  /* --- AÑADIDO: Animación de entrada al cambiar de página --- */
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+/* YA NO HAY NINGUNA REGLA PARA .app-header O .hadercomponent AQUÍ */

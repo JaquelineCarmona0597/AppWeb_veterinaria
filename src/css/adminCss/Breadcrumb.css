@@ -1,0 +1,27 @@
+.breadcrumb-container {
+  /* Estilo de la tarjeta "flotante" */
+  background-color: var(--color-superficie);
+  border-radius: 12px;
+  padding: 12px 24px;
+  border: 1px solid var(--color-borde);
+  
+  /* ✅ AÑADE !important AQUÍ */
+  margin: 24px !important;
+}
+
+/* ... El resto de tus estilos no necesitan cambiar ... */
+
+/* Estilos para los enlaces */
+.breadcrumb-link {
+  color: var(--color-texto-secundario);
+  font-weight: 500;
+}
+
+.breadcrumb-current {
+  color: var(--color-primario);
+  font-weight: 600;
+}
+
+.breadcrumb-container .MuiSvgIcon-root {
+  color: var(--color-borde);
+}

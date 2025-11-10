@@ -1,0 +1,109 @@
+/* ==========================================================================
+   ESTILOS PARA EL DASHBOARD DEL ADMINISTRADOR
+   ========================================================================== */
+
+/* Animación de entrada para los elementos */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 1. CONTENEDORES Y CABECERA                                                 */
+/* -------------------------------------------------------------------------- */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-header {
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.dashboard-title {
+  font-weight: 700 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+.dashboard-subtitle {
+  color: var(--color-texto-secundario) !important;
+  margin-top: 4px !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. TARJETAS DE INDICADORES (KPI)                                           */
+/* -------------------------------------------------------------------------- */
+.kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--color-borde) !important;
+  background-color: var(--color-superficie) !important;
+  transition: all 0.2s ease-out !important;
+  animation: fadeInUp 0.5s ease-out backwards;
+  min-height: 100px; /* Altura mínima para que se vea bien el loader */
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07) !important;
+  border-color: var(--color-primario) !important;
+}
+
+/* Retraso escalonado para la animación de entrada */
+.kpi-grid .MuiGrid-item:nth-child(1) .kpi-card { animation-delay: 0.1s; }
+.kpi-grid .MuiGrid-item:nth-child(2) .kpi-card { animation-delay: 0.2s; }
+.kpi-grid .MuiGrid-item:nth-child(3) .kpi-card { animation-delay: 0.3s; }
+.kpi-grid .MuiGrid-item:nth-child(4) .kpi-card { animation-delay: 0.4s; }
+
+.kpi-icon {
+  width: 50px !important;
+  height: 50px !important;
+  color: var(--color-texto-blanco) !important;
+}
+
+.kpi-value {
+  font-size: 1.75rem !important;
+  font-weight: 700 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+.kpi-title {
+  color: var(--color-texto-secundario) !important;
+  font-size: 0.9rem !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. TARJETAS DE GRÁFICOS Y ACTIVIDAD                                        */
+/* -------------------------------------------------------------------------- */
+.chart-card, .activity-card {
+  padding: 24px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--color-borde) !important;
+  height: 100%;
+  animation: fadeInUp 0.5s ease-out backwards;
+  animation-delay: 0.5s;
+}
+
+.card-title {
+  font-weight: 600 !important;
+  color: var(--color-texto-principal) !important;
+}
+
+/* Placeholder para el gráfico/contenido */
+.chart-container {
+  min-height: 200px; /* Altura mínima */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  color: var(--color-texto-secundario);
+  background-color: var(--color-fondo);
+  border-radius: 8px;
+  margin-top: 16px;
+  padding: 24px;
+}

@@ -1,0 +1,227 @@
+/* ==========================================================================
+   ESTILOS PARA EL COMPONENTE DE INICIO DE SESIÓN (Login)
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. ANIMACIONES GLOBALES (KEYFRAMES)                                        */
+/* -------------------------------------------------------------------------- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* 2. CONTENEDOR PRINCIPAL Y TARJETA                                          */
+/* -------------------------------------------------------------------------- */
+.secion-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-fondo);
+  padding: 2rem 1rem;
+}
+
+.formilario-contenedor {
+  max-width: 420px;
+  width: 100%;
+  padding: 2.5rem !important;
+  border-radius: 16px !important;
+  border: 1px solid var(--color-borde) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+  background-color: var(--color-superficie) !important;
+  /* ▼▼▼ ANIMACIÓN AÑADIDA ▼▼▼ */
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. ENCABEZADO Y TÍTULO                                                     */
+/* -------------------------------------------------------------------------- */
+/* ... (Esta sección no cambia) ... */
+.contenedor-Titulo-imagen {
+  /* ensure the logo + title are vertically stacked and centered */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.secion-imagen {
+  display: block; /* ensure margin auto works on images */
+  max-width: 100px;
+  height: auto;
+  margin: 0 0 1rem 0; /* centered by flexbox / block centering */
+}
+.secion-Titulo {
+  color: var(--color-texto-principal) !important;
+  font-weight: 700 !important;
+  font-size: 1.75rem !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. FORMULARIO, INPUTS Y ENLACES                                            */
+/* -------------------------------------------------------------------------- */
+/* ... (Esta sección no cambia) ... */
+.Formulario-secion {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.secion-inputs .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+}
+.secion-inputs .MuiOutlinedInput-notchedOutline {
+  border: 1px solid var(--color-borde) !important;
+}
+.secion-inputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-texto-secundario) !important;
+}
+.secion-inputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primario) !important;
+}
+.secion-inputs .MuiInputLabel-root.Mui-focused {
+  color: var(--color-primario) !important;
+}
+.olvidar_contraseña {
+  display: flex;
+  justify-content: flex-end;
+}
+.redireccion-boton {
+  font-weight: 500 !important;
+  color: var(--color-texto-secundario) !important;
+  text-decoration: none !important;
+}
+.redireccion-boton:hover {
+  color: var(--color-primario) !important;
+  text-decoration: underline !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. BOTONES                                                                 */
+/* -------------------------------------------------------------------------- */
+.secion-boton, .google-boton, .secion-boton-pregunta {
+  border-radius: 8px !important;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+/* Botón Primario (Iniciar Sesión) */
+.secion-boton {
+  background-color: var(--color-primario) !important;
+  color: var(--color-texto-blanco) !important;
+}
+.secion-boton:not(:disabled):hover {
+  background-color: var(--color-primario-oscuro) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primario) 30%, transparent) !important;
+}
+
+/* Botón Secundario (Google) */
+.google-boton {
+  border-color: var(--color-borde) !important;
+  color: var(--color-texto-secundario) !important;
+}
+.google-boton:not(:disabled):hover {
+  border-color: var(--color-primario) !important;
+  background-color: color-mix(in srgb, var(--color-primario) 10%, transparent) !important;
+  color: var(--color-primario-oscuro) !important;
+  transform: translateY(-2px);
+}
+
+/* Botón de Texto (Regístrate) */
+.secion-boton-pregunta {
+  color: var(--color-primario) !important;
+  padding: 8px !important;
+}
+.secion-boton-pregunta:hover {
+  background-color: color-mix(in srgb, var(--color-primario) 15%, transparent) !important;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* 6. DIVISOR Y OTROS                                                         */
+/* -------------------------------------------------------------------------- */
+/* ... (Esta sección no cambia) ... */
+.Linea-divisora {
+  margin: 1.5rem 0 !important;
+  color: var(--color-borde);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+.google-conenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.secion-pregunta {
+  text-align: center;
+  color: var(--color-texto-secundario);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 7. ESTADOS DE CARGA Y DESHABILITADO (DISABLED)                             */
+/* -------------------------------------------------------------------------- */
+.secion-boton:disabled,
+.google-boton:disabled {
+  background-color: #EAE0D6 !important;
+  color: #6B6B6B !important;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none !important;
+}
+
+/* Spinner para el botón de Iniciar Sesión */
+.secion-boton.loading::after { /* <--- SELECTOR CORREGIDO */
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Ocultar controles nativos de revelado/clear de contraseña (evitar doble ojo) */
+/* -------------------------------------------------------------------------- */
+/* Edge / IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Blink / WebKit based browsers (Chrome, Edge Chromium, Safari) - intentamos cubrir variantes */
+input[type="password"]::-webkit-textfield-decoration-container,
+input[type="password"]::-webkit-textfield-decoration-button,
+input[type="password"]::-webkit-textfield-decoration {
+  display: none !important;
+}
+
+/* Asegurar que el padding derecho deja espacio para el icono de MUI */
+.secion-inputs input[type="password"],
+.MuiInputBase-input[type="password"] {
+  padding-right: 2.5rem; /* ajustar si se solapa */
+}
+
+/* Fallback: si el navegador sigue mostrando algo raro, este selector lo fuerza a ocultar visualmente */
+input[type="password"] { -webkit-appearance: none; }
