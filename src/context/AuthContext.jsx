@@ -1,3 +1,6 @@
+/*
+  Permitir exportaciones que no sean componentes en este archivo para React Refresh.La regla de ESLint `react-refresh/only-export-components` puede ser estricta en monorrepos o al exportar hooks/contexto junto con componentes proveedores. Para evitar errores falsos de Fast Refresh durante el desarrollo, deshabilitamos la regla aquí. Si prefieres una configuración más estricta, mueve el contexto/hooks y el proveedor a archivos separados (recomendado para mantenimiento a largo plazo).*//* eslint-disable react-refresh/only-export-components*/
+
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { onAuthStateChanged, signOut} from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';

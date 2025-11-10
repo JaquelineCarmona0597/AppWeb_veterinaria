@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Drawer, List, ListItemIcon, ListItemText, Toolbar, Typography, Box, Avatar, ListItemButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { Home as DashboardIcon, CalendarMonth as HorariosIcon, MedicalServices as VeterinariosIcon, AccountCircle as ProfileIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
 
@@ -11,7 +11,7 @@ const Sidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
   // La única lógica que necesita es obtener los datos del usuario para mostrarlos.
   const { userData, currentUser, logout } = useAuth();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   // Estado para mostrar el diálogo de confirmación
   const [logoutDialogOpen, setLogoutDialogOpen] = React.useState(false);

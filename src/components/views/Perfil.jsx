@@ -1,5 +1,4 @@
 import React, { useState } from 'react'; // <-- 1. Importa useState
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import '../../css/adminCss/perfil.css';
 
@@ -12,7 +11,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 const UserProfile = () => {
   const { userData, currentUser, logout } = useAuth();
-  const navigate = useNavigate();
   
   // --- 3. Añade el estado para controlar el modal ---
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
