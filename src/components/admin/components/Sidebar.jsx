@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Drawer, List, ListItemIcon, ListItemText, Toolbar, Typography, Box, Avatar, ListItemButton, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import { Drawer, List, ListItemIcon, ListItemText, Toolbar, Typography, Box, Avatar, ListItemButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { Home as DashboardIcon, CalendarMonth as HorariosIcon, MedicalServices as VeterinariosIcon, AccountCircle as ProfileIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
 
 import { useAuth } from '../../../context/AuthContext'; 
@@ -102,16 +102,19 @@ const Sidebar = ({ isSidebarOpen }) => {
 
       {/* Diálogo de confirmación para cerrar sesión */}
       <Dialog
+        className="modal-contenedor"
         open={logoutDialogOpen}
         onClose={() => setLogoutDialogOpen(false)}
         aria-labelledby="confirm-logout-title"
       >
         <DialogTitle id="confirm-logout-title">Confirmar cierre de sesión</DialogTitle>
         <DialogContent>
-          <Typography>¿Estás seguro que deseas cerrar sesión?</Typography>
+          <DialogContentText>
+            ¿Estás seguro que deseas cerrar sesión?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setLogoutDialogOpen(false)} color="primary">
+          <Button onClick={() => setLogoutDialogOpen(false)} color="primary" className="boton-camcelar-invt">
             Cancelar
           </Button>
           <Button
@@ -125,7 +128,7 @@ const Sidebar = ({ isSidebarOpen }) => {
                 setLogoutDialogOpen(false);
               }
             }}
-            color="error"
+            className="eliminar"
             variant="contained"
           >
             Cerrar sesión

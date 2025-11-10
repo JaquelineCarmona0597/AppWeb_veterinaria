@@ -1,4 +1,11 @@
+/* Tailwind disabled - using original CSS styles instead
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*/
+
 /* Paleta de Colores Mejorada para Patita Feliz */
+
 :root {
   /* Colores Primarios y de Marca (Naranja Cálido) */
   --color-primario: #FFA726;         /* Naranja principal para botones y acciones */
