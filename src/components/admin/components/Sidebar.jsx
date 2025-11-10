@@ -122,7 +122,10 @@ const Sidebar = ({ isSidebarOpen }) => {
               try {
                 await logout();
                 setLogoutDialogOpen(false);
-                navigate('/auth/login');
+                // Use a full-page redirect to ensure the landing page is loaded
+                // and avoid race conditions with ProtectedRoute which may
+                // redirect to the login page when auth state changes.
+                window.location.replace('/');
               } catch (error) {
                 console.error('Error cerrando sesión:', error);
                 setLogoutDialogOpen(false);

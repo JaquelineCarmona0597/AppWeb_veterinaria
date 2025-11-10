@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './landing.css';
+import logoM from '../../assets/logoM.png';
 
 // --- Iconos (para no depender de archivos externos) ---
-// Normalmente los importarías de 'lucide-react', pero para un solo archivo,
-// los definimos aquí como componentes SVG.
+// (Estos componentes SVG permanecen igual, ya que son parte de la estructura de React)
 
 // Icono para el Logo (Patita)
 const PawPrint = (props) => (
@@ -113,61 +113,67 @@ const Menu = (props) => (
   </svg>
 );
 
-// Icono de Usuario (profile)
-const UserIcon = (props) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20" {...props}>
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-);
-
 // --- 1. Componente Navbar ---
 function Navbar() {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    if (e) e.preventDefault();
-    navigate('/auth/login');
-  };
-
   return (
     <nav className="navbar">
-      <div className="navbar-container">
-        <a href="#home" className="navbar-logo">
-          <img src="/logoM.png" alt="Patita Feliz" className="navbar-logo-img" />
-          <span>Patita Feliz</span>
+      <div className="container navbar__content">
+        {/* Logo y Título */}
+        <a href="#home" className="navbar__logo">
+          <img src={logoM} alt="logo" className="navbar__logo-img" />
+          Patita Feliz
         </a>
 
-        <div className="nav-menu">
-          <a href="#home" className="nav-links">Inicio</a>
-          <a href="#features" className="nav-links">Características</a>
-          <a href="#project" className="nav-links">El Proyecto</a>
+        {/* Links de Navegación (Escritorio) */}
+        <div className="navbar__menu">
+          <a href="#home" className="navbar__link">Inicio</a>
+          <a href="#features" className="navbar__link">Características</a>
+          <a href="#project" className="navbar__link">El Proyecto</a>
+          <a
+            href="/auth/login"
+            className="navbar__cta-button"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/auth/login');
+            }}
+          >
+            Acceder
+          </a>
         </div>
 
-        <div className="nav-item-login">
-          <button className="nav-links-btn" onClick={handleLogin}>
-            <span className="user-icon"><UserIcon /></span>
-            <span>Acceder</span>
+        {/* Botón de Menú (Móvil) */}
+        <div className="navbar__mobile-toggle">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="navbar__mobile-button"
+          >
+            <Menu className="navbar__mobile-icon" />
           </button>
         </div>
-
-        {/* Mobile toggle */}
-        <div className="mobile-toggle">
-          <button onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menú">
-            <Menu />
-          </button>
-        </div>
-
-        {menuOpen && (
-          <div className="mobile-menu">
-            <a href="#home" className="nav-links">Inicio</a>
-            <a href="#features" className="nav-links">Características</a>
-            <a href="#project" className="nav-links">El Proyecto</a>
-            <button className="nav-links-btn" onClick={(e) => { e.preventDefault(); handleLogin(); setMenuOpen(false); }}>Acceder</button>
-          </div>
-        )}
       </div>
+
+      {/* Menú Desplegable (Móvil) */}
+      {menuOpen && (
+        <div className="navbar__mobile-menu">
+          <a href="#home" className="navbar__mobile-link">Inicio</a>
+          <a href="#features" className="navbar__mobile-link">Características</a>
+          <a href="#project" className="navbar__mobile-link">El Proyecto</a>
+          <a
+            href="/auth/login"
+            className="navbar__mobile-link-cta"
+            onClick={(e) => {
+              e.preventDefault();
+              setMenuOpen(false);
+              navigate('/auth/login');
+            }}
+          >
+            Acceder
+          </a>
+        </div>
+      )}
     </nav>
   );
 }
@@ -175,36 +181,38 @@ function Navbar() {
 // --- 2. Componente Hero ---
 function HeroSection() {
   return (
-    <section id="home">
-      <div className="hero-container">
-        <div className="hero-text">
-          <h1>Gestión Veterinaria Digital</h1>
-          <p>
+    <section id="home" className="hero">
+      <div className="container hero__grid">
+        {/* Columna de Texto */}
+        <div className="hero__text">
+          <h1 className="hero__headline">
+            Gestión Veterinaria Digital
+          </h1>
+          <p className="hero__description">
             Un proyecto integrador que conecta a veterinarios y dueños de mascotas a través de una app nativa y un sistema de gestión web.
           </p>
-          <div style={{ marginTop: 24 }}>
-            <button className="hero-btn" onClick={() => { window.location.hash = '#features'; }}>Conoce Más</button>
-            <span className="cta-chip">Próximamente...</span>
+          <div className="hero__actions">
+            <a
+              href="#features"
+              className="button button--primary"
+            >
+              Conoce Más
+            </a>
+            <span className="hero__cta-secondary">
+              Próximamente...
+            </span>
           </div>
         </div>
-
-        <div className="hero-image-container">
-          <div className="image-placeholder">
-            <div className="mockup-frame">
-              <img
-                src="/src/assets/mockup-screen.png"
-                alt="Mockup pantalla"
-                className="mockup-screen"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  const parent = e.currentTarget.parentNode;
-                  const placeholder = document.createElement('div');
-                  placeholder.className = 'mockup-fallback';
-                  placeholder.innerText = 'Mockup de la App Android\ny el Dashboard Web';
-                  parent.appendChild(placeholder);
-                }}
-              />
-            </div>
+        
+        {/* Columna de Imagen/Mockup */}
+        <div className="hero__image-container">
+          <div className="hero__mockup">
+             {/* Placeholder para tu mockup de la app */}
+             <div className="hero__mockup-placeholder">
+               [Mockup de la App Android
+               <br />
+               y el Dashboard Web]
+             </div>
           </div>
         </div>
       </div>
@@ -216,38 +224,40 @@ function HeroSection() {
 function FeaturesSection() {
   const features = [
     {
-      icon: <CalendarDays className="h-8 w-8 text-white" />,
+      icon: <CalendarDays className="feature-card__icon-svg" />,
       title: "Gestión de Citas",
-      description: "Permite a los dueños de mascotas agendar citas fácilmente desde la app móvil. Los veterinarios administran la agenda desde el panel web.",
+      description: "Permite a los dueños de mascotas agendar citas fácilmente desde la app móvil. Los veterinarios administran la agenda desde sus dispositivo movil Android.",
     },
     {
-      icon: <LineChart className="h-8 w-8 text-white" />,
+      icon: <LineChart className="feature-card__icon-svg" />,
       title: "Rendimiento del Negocio",
-      description: "El panel web ofrece estadísticas y reportes sobre el rendimiento de la clínica, pacientes atendidos, ingresos y más.",
+      description: "El panel web ofrece estadísticas y reportes sobre el rendimiento de la clínica, pacientes atendidos, flujo de usuarios y más.",
     },
     {
-      icon: <Smartphone className="h-8 w-8 text-white" />,
+      icon: <Smartphone className="feature-card__icon-svg" />,
       title: "App Móvil y Web",
       description: "Una solución integral con una app nativa para clientes (Android) y un potente sistema de gestión (CRUD) para la veterinaria.",
     },
   ];
 
   return (
-    <section id="features" className="features-section">
-      <div className="max-width">
-        <div className="text-center mb-16">
-          <h2>Todo lo que tu clínica necesita</h2>
-          <p className="features-sub">Una plataforma unificada para optimizar tu gestión y mejorar la atención.</p>
+    <section id="features" className="features">
+      <div className="container">
+        <div className="features__header">
+          <h2 className="features__title">Todo lo que tu clínica necesita</h2>
+          <p className="features__subtitle">
+            Una plataforma unificada para optimizar tu gestión y mejorar la atención.
+          </p>
         </div>
 
-        <div className="features-list">
+        <div className="features__grid">
           {features.map((feature) => (
-            <div key={feature.title} className="project-card">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 64, width: 64, borderRadius: '999px', background: 'var(--primary)', color: '#fff', marginBottom: 12 }}>
+            <div key={feature.title} className="feature-card">
+              <div className="feature-card__icon-wrapper">
                 {feature.icon}
               </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <h3 className="feature-card__title">{feature.title}</h3>
+              <p className="feature-card__description">{feature.description}</p>
             </div>
           ))}
         </div>
@@ -259,25 +269,31 @@ function FeaturesSection() {
 // --- 4. Componente "Para Quién" (Proyecto) ---
 function ProjectSection() {
   return (
-    <section id="project" className="">
-      <div className="max-width project-grid">
+    <section id="project" className="project">
+      <div className="container project__grid">
+        {/* Columna para Veterinarios */}
         <div className="project-card">
-          <h3>Para Veterinarios</h3>
-          <p className="features-sub">Simplifica la administración de tu clínica. Con nuestro panel web, podrás gestionar citas, historiales de pacientes y, lo más importante, monitorear el rendimiento de tu negocio con reportes claros.</p>
-          <ul>
-            <li>✔ Optimiza tu agenda</li>
-            <li>✔ Accede a historiales clínicos</li>
-            <li>✔ Analiza el crecimiento de tu negocio</li>
+          <h3 className="project-card__title">Para Veterinarios</h3>
+          <p className="project-card__description">
+            Simplifica la administración de tu clínica. Con nuestro panel web, podrás gestionar citas, historiales de pacientes y, lo más importante, monitorear el rendimiento de tu negocio con reportes claros.
+          </p>
+          <ul className="project-card__list">
+            <li className="project-card__list-item">✔<span>Optimiza tu agenda</span></li>
+            <li className="project-card__list-item">✔<span>Accede a historiales clínicos</span></li>
+            <li className="project-card__list-item">✔<span>Analiza el crecimiento de tu negocio</span></li>
           </ul>
         </div>
 
+        {/* Columna para Dueños de Mascotas */}
         <div className="project-card">
-          <h3>Para Dueños de Mascotas</h3>
-          <p className="features-sub">La salud de tu mascota en la palma de tu mano. Nuestra app móvil te permite agendar citas, recibir recordatorios de vacunas y tener toda la información de tus mascotas en un solo lugar.</p>
-          <ul>
-            <li>✔ Agenda citas 24/7</li>
-            <li>✔ Recibe recordatorios importantes</li>
-            <li>✔ Consulta el historial de tu mascota</li>
+          <h3 className="project-card__title">Para Dueños de Mascotas</h3>
+          <p className="project-card__description">
+            La salud de tu mascota en la palma de tu mano. Nuestra app móvil te permite agendar citas, recibir recordatorios de vacunas y tener toda la información de tus mascotas en un solo lugar.
+          </p>
+          <ul className="project-card__list">
+            <li className="project-card__list-item">✔<span>Agenda citas desde la comodidad de tu casa</span></li>
+            <li className="project-card__list-item">✔<span>Recibe recordatorios importantes</span></li>
+            <li className="project-card__list-item">✔<span>Consulta el historial de tu mascota</span></li>
           </ul>
         </div>
       </div>
@@ -288,11 +304,21 @@ function ProjectSection() {
 // --- 5. Componente CTA (Call to Action) ---
 function CtaSection() {
   return (
-    <section className="cta-section">
-      <div className="max-width text-center">
-        <h2>¿Listo para transformar la gestión de tu veterinaria?</h2>
-        <p>Descubre cómo nuestra plataforma puede ayudarte a crecer y a ofrecer un mejor servicio.</p>
-        <a href="#" className="cta-section .cta-button" onClick={(e) => e.preventDefault()}>Contáctanos (Próximamente)</a>
+    <section className="cta">
+      <div className="container cta__content">
+        <h2 className="cta__title">
+          ¿Listo para transformar la gestión de tu veterinaria?
+        </h2>
+        <p className="cta__subtitle">
+          Descubre cómo nuestra plataforma puede ayudarte a crecer y a ofrecer un mejor servicio.
+        </p>
+        <a
+          href="#"
+          className="button button--secondary"
+          onClick={(e) => e.preventDefault()}
+        >
+          Contáctanos (Próximamente)
+        </a>
       </div>
     </section>
   );
@@ -301,10 +327,10 @@ function CtaSection() {
 // --- 6. Componente Footer ---
 function Footer() {
   return (
-    <footer className="site-footer">
-      <div className="max-width">
-        <p>&copy; {new Date().getFullYear()} Vet-App. Todos los derechos reservados.</p>
-        <p className="mt-2">Un proyecto integrador.</p>
+    <footer className="footer">
+      <div className="container footer__content">
+        <p className="footer__copyright">&copy; {new Date().getFullYear()} Vet-App. Todos los derechos reservados.</p>
+        <p className="footer__subtitle">Un proyecto integrador.</p>
       </div>
     </footer>
   );
@@ -312,14 +338,9 @@ function Footer() {
 
 
 // --- Componente Principal APP ---
-// Este es el componente que renderiza toda la página
-export default function Landing() {
+export default function App() {
   return (
-    <div className="landing-root">
-      {/* Para usar Tailwind, asegúrate de tenerlo configurado en tu proyecto
-        o incluye el script de Tailwind CDN en tu index.html para prototipado rápido:
-        <script src="https://cdn.tailwindcss.com"></script>
-      */}
+    <div className="app-wrapper">
       <Navbar />
       <main>
         <HeroSection />
