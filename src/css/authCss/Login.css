@@ -52,13 +52,19 @@
 /* -------------------------------------------------------------------------- */
 /* ... (Esta sección no cambia) ... */
 .contenedor-Titulo-imagen {
+  /* ensure the logo + title are vertically stacked and centered */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   margin-bottom: 1.5rem;
 }
 .secion-imagen {
+  display: block; /* ensure margin auto works on images */
   max-width: 100px;
   height: auto;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem 0; /* centered by flexbox / block centering */
 }
 .secion-Titulo {
   color: var(--color-texto-principal) !important;

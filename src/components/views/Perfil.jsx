@@ -1,4 +1,5 @@
 import React, { useState } from 'react'; // <-- 1. Importa useState
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import '../../css/adminCss/perfil.css';
 
@@ -11,6 +12,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 const UserProfile = () => {
   const { userData, currentUser, logout } = useAuth();
+  const navigate = useNavigate();
   
   // --- 3. Añade el estado para controlar el modal ---
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
@@ -29,6 +31,10 @@ const UserProfile = () => {
     try {
       await logout();
       handleCloseModal(); // Cierra el modal después de cerrar sesión
+      // Use a full-page redirect to ensure the landing page is loaded
+      // and avoid race conditions with ProtectedRoute which may
+      // redirect to the login page when auth state changes.
+      window.location.replace('/');
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }

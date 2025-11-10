@@ -10,6 +10,7 @@ import Horarios from '../views/Horarios';
 import Login from '../auth/login';
 import SignUp from '../auth/SignUp';
 import UnauthorizedView from '../views/UnauthorizedView.jsx.jsx';
+import Landing from '../views/Landing';
 // --- Componentes de Lógica de Rutas ---
 import ProtectedRoute from './ProtectedRoute';
 
@@ -99,9 +100,9 @@ function AppRouter() {
       
       <Route path="/unauthorized" element={<WorkInProgressView />} /> {/* <-- 2. USA TU COMPONENTE AQUÍ */}
 
-      <Route 
-        path="/" 
-        element={currentUser ? <RedirectBasedOnRole /> : <Navigate to="/auth/login" replace />} 
+      <Route
+        path="/"
+        element={currentUser ? <RedirectBasedOnRole /> : <Landing />}
       />
       
       <Route path="*" element={<Navigate to="/" replace />} />

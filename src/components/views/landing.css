@@ -1,0 +1,524 @@
+/* --- Estilos Globales para Landing --- */
+/* --- ESTILOS GLOBALES Y UTILIDADES --- */
+
+/* Esto simula el `font-sans antialiased` de Tailwind.
+  Usamos 'Inter' como un buen tipo de letra sans-serif moderno.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* --- ESTILOS GLOBALES Y UTILIDADES --- */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --color-primary: #FFA726;;      /* indigo-600 */
+      --color-primary-dark: #F59B1A; /* indigo-700 */
+      --color-primary-light: #e0e7ff; /* indigo-100 */
+      --color-primary-text: #3730a3;  /* indigo-700 (para fondo claro) */
+      --color-text-dark: #111827;     /* gray-900 */
+      --color-text-base: #4b5563;     /* gray-600 */
+      --color-text-light: #9ca3af;    /* gray-400 */
+      --color-bg-light: #f9fafb;      /* gray-50 */
+      --color-bg-dark: #1f2937;       /* gray-800 */
+      --color-white: #ffffff;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      --border-radius: 0.5rem; /* 8px */
+      --border-radius-md: 0.375rem; /* 6px */
+      --border-radius-lg: 0.75rem; /* 12px */
+      --border-radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /*
+      En lugar de aplicar estilos a 'body' (lo cual es difícil desde un componente React),
+      aplicamos los estilos base a nuestro contenedor principal '.app-wrapper'.
+    */
+    .app-wrapper {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    /* Contenedor principal, simula \`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\` */
+    .container {
+      width: 100%;
+      max-width: 1280px; /* 7xl */
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1rem; /* px-4 */
+      padding-right: 1rem; /* px-4 */
+    }
+
+    /* Botones reusables */
+    .button {
+      display: inline-block;
+      font-weight: 500;
+      border-radius: var(--border-radius-md);
+      padding: 0.75rem 1.5rem;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+      border: none;
+      text-align: center;
+    }
+
+    .button--primary {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .button--primary:hover {
+      background-color: var(--color-primary-dark);
+    }
+
+    .button--secondary {
+      background-color: var(--color-white);
+      color: var(--color-primary-dark);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .button--secondary:hover {
+      background-color: var(--color-bg-light);
+    }
+
+
+    /* --- 1. NAVBAR --- */
+
+    .navbar {
+      background-color: var(--color-white);
+      box-shadow: var(--shadow-sm);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 20;
+    }
+
+    .navbar__content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 4rem; /* h-16 */
+    }
+
+    .navbar__logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-text-dark);
+    }
+
+    .navbar__logo-icon {
+      height: 1.5rem;
+      width: 1.5rem;
+      color: var(--color-primary);
+    }
+
+    /* Imagen del logo en navbar (reemplaza al SVG) */
+    .navbar__logo-img {
+      height: 3rem;
+      width: 3rem;
+      object-fit: contain;
+    }
+
+    .navbar__menu {
+      display: none; /* Oculto en móvil */
+      align-items: center;
+      gap: 2rem; /* space-x-8 */
+    }
+
+    .navbar__link {
+      color: var(--color-text-base);
+      transition: color 0.3s ease;
+    }
+
+    .navbar__link:hover {
+      color: var(--color-primary);
+    }
+
+    .navbar__cta-button {
+      padding: 0.5rem 1rem;
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-md);
+      transition: background-color 0.3s ease;
+    }
+
+    .navbar__cta-button:hover {
+      background-color: var(--color-primary-dark);
+    }
+
+    .navbar__mobile-toggle {
+      display: block; /* Visible en móvil */
+    }
+
+    .navbar__mobile-button {
+      background: none;
+      border: none;
+      color: var(--color-text-base);
+      cursor: pointer;
+    }
+
+    .navbar__mobile-icon {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
+    .navbar__mobile-menu {
+      display: block; /* Oculto por JS, pero visible cuando está en el DOM */
+      background-color: var(--color-white);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .navbar__mobile-link {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: var(--color-text-base);
+    }
+
+    .navbar__mobile-link:hover {
+      background-color: var(--color-bg-light);
+    }
+
+    .navbar__mobile-link-cta {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      background-color: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    .navbar__mobile-link-cta:hover {
+      background-color: var(--color-primary-dark);
+    }
+
+    /* --- 2. HERO SECTION --- */
+
+    .hero {
+      padding-top: 8rem; /* 4rem de navbar + 4rem de padding */
+      padding-bottom: 5rem;
+      background-color: var(--color-bg-light);
+    }
+
+    .hero__grid {
+      display: grid;
+      grid-template-columns: 1fr; /* 1 columna en móvil */
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero__text {
+      text-align: center;
+    }
+
+    .hero__headline {
+      font-size: 2.5rem; /* ~text-4xl */
+      font-weight: 900;
+      color: var(--color-text-dark);
+      letter-spacing: -0.025em; /* tracking-tight */
+    }
+
+    .hero__description {
+      margin-top: 1rem;
+      font-size: 1.125rem; /* text-lg */
+      color: var(--color-text-base);
+    }
+
+    .hero__actions {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .hero__cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1rem;
+      background-color: var(--color-primary-light);
+      color: var(--color-primary-text);
+      font-weight: 500;
+      border-radius: var(--border-radius-full);
+    }
+
+    .hero__image-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero__mockup {
+      width: 16rem; /* w-64 */
+      background: linear-gradient(to bottom right, var(--color-primary), #a855f7); /* purple-600 */
+      border-radius: 1.875rem; /* rounded-3xl */
+      box-shadow: var(--shadow-xl);
+      padding: 1rem;
+    }
+
+    .hero__mockup-placeholder {
+      width: 100%;
+      height: 24rem; /* h-96 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-white);
+      text-align: center;
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: 1.25rem; /* rounded-2xl */
+    }
+
+
+    /* --- 3. FEATURES SECTION --- */
+
+    .features {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+      background-color: var(--color-white);
+    }
+
+    .features__header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .features__title {
+      font-size: 2rem; /* ~text-3xl */
+      font-weight: 900;
+      color: var(--color-text-dark);
+    }
+
+    .features__subtitle {
+      margin-top: 1rem;
+      font-size: 1.125rem; /* text-lg */
+      color: var(--color-text-base);
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background-color: var(--color-bg-light);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: scale(1.05);
+    }
+
+    .feature-card__icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 4rem;
+      width: 4rem;
+      background-color: var(--color-primary);
+      border-radius: var(--border-radius-full);
+      margin-bottom: 1rem;
+    }
+
+    .feature-card__icon-svg {
+      height: 2rem;
+      width: 2rem;
+      color: var(--color-white);
+    }
+
+    .feature-card__title {
+      font-size: 1.25rem; /* text-xl */
+      font-weight: 600;
+      color: var(--color-text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card__description {
+      color: var(--color-text-base);
+    }
+
+
+    /* --- 4. PROJECT SECTION --- */
+
+    .project {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+      background-color: var(--color-bg-light);
+    }
+
+    .project__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .project-card {
+      padding: 2rem;
+      background-color: var(--color-white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .project-card__title {
+      font-size: 1.5rem; /* text-2xl */
+      font-weight: 700;
+      color: var(--color-text-dark);
+      margin-bottom: 1rem;
+    }
+
+    .project-card__description {
+      color: var(--color-text-base);
+      margin-bottom: 1rem;
+    }
+
+    .project-card__list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .project-card__list-item {
+      display: flex;
+      gap: 0.5rem;
+      color: var(--color-text-base);
+    }
+
+
+    /* --- 5. CTA SECTION --- */
+
+    .cta {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+      background-color: var(--color-primary-dark);
+      color: var(--color-white);
+    }
+
+    .cta__content {
+      max-width: 640px; /* max-w-4xl (ajustado para centrar mejor) */
+      text-align: center;
+    }
+
+    .cta__title {
+      font-size: 2rem; /* ~text-3xl */
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+
+    .cta__subtitle {
+      color: var(--color-primary-light);
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+    }
+
+
+    /* --- 6. FOOTER --- */
+
+    .footer {
+      background-color: var(--color-bg-dark);
+      color: var(--color-text-light);
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    .footer__content {
+      text-align: center;
+    }
+
+    .footer__subtitle {
+      margin-top: 0.5rem;
+    }
+
+
+    /* --- REGLAS RESPONSIVE (Media Queries) --- */
+
+    /* sm: 640px */
+    @media (min-width: 640px) {
+      .container {
+        padding-left: 1.5rem; /* sm:px-6 */
+        padding-right: 1.5rem;
+      }
+
+      .hero__actions {
+        flex-direction: row;
+      }
+    }
+
+    /* md: 768px */
+    @media (min-width: 768px) {
+      /* Ocultar menú móvil y mostrar menú de escritorio */
+      .navbar__menu {
+        display: flex;
+      }
+      .navbar__mobile-toggle {
+        display: none;
+      }
+      .navbar__mobile-menu {
+        display: none;
+      }
+
+      /* Hero */
+      .hero {
+        padding-top: 8rem; 
+        padding-bottom: 8rem;
+      }
+      .hero__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .hero__text {
+        text-align: left;
+      }
+      .hero__headline {
+        font-size: 3rem; /* ~text-5xl */
+      }
+      .hero__actions {
+        justify-content: flex-start;
+      }
+      .hero__mockup-placeholder {
+        height: 31.25rem; /* h-[500px] */
+      }
+
+      /* Features */
+      .features__grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      /* Project */
+      .project__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* lg: 1024px */
+    @media (min-width: 1024px) {
+      .container {
+        padding-left: 2rem; /* lg:px-8 */
+        padding-right: 2rem;
+      }
+    }
+
+
