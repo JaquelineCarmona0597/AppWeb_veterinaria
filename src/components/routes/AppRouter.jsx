@@ -22,6 +22,7 @@ import NuevoEmpleado from '../views/NuevoEmpleado.jsx';
 import RecepcionistaLayout from '../recepcionista/RecepcionistaLayout.jsx';
 import GestionCitasRecepcionista from '../views/Horarios';
 import AgendarCitaInvitado from '../views/AñadirCitaRecepcionista.jsx';
+import DashboardRecepcionista from '../views/DashboradResep.jsx';
 
 
 /**
@@ -87,6 +88,7 @@ function AppRouter() {
         <Route path="Disponibilidad" element={<GestionCitasRecepcionista />} />
         <Route path="perfil" element={<UserProfile />} />
         <Route path="invitado" element={<AgendarCitaInvitado />} />
+        <Route path="dashboard" element={<DashboardRecepcionista />} />
       </Route>
       {/* --- FIN DEL NUEVO BLOQUE --- */}
       <Route 
