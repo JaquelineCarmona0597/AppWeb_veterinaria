@@ -1,14 +1,23 @@
 // src/views/DashboardRecepcionista.jsx
 import React, { useState, useEffect } from 'react';
-import { Box, Paper, Typography, Grid, Avatar, CircularProgress, List, ListItem, ListItemText, ListItemAvatar, Divider } from '@mui/material';
-import { Event as EventIcon, PersonAdd as PersonAddIcon, Pets as PetIcon, MedicalServices as VetIcon } from '@mui/icons-material';
-import '../../css/adminCss/Dashboard.css'; // Reutilizamos el mismo CSS
+import { 
+  Box, Paper, Typography, Grid, Avatar, CircularProgress, List, 
+  ListItem, ListItemText, ListItemAvatar, Divider, TextField, InputAdornment 
+} from '@mui/material';
+import { 
+  Event as EventIcon, 
+  PersonAdd as PersonAddIcon, 
+  Pets as PetIcon, 
+  MedicalServices as VetIcon,
+  Search as SearchIcon // <--- IMPORTANTE: Nuevo icono
+} from '@mui/icons-material';
+import '../../css/adminCss/Dashboard.css'; 
 
 // --- IMPORTACIONES DE FIREBASE ---
 import { db } from '../../firebase';
 import { collection, getDocs, doc, getDoc, query, where, Timestamp, orderBy } from "firebase/firestore";
 
-// Componente de Tarjeta KPI (reutilizado)
+// Componente de Tarjeta KPI
 const KpiCard = ({ title, value, icon, color, loading, delay }) => (
   <Paper className="kpi-card" elevation={0} variant="outlined" style={{ animation: `fadeInUp 0.5s ease-out ${delay}s forwards`, opacity: 0 }}>
     <Avatar className="kpi-icon" sx={{ bgcolor: color }}>
@@ -25,226 +34,229 @@ const KpiCard = ({ title, value, icon, color, loading, delay }) => (
   </Paper>
 );
 
-// Componente principal del Dashboard de Recepcionista
 const DashboardRecepcionista = () => {
-  const [stats, setStats] = useState({
-    citasHoy: 0,
-    invitadosHoy: 0,
-  });
-  const [proximasCitas, setProximasCitas] = useState([]);
+  const [stats, setStats] = useState({ citasHoy: 0, invitadosHoy: 0 });
+  const [citasDelDia, setCitasDelDia] = useState([]); 
+  const [searchTerm, setSearchTerm] = useState(""); // <--- NUEVO ESTADO PARA EL BUSCADOR
   const [loading, setLoading] = useState(true);
 
-  // --- LÓGICA PARA OBTENER DATOS DE FIRESTORE ---
   useEffect(() => {
-    
-    // --- FUNCIÓN DE AYUDA (MODIFICADA) ---
-    // Ahora solo la necesitamos para buscar el doctor de las 'invitaciones'
     const getNombreUsuario = async (userId) => {
-      // Si el ID no existe o es un string (como "Por asignar"), solo devolvemos ese valor
-      if (!userId || typeof userId !== 'string' || userId.length < 10) {
-        return userId || "No asignado";
-      }
-      
+      if (!userId || typeof userId !== 'string' || userId.length < 5) return "No asignado";
       try {
         const userDoc = await getDoc(doc(db, "usuarios", userId));
-        return userDoc.exists() ? userDoc.data().nombre : "Usuario no encontrado";
+        return userDoc.exists() ? userDoc.data().nombre : "Desconocido";
       } catch (error) {
-        console.error("Error obteniendo usuario:", error);
         return "Error";
       }
     };
 
-    // ¡Ya no necesitamos 'getNombreMascota'!
-
     const fetchCitas = async () => {
       try {
         setLoading(true);
+        
         const hoy = new Date();
-        const inicioHoy = new Date(hoy.setHours(0, 0, 0, 0));
-        const finHoy = new Date(hoy.setHours(23, 59, 59, 999));
+        const inicioHoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 0, 0, 0);
+        const finHoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 23, 59, 59);
 
         const inicioHoyTimestamp = Timestamp.fromDate(inicioHoy);
-        const finHoyTimestamp = Timestamp.fromDate(finHoy);
 
-        let citasHoyCount = 0;
-        let invitadosHoyCount = 0;
-        let citasCombinadas = [];
-
-        // --- 1. Obtener Citas de Usuarios Registrados (¡SIMPLIFICADO!) ---
+        // --- A. CITAS REGISTRADAS ---
         const qCitas = query(
           collection(db, "citas"),
-          where("fecha", ">=", inicioHoyTimestamp), // Usamos 'fecha'
+          where("fecha", ">=", inicioHoyTimestamp), 
           orderBy("fecha", "asc")
         );
         const citasSnapshot = await getDocs(qCitas);
 
-        // Ya no es una promesa, es un mapeo directo
-        const proximasCitasResueltas = citasSnapshot.docs.map((citaDoc) => {
-          const citaData = citaDoc.data();
-          
-          // Contar para el KPI
-          if (citaData.fecha <= finHoyTimestamp) {
-            citasHoyCount++;
-          }
+        let contadorCitasReg = 0;
 
-          // --- ¡CAMBIO CLAVE AQUÍ! ---
-          // Usamos los campos que vienen directo del documento 'citas'
-          return {
-            id: citaDoc.id,
-            fecha: citaData.fecha.toDate(),
-            dueño: citaData.nombrePropietario, // <--- CAMBIO
-            mascota: citaData.nombreMascota, // <--- CAMBIO
-            doctor: citaData.doctor,           // <--- CAMBIO
-            tipo: "Registrado"
-          };
-        });
+        const citasProcesadas = citasSnapshot.docs
+          .map((doc) => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              fecha: data.fecha.toDate(),
+              dueño: data.nombrePropietario || "Sin nombre", 
+              mascota: data.nombreMascota || "Mascota",
+              doctor: data.doctor || "Por asignar",
+              tipo: "Registrado"
+            };
+          })
+          .filter((cita) => {
+            const esHoy = cita.fecha <= finHoy;
+            if (esHoy) contadorCitasReg++;
+            return esHoy; 
+          });
 
-        // --- 2. Obtener Citas de Invitados (SIN CAMBIOS) ---
-        // Esta lógica asume que 'invitaciones' SÍ necesita buscar el 'idDoctor'
+        // --- B. CITAS DE INVITADOS ---
         const qInvitados = query(
           collection(db, "invitaciones"),
           where("fecha", ">=", inicioHoyTimestamp),
           orderBy("fecha", "asc")
         );
         const invitadosSnapshot = await getDocs(qInvitados);
-        
-        // Esta parte SÍ sigue siendo asíncrona
-        const invitadosPromises = invitadosSnapshot.docs.map(async (invDoc) => {
-          const invData = invDoc.data();
+        let contadorInvitados = 0;
 
-          if (invData.fecha <= finHoyTimestamp) {
-            invitadosHoyCount++;
-          }
-
-          // Asumimos que 'invitaciones' guarda el ID del doctor
-          const nombreDoctor = await getNombreUsuario(invData.idDoctor);
-
+        const invitadosPromesas = invitadosSnapshot.docs.map(async (doc) => {
+          const data = doc.data();
+          const nombreDoctor = await getNombreUsuario(data.idDoctor);
           return {
-            id: invDoc.id,
-            fecha: invData.fecha.toDate(),
-            dueño: invData.nombreDueño,
-            mascota: invData.nombreMascota,
+            id: doc.id,
+            fecha: data.fecha.toDate(),
+            dueño: data.nombreDueño || "Invitado",
+            mascota: data.nombreMascota || "Mascota",
             doctor: nombreDoctor,
             tipo: "Invitado"
           };
         });
 
-        // --- 3. Resolver y Combinar ---
-        const proximasInvitacionesResueltas = await Promise.all(invitadosPromises);
-
-        citasCombinadas = [...proximasCitasResueltas, ...proximasInvitacionesResueltas];
-        citasCombinadas.sort((a, b) => a.fecha - b.fecha);
-
-        setProximasCitas(citasCombinadas);
-        setStats({
-          citasHoy: citasHoyCount,
-          invitadosHoy: invitadosHoyCount,
+        let invitadosProcesados = await Promise.all(invitadosPromesas);
+        invitadosProcesados = invitadosProcesados.filter(inv => {
+            const esHoy = inv.fecha <= finHoy;
+            if (esHoy) contadorInvitados++;
+            return esHoy;
         });
 
+        const listaFinal = [...citasProcesadas, ...invitadosProcesados].sort((a, b) => a.fecha - b.fecha);
+
+        setCitasDelDia(listaFinal);
+        setStats({ citasHoy: contadorCitasReg, invitadosHoy: contadorInvitados });
+
       } catch (error) {
-        console.error("Error al cargar citas: ", error);
+        console.error("Error cargando citas:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchCitas();
-  }, []); // Se ejecuta una vez
+  }, []);
 
-  // Datos para las tarjetas KPI
+  // --- LÓGICA DE FILTRADO ---
+  // Filtramos la lista original basándonos en el texto escrito
+  const citasFiltradas = citasDelDia.filter((cita) => {
+    const termino = searchTerm.toLowerCase();
+    return (
+      cita.mascota.toLowerCase().includes(termino) || // Busca por nombre mascota
+      cita.dueño.toLowerCase().includes(termino)      // O busca por nombre dueño
+    );
+  });
+
   const kpiData = [
-    { title: 'Citas de Clientes (Hoy)', value: stats.citasHoy, icon: <EventIcon />, color: 'var(--color-primario)', loading },
-    { title: 'Citas de Invitados (Hoy)', value: stats.invitadosHoy, icon: <PersonAddIcon />, color: 'var(--color-acento)', loading },
+    { title: 'Citas Registradas (Hoy)', value: stats.citasHoy, icon: <EventIcon />, color: '#4CAF50', loading },
+    { title: 'Citas Invitados (Hoy)', value: stats.invitadosHoy, icon: <PersonAddIcon />, color: '#FF9800', loading },
   ];
 
   return (
     <Box className="dashboard-container">
-      {/* --- SECCIÓN DE BIENVENIDA --- */}
-      <Box className="dashboard-header" sx={{ textAlign: 'center' }}>
-        <Typography variant="h5" component="h1" className="dashboard-title">
-          Dashboard de Recepción
+      <Box className="dashboard-header" sx={{ textAlign: 'center', mb: 3 }}>
+        <Typography variant="h5" component="h1" fontWeight="bold">
+          Agenda del Día
         </Typography>
-        <Typography className="dashboard-subtitle">
-          Gestión de citas y pacientes del día.
+        <Typography color="text.secondary">
+          {new Date().toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </Typography>
       </Box>
 
-      {/* --- SECCIÓN DE TARJETAS KPI (CORREGIDO) --- */}
-      <Grid container spacing={3} className="kpi-grid">
+      {/* KPI GRID */}
+      <Grid container spacing={2} className="kpi-grid" sx={{ mb: 3 }}>
         {kpiData.map((kpi, index) => (
-          // ¡CAMBIO! Se quita 'item' y se usa 'xs' y 'sm' directo
-          <Grid xs={12} sm={6} key={index}> 
-            <KpiCard 
-              title={kpi.title} 
-              value={kpi.value} 
-              icon={kpi.icon} 
-              color={kpi.color} 
-              loading={kpi.loading}
-              delay={index * 0.1}
-            />
+          <Grid item xs={12} sm={6} key={index}>
+            <KpiCard {...kpi} delay={index * 0.1} />
           </Grid>
         ))}
       </Grid>
       
-      {/* --- SECCIÓN DE LISTA DE CITAS (CORREGIDO) --- */}
-      <Grid container spacing={3} className="main-content-grid">
-        {/* ¡CAMBIO! Se quita 'item' y se usa 'xs' directo */}
-        <Grid xs={12}>
-          <Paper 
-            className="chart-card" 
-            elevation={0} 
-            variant="outlined" 
-            style={{ animationDelay: '0.2s', opacity: 0 }}
-          >
-            <Typography 
-              variant="h6" 
-              className="card-title" 
-              sx={{ textAlign: 'center', paddingTop: '16px' }}
-            >
-              Próximas Citas (Registrados e Invitados)
-            </Typography>
-            <Box className="chart-container" sx={{ maxHeight: 400, overflow: 'auto' }}>
+      {/* LISTA DE CITAS CON BUSCADOR */}
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Paper className="chart-card" elevation={1} sx={{ p: 0, overflow: 'hidden' }}>
+            
+            {/* HEADER DE LA TARJETA + BUSCADOR */}
+            <Box sx={{ p: 2, bgcolor: '#f5f5f5', borderBottom: '1px solid #e0e0e0' }}>
+              <Typography variant="h6" sx={{ color: '#333', mb: 2 }}>
+                Pacientes de Hoy
+              </Typography>
+
+              {/* --- CAMPO DE BÚSQUEDA --- */}
+              <TextField
+                fullWidth
+                size="small"
+                variant="outlined"
+                placeholder="Buscar por mascota o dueño..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon color="action" />
+                    </InputAdornment>
+                  ),
+                  style: { backgroundColor: 'white' } 
+                }}
+              />
+            </Box>
+            
+            <Box sx={{ maxHeight: 450, overflow: 'auto' }}>
               {loading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', padding: 4 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
                   <CircularProgress />
                 </Box>
               ) : (
-                <List sx={{ padding: 2 }}>
-                  {proximasCitas.length > 0 ? (
-                    proximasCitas.map((cita, index) => (
+                <List sx={{ p: 0 }}>
+                  {/* Usamos 'citasFiltradas' en lugar de 'citasDelDia' */}
+                  {citasFiltradas.length > 0 ? (
+                    citasFiltradas.map((cita, index) => (
                       <React.Fragment key={cita.id}>
-                        <ListItem alignItems="flex-start">
+                        <ListItem alignItems="flex-start" sx={{ '&:hover': { bgcolor: '#fafafa' } }}>
                           <ListItemAvatar>
-                            <Avatar sx={{ bgcolor: cita.tipo === 'Invitado' ? 'var(--color-acento)' : 'var(--color-primario)' }}>
+                            <Avatar 
+                              sx={{ 
+                                bgcolor: cita.tipo === 'Invitado' ? '#FF9800' : '#2196F3',
+                                width: 45, height: 45 
+                              }}
+                            >
                               {cita.tipo === 'Invitado' ? <PersonAddIcon /> : <PetIcon />}
                             </Avatar>
                           </ListItemAvatar>
+                          
                           <ListItemText
                             primary={
-                              <Typography component="span" variant="body1" color="text.primary">
-                                {`Mascota: ${cita.mascota} (Dueño: ${cita.dueño})`}
+                              <Typography variant="subtitle1" component="div" fontWeight="bold">
+                                {cita.mascota} 
+                                <Typography component="span" variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                                  (Prop: {cita.dueño})
+                                </Typography>
                               </Typography>
                             }
                             secondary={
-                              <>
-                                <Typography component="span" sx={{ display: 'block' }} variant="body2">
-                                  {cita.fecha.toLocaleString('es-MX', { dateStyle: 'long', timeStyle: 'short' })}
+                              <Box sx={{ mt: 0.5 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                                  <VetIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                                  <Typography variant="body2" color="text.primary">
+                                    Dr/a. {cita.doctor}
+                                  </Typography>
+                                </Box>
+                                <Typography variant="caption" color="primary" fontWeight="medium">
+                                  Hora: {cita.fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true })}
                                 </Typography>
-                                <Typography component="span" sx={{ display: 'block' }} variant="body2">
-                                  <VetIcon sx={{ fontSize: '1rem', verticalAlign: 'middle' }} /> {` Doctor: ${cita.doctor}`}
-                                </Typography>
-                              </>
+                              </Box>
                             }
                           />
                         </ListItem>
-                        {index < proximasCitas.length - 1 && <Divider variant="inset" component="li" />}
+                        {index < citasFiltradas.length - 1 && <Divider variant="inset" component="li" />}
                       </React.Fragment>
                     ))
                   ) : (
-                    // Este mensaje ahora sí debería aparecer
-                    <Typography sx={{ textAlign: 'center', padding: 3 }}>
-                      No hay próximas citas programadas.
-                    </Typography>
+                    // Mensaje diferente si no hay resultados en la búsqueda o si no hay citas
+                    <Box sx={{ textAlign: 'center', p: 4, color: 'text.secondary' }}>
+                      <Typography>
+                        {citasDelDia.length === 0 
+                          ? "No hay citas programadas para hoy." 
+                          : "No se encontraron coincidencias con tu búsqueda."}
+                      </Typography>
+                    </Box>
                   )}
                 </List>
               )}
