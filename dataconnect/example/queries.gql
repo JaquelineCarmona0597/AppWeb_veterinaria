@@ -1,0 +1,21 @@
+mutation CreateUser($bio: String, $displayName: String, $email: String!, $photoUrl: String, $username: String!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  user_insert(data: {bio: $bio, displayName: $displayName, email: $email, photoUrl: $photoUrl, username: $username})
+}
+
+query GetPublicTrips @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  trips(where: {isPublic: {eq: true}}) {
+    id
+    title
+    description
+    startDate
+    endDate
+  }
+}
+
+mutation UpdateTrip($id: UUID!, $description: String, $endDate: Date, $isPublic: Boolean, $startDate: Date, $title: String) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  trip_update(id: $id, data: {description: $description, endDate: $endDate, isPublic: $isPublic, startDate: $startDate, title: $title})
+}
+
+mutation DeleteLocation($id: UUID!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  location_delete(id: $id)
+}

@@ -5,7 +5,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { auth, db } from '../../firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"; 
 import { doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { getApp } from "firebase/app";
 import { useAuth } from '../../context/AuthContext';
 import { Box, Button, Card, Checkbox, CssBaseline, Divider, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField, Typography, List, ListItem, ListItemIcon, ListItemText, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress, Alert } from '@mui/material';
 import { PersonOutline as PersonOutlineIcon, LockOutlined as LockOutlinedIcon, MailOutline as MailOutlineIcon, Visibility, VisibilityOff, CheckCircleOutline, HighlightOff } from '@mui/icons-material';
@@ -185,19 +186,24 @@ export default function SignUp() {
     if (token && invitacionData) {
       // --- LÓGICA DE EMPLEADO (con token) ---
       try {
-        const functions = getFunctions();
+        const app = getApp();
+        // Especificar la región donde desplegaste la función callable
+        const functions = getFunctions(app, 'northamerica-northeast1');
         const completarInvitacion = httpsCallable(functions, 'completarInvitacion');
         
+        // Llamar a la función callable para crear el usuario en el backend
         await completarInvitacion({
           token: token,
           nombre: name,
           password: password,
         });
 
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        await refreshUserData(userCredential.user);
-        
-        navigate('/dashboard-empleado'); // (O la ruta que corresponda)
+        // La función ya crea el usuario en Authentication; aquí iniciamos sesión
+        // con las credenciales recién creadas para obtener la sesión en el cliente.
+        await signInWithEmailAndPassword(auth, email, password);
+        const current = auth.currentUser;
+        await refreshUserData(current);
+        navigate('/dashboard-empleado');
 
       } catch (error) {
         console.error("Error al completar invitación:", error);
